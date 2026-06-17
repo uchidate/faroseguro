@@ -589,7 +589,7 @@ function fs_fraude_card(WP_Post $post, bool $show_excerpt = true): void {
     <article class="fs-card fs-fraude-card" style="border-top:3px solid <?php echo esc_attr($border); ?>">
       <?php if (has_post_thumbnail($post->ID)): ?>
         <div class="fs-card__image">
-          <a href="<?php echo get_permalink($post); ?>"><?php echo get_the_post_thumbnail($post->ID, 'fs-card'); ?></a>
+          <a href="<?php echo get_permalink($post); ?>"><?php echo get_the_post_thumbnail($post->ID, 'fs-card', ['loading' => 'eager']); ?></a>
         </div>
       <?php endif; ?>
       <div class="fs-card__body">
@@ -696,7 +696,7 @@ function fs_artigo_card_hero(WP_Post $post): void {
       <?php if (has_post_thumbnail($post->ID)): ?>
         <div class="fs-card__image">
           <a href="<?php echo get_permalink($post); ?>">
-            <?php echo get_the_post_thumbnail($post->ID, 'full'); ?>
+            <?php echo get_the_post_thumbnail($post->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
           </a>
           <?php if ($destaque): ?>
             <div class="fs-card__image-badge"><span class="fs-badge fs-badge--novo">⭐ Destaque</span></div>
@@ -753,7 +753,7 @@ add_action('wp_head', function () {
     if (is_singular('golpe')) {
         $post   = get_queried_object();
         $nivel  = get_post_meta($post->ID, 'nivel_risco', true);
-        $sinais = get_post_meta($post->ID, 'sinais_alerta', true);
+        // sinais_alerta usado no schema em versão futura
         $protec = get_post_meta($post->ID, 'como_se_proteger', true);
 
         $schema = [
@@ -802,7 +802,7 @@ add_filter('pre_get_posts', function (WP_Query $q) {
             $q->set('orderby', 'date');
             $q->set('order', 'DESC');
         }
-        if ($q->is_home() || $q->is_archive('post')) {
+        if ($q->is_home() || $q->is_archive()) {
             $q->set('posts_per_page', 10);
         }
     }
