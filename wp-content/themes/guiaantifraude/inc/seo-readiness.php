@@ -1,6 +1,6 @@
 <?php
 /**
- * Faro Seguro — SEO técnico e prontidão para AdSense.
+ * Guia Antifraude — SEO técnico e prontidão para AdSense.
  */
 
 defined('ABSPATH') || exit;
@@ -22,7 +22,7 @@ function fs_seo_get_description(): string {
     }
 
     if (is_search()) {
-        return 'Resultados de busca no Faro Seguro para alertas, golpes, fraudes bancarias e artigos de prevencao.';
+        return 'Resultados de busca no ' . FS_BRAND_NAME . ' para alertas, golpes, fraudes bancarias e artigos de prevencao.';
     }
 
     return get_bloginfo('description') ?: 'Alertas, guias e orientacoes verificadas sobre golpes, fraudes bancarias e seguranca financeira no Brasil.';

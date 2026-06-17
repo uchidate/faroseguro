@@ -6,7 +6,7 @@ $canal_atual = is_tax('canal_golpe') ? get_queried_object() : null;
 $tipos       = get_terms(['taxonomy' => 'tipo_golpe',  'hide_empty' => true]);
 $canais      = get_terms(['taxonomy' => 'canal_golpe', 'hide_empty' => true]);
 $hero_title  = $tipo_atual ? $tipo_atual->name : ($canal_atual ? $canal_atual->name : 'Central de Alertas');
-$hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_atual->description : 'Todos os golpes e fraudes bancárias identificados pela equipe Faro Seguro. Atualizações em até 24h após identificação.');
+$hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_atual->description : 'Todos os golpes e fraudes bancárias identificados pela equipe Guia Antifraude. Atualizações em até 24h após identificação.');
 ?>
 
 <div class="fs-archive__hero fs-archive__hero--dark">

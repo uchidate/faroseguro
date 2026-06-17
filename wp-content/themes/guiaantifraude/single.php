@@ -33,7 +33,7 @@
           <span>Atualizado em <?php echo esc_html(date('d/m/Y', strtotime($atualizado))); ?></span>
         <?php endif; ?>
         <span><?php echo esc_html($leitura); ?></span>
-        <span>Por <strong>Equipe Faro Seguro</strong></span>
+        <span>Por <strong>Equipe Guia Antifraude</strong></span>
       </div>
     </div>
   </div>
