@@ -14,9 +14,9 @@
         </a>
         <p class="fs-footer__about">Portal de alertas e educação sobre fraudes e golpes financeiros no Brasil. Conteúdo verificado, publicado em até 24h após identificação de novos modus operandi.</p>
         <div class="fs-footer__badges">
-          <span class="fs-footer__badge">🔒 SSL Seguro</span>
-          <span class="fs-footer__badge">📊 Baseado no BCB</span>
-          <span class="fs-footer__badge">✅ Conteúdo verificado</span>
+          <span class="fs-footer__badge">SSL Seguro</span>
+          <span class="fs-footer__badge">Baseado no BCB</span>
+          <span class="fs-footer__badge">Conteúdo verificado</span>
         </div>
       </div>
 

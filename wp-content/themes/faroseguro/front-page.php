@@ -73,7 +73,7 @@ $total_posts   = wp_count_posts('post')->publish;
         <?php if ($fraude_hero):
           $fnivel = get_post_meta($fraude_hero->ID, 'nivel_risco', true) ?: 'alto';
           $ftipos = get_the_terms($fraude_hero->ID, 'tipo_fraude');
-          $fbl = ['alto' => ['fs-badge--fraude-alto','🔓 Alto Risco'],'medio' => ['fs-badge--fraude-medio','⚠️ Médio'],'baixo' => ['fs-badge--fraude-baixo','ℹ️ Baixo']];
+          $fbl = ['alto' => ['fs-badge--fraude-alto','Alto Risco'],'medio' => ['fs-badge--fraude-medio','Risco Médio'],'baixo' => ['fs-badge--fraude-baixo','Baixo Risco']];
           [$fbc,$fbl2] = $fbl[$fnivel] ?? $fbl['alto'];
         ?>
         <div class="fs-latest-alert fs-latest-alert--fraude">
@@ -117,7 +117,7 @@ $total_posts   = wp_count_posts('post')->publish;
   <div class="fs-concept-bar">
     <div class="container fs-concept-bar__inner">
       <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-concept-bar__item">
-        <span class="fs-concept-bar__icon">🪤</span>
+        <svg class="fs-concept-bar__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div class="fs-concept-bar__item-text">
           <strong>Golpe</strong>
           <span>Você é manipulado a agir — pagar, transferir ou entregar dados</span>
@@ -125,7 +125,7 @@ $total_posts   = wp_count_posts('post')->publish;
       </a>
       <div class="fs-concept-bar__sep"></div>
       <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-concept-bar__item">
-        <span class="fs-concept-bar__icon">🔓</span>
+        <svg class="fs-concept-bar__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         <div class="fs-concept-bar__item-text">
           <strong>Fraude</strong>
           <span>Acontece sem sua ação — conta invadida, cartão clonado, dados vazados</span>
