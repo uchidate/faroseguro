@@ -10,7 +10,7 @@
             <circle cx="16" cy="16" r="3.5" fill="#f97316"/>
             <path d="M16 12.5v7M12.5 16h7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
-          <span>Faro Seguro</span>
+          <span><?php echo esc_html(FS_BRAND_NAME); ?></span>
         </a>
         <p class="fs-footer__about">Portal de alertas e educação sobre fraudes e golpes financeiros no Brasil. Conteúdo verificado, publicado em até 24h após identificação de novos modus operandi.</p>
         <div class="fs-footer__badges">
@@ -65,7 +65,7 @@
 
   <div class="fs-footer__bottom">
     <div class="container fs-footer__bottom-inner">
-      <p>© <?php echo date('Y'); ?> Faro Seguro. Todos os direitos reservados.</p>
+      <p>© <?php echo date('Y'); ?> <?php echo esc_html(FS_BRAND_NAME); ?>. Todos os direitos reservados.</p>
       <p>
         Conteúdo de caráter informativo. Não nos responsabilizamos por decisões financeiras individuais. Fontes: Banco Central do Brasil, Febraban, Senacon e Ministério da Justiça.
         &nbsp;·&nbsp; <a href="<?php echo home_url('/politica-de-privacidade/'); ?>">Política de Privacidade</a>

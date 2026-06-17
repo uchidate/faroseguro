@@ -1,4 +1,4 @@
-/* Faro Seguro — main.js */
+/* Guia Antifraude — main.js */
 (function () {
   'use strict';
 

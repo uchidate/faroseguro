@@ -42,7 +42,7 @@ if ($latest_golpes): ?>
           <path d="M16 12.5v7M12.5 16h7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
         <div class="fs-logo__text">
-          <span class="fs-logo__name">Faro Seguro</span>
+          <span class="fs-logo__name"><?php echo esc_html(FS_BRAND_NAME); ?></span>
           <span class="fs-logo__tagline">Alertas de Fraudes e Golpes</span>
         </div>
       </a>

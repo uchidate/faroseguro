@@ -6,7 +6,7 @@
       <article id="page-<?php the_ID(); ?>" <?php post_class('fs-page__article'); ?> >
         <header class="fs-page__hero">
           <div class="container--narrow">
-            <p class="fs-eyebrow">Faro Seguro</p>
+            <p class="fs-eyebrow"><?php echo esc_html(FS_BRAND_NAME); ?></p>
             <h1 class="fs-page__title"><?php the_title(); ?></h1>
             <?php if (has_excerpt()): ?>
               <p class="fs-page__lead"><?php the_excerpt(); ?></p>

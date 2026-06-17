@@ -5,7 +5,7 @@
     <span class="fs-eyebrow">Busca</span>
     <h1 class="fs-archive__title">
       <?php if (get_search_query()): ?>Resultados para "<?php the_search_query(); ?>"
-      <?php else: ?>Buscar no Faro Seguro<?php endif; ?>
+      <?php else: ?>Buscar no Guia Antifraude<?php endif; ?>
     </h1>
     <form class="fs-search-form" role="search" method="get" action="<?php echo home_url('/'); ?>">
       <input class="fs-search-form__input" type="search" name="s" placeholder="Buscar golpes, artigos, termos…" value="<?php echo get_search_query(); ?>" autofocus>

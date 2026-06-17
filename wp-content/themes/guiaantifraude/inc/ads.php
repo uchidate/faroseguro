@@ -1,6 +1,6 @@
 <?php
 /**
- * Faro Seguro — Sistema de anúncios (Google AdSense)
+ * Guia Antifraude — Sistema de anúncios (Google AdSense)
  *
  * Como usar:
  *   fs_ad('in_article')   — dentro do conteúdo

@@ -1,10 +1,22 @@
 <?php
 /**
- * Faro Seguro — Child theme do Kadence
+ * Guia Antifraude — Child theme do Kadence
  * Arquitetura de conteúdo para alertas de fraudes e golpes bancários.
  */
 
 defined('ABSPATH') || exit;
+
+if (!defined('FS_BRAND_NAME')) {
+    define('FS_BRAND_NAME', 'Guia Antifraude');
+}
+
+if (!defined('FS_SITE_DOMAIN')) {
+    define('FS_SITE_DOMAIN', 'guiaantifraude.com');
+}
+
+if (!defined('FS_SITE_URL')) {
+    define('FS_SITE_URL', 'https://guiaantifraude.com');
+}
 
 require_once get_stylesheet_directory() . '/inc/ads.php';
 require_once get_stylesheet_directory() . '/inc/seo-readiness.php';
@@ -36,6 +48,16 @@ add_filter('document_title_parts', function ($parts) {
 
     return array_map(fn($part) => fs_editorial_text((string) $part), $parts);
 }, 20);
+
+add_action('init', function () {
+    if (get_option('blogname') === 'Faro Seguro') {
+        update_option('blogname', FS_BRAND_NAME);
+    }
+
+    if (get_option('blogdescription') === 'Alertas de Fraudes e Golpes') {
+        update_option('blogdescription', 'Alertas e orientação contra fraudes financeiras no Brasil');
+    }
+});
 
 /* ────────────────────────────────────────────
    1. ENQUEUE
@@ -101,14 +123,17 @@ add_action('after_setup_theme', function () {
     add_image_size('fs-thumb',  380, 215,  true);
     add_image_size('fs-square', 320, 320,  true);
 
-    load_child_theme_textdomain('faro-seguro', get_stylesheet_directory() . '/languages');
+    load_child_theme_textdomain('guia-antifraude', get_stylesheet_directory() . '/languages');
 });
 
 add_action('after_switch_theme', function () {
+    update_option('blogname', FS_BRAND_NAME);
+    update_option('blogdescription', 'Alertas e orientação contra fraudes financeiras no Brasil');
+
     $pages = [
         'sobre-nos' => [
-            'title' => 'Sobre o Faro Seguro',
-            'content' => '<p>O Faro Seguro é um portal editorial de alertas e educação sobre golpes, fraudes bancárias e segurança financeira no Brasil.</p><h2>Como trabalhamos</h2><p>Organizamos golpes por tipo, canal e público-alvo para que o leitor entenda rapidamente o risco, os sinais de alerta e os próximos passos.</p><h2>Compromisso editorial</h2><p>Nosso conteúdo tem caráter informativo e busca apontar fontes públicas, canais oficiais e medidas práticas de prevenção.</p>',
+            'title' => 'Sobre o ' . FS_BRAND_NAME,
+            'content' => '<p>O ' . FS_BRAND_NAME . ' é um portal editorial de alertas e educação sobre golpes, fraudes bancárias e segurança financeira no Brasil.</p><h2>Como trabalhamos</h2><p>Organizamos golpes por tipo, canal e público-alvo para que o leitor entenda rapidamente o risco, os sinais de alerta e os próximos passos.</p><h2>Compromisso editorial</h2><p>Nosso conteúdo tem caráter informativo e busca apontar fontes públicas, canais oficiais e medidas práticas de prevenção.</p>',
         ],
         'contato' => [
             'title' => 'Contato e denúncia',
@@ -116,16 +141,25 @@ add_action('after_switch_theme', function () {
         ],
         'politica-de-privacidade' => [
             'title' => 'Política de Privacidade',
-            'content' => '<p>Esta política explica, de forma resumida, como o Faro Seguro pode tratar informações de navegação, contato e segurança.</p><h2>Dados de navegação</h2><p>Podemos utilizar recursos de análise, segurança e publicidade para medir audiência, proteger o site e melhorar a experiência do usuário.</p><h2>Dados enviados pelo usuário</h2><p>Informações enviadas em formulários devem ser usadas apenas para análise editorial, contato e apuração de relatos. Evite enviar senhas, códigos de autenticação ou dados bancários completos.</p><h2>Publicidade</h2><p>O site pode exibir anúncios de terceiros, como Google AdSense, sujeitos às políticas desses provedores.</p>',
+            'content' => '<p>Esta política explica, de forma resumida, como o ' . FS_BRAND_NAME . ' pode tratar informações de navegação, contato e segurança.</p><h2>Dados de navegação</h2><p>Podemos utilizar recursos de análise, segurança e publicidade para medir audiência, proteger o site e melhorar a experiência do usuário.</p><h2>Dados enviados pelo usuário</h2><p>Informações enviadas em formulários devem ser usadas apenas para análise editorial, contato e apuração de relatos. Evite enviar senhas, códigos de autenticação ou dados bancários completos.</p><h2>Publicidade</h2><p>O site pode exibir anúncios de terceiros, como Google AdSense, sujeitos às políticas desses provedores.</p>',
         ],
         'termos-de-uso' => [
             'title' => 'Termos de Uso',
-            'content' => '<p>Ao acessar o Faro Seguro, você concorda em utilizar o conteúdo apenas para fins informativos e preventivos.</p><h2>Natureza do conteúdo</h2><p>As informações publicadas não substituem orientação jurídica, policial, bancária ou financeira individualizada.</p><h2>Responsabilidade do usuário</h2><p>Em caso de golpe ou fraude, entre em contato imediatamente com seu banco e registre a ocorrência nos canais oficiais.</p><h2>Atualizações</h2><p>Estes termos podem ser atualizados para refletir melhorias editoriais, técnicas ou legais.</p>',
+            'content' => '<p>Ao acessar o ' . FS_BRAND_NAME . ', você concorda em utilizar o conteúdo apenas para fins informativos e preventivos.</p><h2>Natureza do conteúdo</h2><p>As informações publicadas não substituem orientação jurídica, policial, bancária ou financeira individualizada.</p><h2>Responsabilidade do usuário</h2><p>Em caso de golpe ou fraude, entre em contato imediatamente com seu banco e registre a ocorrência nos canais oficiais.</p><h2>Atualizações</h2><p>Estes termos podem ser atualizados para refletir melhorias editoriais, técnicas ou legais.</p>',
         ],
     ];
 
     foreach ($pages as $slug => $page) {
-        if (get_page_by_path($slug)) {
+        $existing = get_page_by_path($slug);
+
+        if ($existing instanceof WP_Post) {
+            if (strpos($existing->post_title . $existing->post_content, 'Faro Seguro') !== false) {
+                wp_update_post([
+                    'ID' => $existing->ID,
+                    'post_title' => $page['title'],
+                    'post_content' => $page['content'],
+                ]);
+            }
             continue;
         }
 
