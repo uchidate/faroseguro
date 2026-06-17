@@ -139,7 +139,33 @@ add_action('init', function () {
         'taxonomies'        => ['tipo_golpe', 'canal_golpe', 'publico_alvo'],
     ]);
 
-    /* 4b. Glossário — Dicionário de termos */
+    /* 4b. Fraude — Acesso não autorizado, sem ação direta da vítima */
+    register_post_type('fraude', [
+        'label'         => 'Fraudes',
+        'labels'        => [
+            'name'               => 'Fraudes',
+            'singular_name'      => 'Fraude',
+            'menu_name'          => 'Fraudes',
+            'add_new_item'       => 'Nova Fraude',
+            'edit_item'          => 'Editar Fraude',
+            'new_item'           => 'Nova Fraude',
+            'view_item'          => 'Ver Fraude',
+            'search_items'       => 'Buscar Fraudes',
+            'not_found'          => 'Nenhuma fraude encontrada.',
+            'not_found_in_trash' => 'Nenhuma fraude na lixeira.',
+            'all_items'          => 'Todas as Fraudes',
+        ],
+        'public'        => true,
+        'has_archive'   => true,
+        'rewrite'       => ['slug' => 'fraudes', 'with_front' => false],
+        'supports'      => ['title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'author'],
+        'menu_icon'     => 'dashicons-warning',
+        'menu_position' => 6,
+        'show_in_rest'  => true,
+        'taxonomies'    => ['tipo_fraude', 'canal_golpe', 'publico_alvo'],
+    ]);
+
+    /* 4c. Glossário — Dicionário de termos */
     register_post_type('glossario', [
         'label'         => 'Glossário',
         'labels'        => [
@@ -195,8 +221,23 @@ add_action('init', function () {
         'show_admin_column' => true,
     ]);
 
-    /* 5c. Público-alvo */
-    register_taxonomy('publico_alvo', ['golpe', 'post'], [
+    /* 5c. Tipo de Fraude */
+    register_taxonomy('tipo_fraude', ['fraude'], [
+        'label'         => 'Tipo de Fraude',
+        'labels'        => [
+            'name'          => 'Tipos de Fraude',
+            'singular_name' => 'Tipo de Fraude',
+            'all_items'     => 'Todos os Tipos',
+            'add_new_item'  => 'Novo Tipo',
+        ],
+        'hierarchical'      => true,
+        'rewrite'           => ['slug' => 'tipo-fraude', 'with_front' => false],
+        'show_in_rest'      => true,
+        'show_admin_column' => true,
+    ]);
+
+    /* 5d. Público-alvo */
+    register_taxonomy('publico_alvo', ['golpe', 'fraude', 'post'], [
         'label'         => 'Público-Alvo',
         'labels'        => [
             'name'          => 'Públicos-Alvo',
@@ -212,6 +253,72 @@ add_action('init', function () {
     /* 5d. Categorias de Artigos — usa a nativa 'category'
        mas adiciona categorias específicas via admin.
        Aqui só garantimos que está habilitada para 'post'. */
+});
+
+/* ────────────────────────────────────────────
+   6a. METABOX — Fraude
+   ──────────────────────────────────────────── */
+
+add_action('add_meta_boxes', function () {
+    add_meta_box('fs_fraude_meta',      '⚠️ Dados da Fraude',    'fs_render_fraude_metabox',  'fraude', 'side', 'high');
+    add_meta_box('fs_fraude_conteudo',  '📋 Estrutura da Fraude','fs_render_fraude_conteudo_metabox', 'fraude', 'normal', 'high');
+});
+
+function fs_render_fraude_metabox($post) {
+    wp_nonce_field('fs_fraude_meta_save', 'fs_fraude_nonce');
+    $nivel    = get_post_meta($post->ID, 'nivel_risco', true) ?: 'alto';
+    $prejuizo = get_post_meta($post->ID, 'prejuizo_estimado', true);
+    $nova     = get_post_meta($post->ID, 'nova_tecnica', true);
+    $fonte    = get_post_meta($post->ID, 'fonte_referencia', true);
+    ?>
+    <p><label><strong>Nível de Risco</strong></label><br>
+    <select name="nivel_risco" style="width:100%;margin-top:4px">
+      <?php foreach (['alto' => '🔴 Alto', 'medio' => '🟡 Médio', 'baixo' => '🔵 Baixo'] as $v => $l): ?>
+        <option value="<?php echo $v; ?>" <?php selected($nivel, $v); ?>><?php echo $l; ?></option>
+      <?php endforeach; ?>
+    </select></p>
+    <p><label><strong>Prejuízo Estimado</strong></label><br>
+    <input type="text" name="prejuizo_estimado" value="<?php echo esc_attr($prejuizo); ?>" placeholder="Ex: R$ 5.000 – R$ 50.000" style="width:100%"></p>
+    <p><label><input type="checkbox" name="nova_tecnica" value="1" <?php checked($nova, '1'); ?>> Nova técnica identificada</label></p>
+    <p><label><strong>Fonte / Referência</strong></label><br>
+    <textarea name="fonte_referencia_fraude" style="width:100%;height:60px"><?php echo esc_textarea($fonte); ?></textarea></p>
+    <?php
+}
+
+function fs_render_fraude_conteudo_metabox($post) {
+    wp_nonce_field('fs_fraude_conteudo_save', 'fs_fraude_conteudo_nonce');
+    $fields = [
+        'como_funciona'    => ['Como acontece', 'Descreva o mecanismo técnico da fraude…'],
+        'sinais_alerta'    => ['Sinais de alerta', 'Um sinal por linha…'],
+        'como_se_proteger' => ['Como se proteger', 'Uma dica por linha…'],
+        'o_que_fazer'      => ['O que fazer se for vítima', 'Um passo por linha…'],
+    ];
+    foreach ($fields as $key => [$label, $placeholder]):
+        $val = get_post_meta($post->ID, $key, true);
+        ?>
+        <p><label><strong><?php echo $label; ?></strong></label><br>
+        <textarea name="<?php echo $key; ?>" style="width:100%;height:100px;margin-top:4px" placeholder="<?php echo $placeholder; ?>"><?php echo esc_textarea($val); ?></textarea></p>
+        <?php
+    endforeach;
+}
+
+add_action('save_post_fraude', function ($post_id) {
+    if (!isset($_POST['fs_fraude_nonce']) || !wp_verify_nonce($_POST['fs_fraude_nonce'], 'fs_fraude_meta_save')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    $fields_single = ['nivel_risco', 'prejuizo_estimado'];
+    foreach ($fields_single as $f) {
+        if (isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_text_field($_POST[$f]));
+    }
+    update_post_meta($post_id, 'nova_tecnica', isset($_POST['nova_tecnica']) ? '1' : '0');
+    if (isset($_POST['fonte_referencia_fraude'])) {
+        update_post_meta($post_id, 'fonte_referencia', sanitize_textarea_field($_POST['fonte_referencia_fraude']));
+    }
+
+    $fields_text = ['como_funciona', 'sinais_alerta', 'como_se_proteger', 'o_que_fazer'];
+    foreach ($fields_text as $f) {
+        if (isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_textarea_field($_POST[$f]));
+    }
 });
 
 /* ────────────────────────────────────────────
@@ -462,6 +569,42 @@ function fs_golpe_card(WP_Post $post, bool $show_excerpt = true): void {
             <?= get_the_date('d M Y', $post) ?>
           </time>
           <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler alerta →</a>
+        </div>
+      </div>
+    </article>
+    <?php
+}
+
+/**
+ * Renderiza um card de fraude (visual distinto do golpe — azul/roxo).
+ */
+function fs_fraude_card(WP_Post $post, bool $show_excerpt = true): void {
+    $nivel   = get_post_meta($post->ID, 'nivel_risco', true) ?: 'alto';
+    $nova    = get_post_meta($post->ID, 'nova_tecnica', true) === '1';
+    $tipos   = get_the_terms($post->ID, 'tipo_fraude');
+    $border  = ['alto' => '#7c3aed', 'medio' => '#2563eb', 'baixo' => '#0891b2'][$nivel] ?? '#7c3aed';
+    $badge_map = ['alto' => ['fs-badge--fraude-alto', '🔓 Alto Risco'], 'medio' => ['fs-badge--fraude-medio', '⚠️ Risco Médio'], 'baixo' => ['fs-badge--fraude-baixo', 'ℹ️ Baixo Risco']];
+    [$badge_cls, $badge_label] = $badge_map[$nivel] ?? $badge_map['alto'];
+    ?>
+    <article class="fs-card fs-fraude-card" style="border-top:3px solid <?php echo esc_attr($border); ?>">
+      <?php if (has_post_thumbnail($post->ID)): ?>
+        <div class="fs-card__image">
+          <a href="<?php echo get_permalink($post); ?>"><?php echo get_the_post_thumbnail($post->ID, 'fs-card'); ?></a>
+        </div>
+      <?php endif; ?>
+      <div class="fs-card__body">
+        <div class="fs-card__meta">
+          <span class="fs-badge <?php echo $badge_cls; ?>"><?php echo $badge_label; ?></span>
+          <?php if ($nova): ?><span class="fs-badge fs-badge--novo">✦ Nova técnica</span><?php endif; ?>
+          <?php if ($tipos && !is_wp_error($tipos)): ?><span class="fs-tag"><?php echo esc_html($tipos[0]->name); ?></span><?php endif; ?>
+        </div>
+        <h2 class="fs-card__title"><a href="<?php echo get_permalink($post); ?>"><?php echo get_the_title($post); ?></a></h2>
+        <?php if ($show_excerpt): ?>
+          <p class="fs-card__excerpt"><?php echo wp_trim_words(get_the_excerpt($post), 22); ?></p>
+        <?php endif; ?>
+        <div class="fs-card__footer">
+          <time class="fs-card__date" datetime="<?php echo get_the_date('c', $post); ?>"><?php echo get_the_date('d M Y', $post); ?></time>
+          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link" style="color:var(--purple);">Ver detalhes →</a>
         </div>
       </div>
     </article>
