@@ -1,0 +1,29 @@
+services:
+  wordpress:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: faroseguro
+      WORDPRESS_DB_USER: faroseguro
+      WORDPRESS_DB_PASSWORD: faroseguro
+      WORDPRESS_DEBUG: "1"
+    volumes:
+      - ./wp-content/themes/faroseguro:/var/www/html/wp-content/themes/faroseguro
+      - ./ads.txt:/var/www/html/ads.txt
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: faroseguro
+      MYSQL_USER: faroseguro
+      MYSQL_PASSWORD: faroseguro
+      MYSQL_ROOT_PASSWORD: faroseguro_root
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
