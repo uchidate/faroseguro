@@ -1,0 +1,373 @@
+/*
+Theme Name: Faro Seguro
+Theme URI: https://faroseguro.com.br
+Author: Faro Seguro
+Author URI: https://faroseguro.com.br
+Description: Child theme do Kadence para o site Faro Seguro - segurança eletrônica e proteção patrimonial.
+Template: kadence
+Version: 1.0.0
+Requires PHP: 8.0
+Requires at least: 6.4
+Text Domain: faro-seguro
+Tags: security, kadence-child
+*/
+
+/* ================================================================
+   Variáveis de Design — Faro Seguro
+   Paleta: Azul escuro naval + Laranja de destaque
+   ================================================================ */
+
+:root {
+  --fs-navy:       #1a2e4a;
+  --fs-blue:       #2563eb;
+  --fs-orange:     #f97316;
+  --fs-orange-h:   #ea6a0a;
+  --fs-light-bg:   #f8fafc;
+  --fs-dark-text:  #1e293b;
+  --fs-muted:      #64748b;
+  --fs-border:     #e2e8f0;
+  --fs-white:      #ffffff;
+
+  --fs-font:       'Inter', system-ui, -apple-system, sans-serif;
+  --fs-radius:     10px;
+  --fs-radius-lg:  16px;
+  --fs-shadow:     0 4px 24px rgba(0,0,0,0.08);
+  --fs-shadow-lg:  0 12px 40px rgba(0,0,0,0.12);
+  --fs-transition: 0.2s ease;
+}
+
+/* ================================================================
+   Reset / Base
+   ================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--fs-font);
+  color: var(--fs-dark-text);
+  background: var(--fs-white);
+  margin: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+
+a { color: var(--fs-blue); transition: color var(--fs-transition); }
+a:hover { color: var(--fs-orange); }
+
+/* ================================================================
+   Layout Container
+   ================================================================ */
+
+.container {
+  width: min(1200px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+/* ================================================================
+   Header / Navegação (sobrescreve Kadence)
+   ================================================================ */
+
+.site-header,
+#masthead {
+  background: var(--fs-navy) !important;
+  border-bottom: none !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header .header-navigation .nav-menu > li > a,
+#masthead .main-navigation a {
+  color: rgba(255,255,255,0.85) !important;
+  font-weight: 500;
+  transition: color var(--fs-transition);
+}
+
+.site-header .header-navigation .nav-menu > li > a:hover,
+#masthead .main-navigation a:hover {
+  color: var(--fs-orange) !important;
+}
+
+/* Botão CTA no header */
+.header-cta-btn {
+  display: inline-block;
+  background: var(--fs-orange);
+  color: var(--fs-white) !important;
+  padding: 0.55rem 1.3rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background var(--fs-transition), transform var(--fs-transition);
+}
+.header-cta-btn:hover {
+  background: var(--fs-orange-h) !important;
+  color: var(--fs-white) !important;
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   Botões Globais
+   ================================================================ */
+
+.wp-block-button__link,
+.kt-button,
+.button-primary-fs {
+  border-radius: var(--fs-radius) !important;
+  font-weight: 600 !important;
+  transition: transform var(--fs-transition), box-shadow var(--fs-transition) !important;
+}
+
+.wp-block-button__link:hover,
+.kt-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+}
+
+/* ================================================================
+   Seção Hero — classe utilitária
+   ================================================================ */
+
+.fs-hero {
+  background: linear-gradient(135deg, var(--fs-navy) 60%, #0f2240 100%);
+  color: var(--fs-white);
+  padding: 100px 0 80px;
+  text-align: center;
+}
+
+.fs-hero h1 {
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--fs-white);
+  margin: 0 0 1.25rem;
+}
+
+.fs-hero p {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.75;
+}
+
+.fs-eyebrow {
+  display: inline-block;
+  color: var(--fs-orange);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* ================================================================
+   Cards de Serviços
+   ================================================================ */
+
+.fs-card {
+  background: var(--fs-white);
+  border-radius: var(--fs-radius-lg);
+  padding: 2rem 1.75rem;
+  box-shadow: var(--fs-shadow);
+  border: 1px solid var(--fs-border);
+  transition: transform var(--fs-transition), box-shadow var(--fs-transition);
+}
+
+.fs-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--fs-shadow-lg);
+}
+
+.fs-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.fs-card h3 {
+  color: var(--fs-navy);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.fs-card p {
+  color: var(--fs-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ================================================================
+   Stats / Números
+   ================================================================ */
+
+.fs-stats-bar {
+  background: var(--fs-white);
+  border-top: 4px solid var(--fs-orange);
+  box-shadow: 0 -2px 0 rgba(0,0,0,0.04), var(--fs-shadow);
+}
+
+.fs-stat {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border-right: 1px solid var(--fs-border);
+}
+
+.fs-stat:last-child { border-right: none; }
+
+.fs-stat-number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--fs-orange);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.fs-stat-label {
+  color: var(--fs-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ================================================================
+   Seção CTA Banner
+   ================================================================ */
+
+.fs-cta-banner {
+  background: var(--fs-orange);
+  color: var(--fs-white);
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.fs-cta-banner h2 {
+  color: var(--fs-white);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.fs-cta-banner p {
+  color: rgba(255,255,255,0.88);
+  font-size: 1.1rem;
+  margin: 0 0 2rem;
+}
+
+.fs-btn-white {
+  display: inline-block;
+  background: var(--fs-white);
+  color: var(--fs-orange) !important;
+  padding: 1rem 2.5rem;
+  border-radius: var(--fs-radius);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform var(--fs-transition), box-shadow var(--fs-transition);
+}
+
+.fs-btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  color: var(--fs-orange) !important;
+}
+
+/* ================================================================
+   Footer
+   ================================================================ */
+
+.site-footer,
+#colophon {
+  background: var(--fs-navy) !important;
+  color: rgba(255,255,255,0.6);
+}
+
+.site-footer a,
+#colophon a {
+  color: rgba(255,255,255,0.6);
+}
+
+.site-footer a:hover,
+#colophon a:hover {
+  color: var(--fs-orange);
+}
+
+/* ================================================================
+   Formulário de Contato (CF7)
+   ================================================================ */
+
+.wpcf7-form input[type="text"],
+.wpcf7-form input[type="email"],
+.wpcf7-form input[type="tel"],
+.wpcf7-form select,
+.wpcf7-form textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--fs-border);
+  border-radius: var(--fs-radius);
+  font-family: var(--fs-font);
+  font-size: 0.95rem;
+  color: var(--fs-dark-text);
+  background: var(--fs-white);
+  transition: border-color var(--fs-transition);
+  margin-bottom: 0.25rem;
+}
+
+.wpcf7-form input:focus,
+.wpcf7-form select:focus,
+.wpcf7-form textarea:focus {
+  outline: none;
+  border-color: var(--fs-blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.wpcf7-form input[type="submit"] {
+  background: var(--fs-orange) !important;
+  color: var(--fs-white) !important;
+  border: none !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  width: auto;
+  padding: 0.9rem 2.5rem !important;
+  transition: background var(--fs-transition), transform var(--fs-transition) !important;
+}
+
+.wpcf7-form input[type="submit"]:hover {
+  background: var(--fs-orange-h) !important;
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   Utilitários
+   ================================================================ */
+
+.text-center { text-align: center; }
+.text-navy   { color: var(--fs-navy); }
+.text-orange { color: var(--fs-orange); }
+.text-muted  { color: var(--fs-muted); }
+
+.bg-light  { background: var(--fs-light-bg); }
+.bg-navy   { background: var(--fs-navy); }
+.bg-white  { background: var(--fs-white); }
+
+.section-pad { padding: 5rem 0; }
+.section-pad-sm { padding: 3rem 0; }
+
+/* ================================================================
+   Responsivo
+   ================================================================ */
+
+@media (max-width: 768px) {
+  .fs-hero { padding: 64px 1rem 48px; }
+  .fs-stat { border-right: none; border-bottom: 1px solid var(--fs-border); }
+  .fs-stat:last-child { border-bottom: none; }
+}

@@ -1,0 +1,44 @@
+# WordPress core (não versionar, vem da imagem Docker)
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Uploads (arquivos de mídia do site)
+wp-content/uploads/
+
+# Plugins (instalar via WP-CLI ou Coolify)
+wp-content/plugins/
+
+# Temas de terceiros (apenas nosso child theme)
+wp-content/themes/*/
+!wp-content/themes/faroseguro/
+
+# WordPress config
+wp-config.php
+wp-config-docker.php
+
+# Cache
+wp-content/cache/
+wp-content/advanced-cache.php
+wp-content/object-cache.php
+
+# Logs
+*.log
+debug.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Antigos arquivos estáticos (migrados para o WP)
+index.html
+script.js
+styles.css
+README.md
