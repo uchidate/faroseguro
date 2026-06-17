@@ -1,4 +1,4 @@
-name: CI
+name: CI / Deploy
 
 on:
   push:
@@ -13,35 +13,78 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: PHP syntax check
+      - name: Syntax check — todos os arquivos PHP do tema
         run: |
           find wp-content/themes/guiaantifraude -name "*.php" -print0 \
             | xargs -0 -n1 php -l
 
-      - name: Check for inline styles in PHP templates
+      - name: Inline styles excessivos
         run: |
           count=$(grep -rn 'style=' wp-content/themes/guiaantifraude --include="*.php" | wc -l)
-          echo "Inline styles encontrados: $count"
+          echo "Inline styles: $count"
           if [ "$count" -gt 10 ]; then
-            echo "::warning::Muitos inline styles ($count). Considere mover para style.css."
+            echo "::warning::$count inline styles encontrados — considere mover para style.css"
           fi
 
   deploy:
-    name: Deploy via Coolify
+    name: Deploy (zero downtime)
     runs-on: ubuntu-latest
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_HOST_KEY: ${{ secrets.DEPLOY_HOST_KEY }}
+
     steps:
-      - name: Trigger Coolify deploy
+      - uses: actions/checkout@v4
+
+      - name: Configurar chave SSH
         run: |
-          response=$(curl -s -o /tmp/coolify_resp.txt -w "%{http_code}" \
-            -X GET \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-            "https://coolify.hallyuhub.com.br/api/v1/deploy?uuid=pjn7ad04hr2r75ocaa68yeki")
-          echo "Coolify respondeu: $response"
-          cat /tmp/coolify_resp.txt
-          if [ "$response" != "200" ] && [ "$response" != "201" ]; then
-            echo "::error::Deploy falhou. HTTP $response"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+
+      - name: Copiar tema para o container (sem downtime)
+        run: |
+          THEME_DIR="wp-content/themes/guiaantifraude"
+          CONTAINER="wordpress-pjn7ad04hr2r75ocaa68yeki"
+          REMOTE_PATH="/var/www/html/wp-content/themes/guiaantifraude"
+
+          # Cria tarball do tema localmente
+          tar czf /tmp/theme.tar.gz -C wp-content/themes guiaantifraude
+
+          # Envia para o servidor
+          scp -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            /tmp/theme.tar.gz \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/theme.tar.gz
+
+          # Extrai direto no container em execução (sem restart)
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'ENDSSH'
+              set -e
+              # Extrai no servidor e copia para o container
+              tar xzf /tmp/theme.tar.gz -C /tmp/
+              docker cp /tmp/guiaantifraude/. wordpress-pjn7ad04hr2r75ocaa68yeki:/var/www/html/wp-content/themes/guiaantifraude/
+              # Ajusta permissões
+              docker exec wordpress-pjn7ad04hr2r75ocaa68yeki \
+                chown -R www-data:www-data /var/www/html/wp-content/themes/guiaantifraude
+              # Limpa temporários
+              rm -rf /tmp/theme.tar.gz /tmp/guiaantifraude
+              echo "Deploy concluído com sucesso"
+          ENDSSH
+
+      - name: Verificar site no ar
+        run: |
+          sleep 5
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://guiaantifraude.com)
+          echo "HTTP status: $status"
+          if [ "$status" != "200" ] && [ "$status" != "301" ] && [ "$status" != "302" ]; then
+            echo "::error::Site retornou HTTP $status após deploy"
             exit 1
           fi
-          echo "Deploy disparado com sucesso."
+          echo "Site respondendo normalmente."
