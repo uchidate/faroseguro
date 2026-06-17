@@ -36,7 +36,7 @@
       <h1 class="fs-single__title"><?php the_title(); ?></h1>
       <?php if (has_excerpt()): ?><p class="fs-single__lead"><?php the_excerpt(); ?></p><?php endif; ?>
       <div class="fs-single__byline">
-        <span>Publicado em <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
+        <span>Publicado em <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('d \d\e F \d\e Y'); ?></time></span>
         <?php if ($canais && !is_wp_error($canais)): ?><span>Canal: <?php echo esc_html(implode(', ', wp_list_pluck($canais, 'name'))); ?></span><?php endif; ?>
         <?php if ($publicos && !is_wp_error($publicos)): ?><span>Público-alvo: <?php echo esc_html(implode(', ', wp_list_pluck($publicos, 'name'))); ?></span><?php endif; ?>
         <?php if ($prejuizo): ?><span>Prejuízo estimado: <strong style="color:#fb923c;"><?php echo esc_html($prejuizo); ?></strong></span><?php endif; ?>

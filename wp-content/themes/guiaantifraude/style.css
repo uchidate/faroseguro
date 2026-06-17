@@ -1,7 +1,7 @@
 /*
 Theme Name: Guia Antifraude
 Template:   kadence
-Version:    3.6.0
+Version:    3.8.0
 Text Domain: guia-antifraude
 */
 
@@ -268,7 +268,7 @@ button { cursor: pointer; font: inherit; }
 .fs-single__hero { background: var(--navy); padding: 56px 0 48px; border-bottom: 3px solid var(--orange); }
 .fs-single__meta-top { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .fs-single__title { font-size: clamp(var(--text-2xl), 4vw, 2.75rem); font-weight: 800; color: #fff; letter-spacing: -.035em; line-height: 1.15; margin-bottom: 16px; }
-.fs-single__lead { font-size: var(--text-lg); color: #e2e8f0; line-height: 1.75; max-width: 700px; margin-bottom: 24px; }
+.fs-single__lead { font-size: var(--text-lg); font-weight: 600; color: #fff; line-height: 1.75; max-width: 700px; margin-bottom: 24px; -webkit-font-smoothing: antialiased; }
 .fs-single__byline { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--text-sm); color: rgba(255,255,255,.65); }
 .fs-single__byline strong { color: rgba(255,255,255,.9); }
 .fs-single__byline a { color: rgba(255,255,255,.75); transition: color var(--dur) var(--ease); }
