@@ -12,62 +12,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Syntax check — todos os arquivos PHP do tema
-        run: |
-          find wp-content/themes/guiaantifraude -name "*.php" -print0 \
-            | xargs -0 -n1 php -l
-
-      - name: Inline styles excessivos
-        run: |
-          count=$(grep -rn 'style=' wp-content/themes/guiaantifraude --include="*.php" | wc -l)
-          echo "Inline styles: $count"
-          if [ "$count" -gt 10 ]; then
-            echo "::warning::$count inline styles — considere mover para style.css"
-          fi
+      - name: PHP syntax check
+        run: find wp-content/themes/guiaantifraude -name "*.php" -print0 | xargs -0 -n1 php -l
 
   deploy:
-    name: Deploy (zero downtime)
+    name: Deploy
     runs-on: ubuntu-latest
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    env:
-      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configurar chave SSH
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Add known host
+        run: echo "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy tema
         run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          printf '%s\n' "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          tar czf /tmp/theme.tar.gz -C wp-content/themes guiaantifraude
+          scp /tmp/theme.tar.gz scripts/deploy-theme.sh root@31.97.255.107:/tmp/
+          ssh root@31.97.255.107 "chmod +x /tmp/deploy-theme.sh && /tmp/deploy-theme.sh"
 
-      - name: Empacotar tema
-        run: tar czf /tmp/guiaantifraude-theme.tar.gz -C wp-content/themes guiaantifraude
-
-      - name: Enviar tema e script para o servidor
-        run: |
-          scp -i ~/.ssh/deploy_key \
-            /tmp/guiaantifraude-theme.tar.gz \
-            scripts/deploy-theme.sh \
-            ${DEPLOY_USER}@${DEPLOY_HOST}:/tmp/
-
-      - name: Executar deploy no servidor
-        run: |
-          ssh -i ~/.ssh/deploy_key \
-            ${DEPLOY_USER}@${DEPLOY_HOST} \
-            "chmod +x /tmp/deploy-theme.sh && /tmp/deploy-theme.sh"
-
-      - name: Verificar site no ar
+      - name: Verificar site
         run: |
           sleep 3
           status=$(curl -s -o /dev/null -w "%{http_code}" https://guiaantifraude.com)
-          echo "HTTP status: $status"
-          if [ "$status" != "200" ] && [ "$status" != "301" ] && [ "$status" != "302" ]; then
-            echo "::error::Site retornou HTTP $status após deploy"
-            exit 1
-          fi
-          echo "Site OK."
+          [ "$status" = "200" ] || [ "$status" = "301" ] || { echo "Site retornou $status"; exit 1; }
+          echo "Site OK ($status)"
