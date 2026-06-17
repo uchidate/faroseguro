@@ -103,7 +103,7 @@
 
           <?php if (trim((string)$o_que_fazer)): ?>
           <div class="fs-block fs-block--action">
-            <div class="fs-block__header"><span>🆘</span><h2>Fui vítima — o que fazer agora</h2></div>
+            <div class="fs-block__header"><span aria-hidden="true" class="fs-block__mark"></span><h2>Fui vítima — o que fazer agora</h2></div>
             <div class="fs-block__body">
               <ul class="fs-checklist fs-checklist--safe">
                 <?php foreach (array_filter(array_map('trim', explode("\n", $o_que_fazer))) as $a): ?>
