@@ -4,8 +4,8 @@
   <div class="fs-archive__hero">
     <div class="container">
       <span class="fs-eyebrow">Referência</span>
-      <h1 class="fs-archive__title">Glossário de Fraudes</h1>
-      <p class="fs-archive__desc">Definições claras dos termos usados no universo de golpes e segurança financeira.</p>
+      <h1 class="fs-archive__title">Glossário de Segurança Financeira</h1>
+      <p class="fs-archive__desc">Definições claras dos termos técnicos usados no universo de golpes, fraudes bancárias e segurança digital.</p>
     </div>
   </div>
 
