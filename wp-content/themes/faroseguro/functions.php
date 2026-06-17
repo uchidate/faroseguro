@@ -7,6 +7,7 @@
 defined('ABSPATH') || exit;
 
 require_once get_stylesheet_directory() . '/inc/ads.php';
+require_once get_stylesheet_directory() . '/inc/seo-readiness.php';
 
 /* ────────────────────────────────────────────
    1. ENQUEUE
