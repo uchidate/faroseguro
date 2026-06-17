@@ -30,12 +30,9 @@ $total_posts   = wp_count_posts('post')->publish;
 
 <main class="fs-homepage">
 
-  <!-- ══════════════════════════════════════
-       SPLIT HERO — Golpe + Fraude lado a lado
-  ════════════════════════════════════════ -->
+  <!-- SPLIT HERO -->
   <section class="fs-split-hero">
 
-    <!-- Lado esquerdo: Golpe -->
     <?php if ($golpe_hero):
       $nivel    = get_post_meta($golpe_hero->ID, 'nivel_risco', true) ?: 'alto';
       $prejuizo = get_post_meta($golpe_hero->ID, 'prejuizo_estimado', true);
@@ -45,43 +42,39 @@ $total_posts   = wp_count_posts('post')->publish;
     <div class="fs-split-hero__panel fs-split-hero__panel--golpe">
       <?php if (has_post_thumbnail($golpe_hero->ID)): ?>
         <div class="fs-split-hero__bg">
-          <?php echo get_the_post_thumbnail($golpe_hero->ID, 'full', ['loading' => 'eager']); ?>
+          <?php echo get_the_post_thumbnail($golpe_hero->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
         </div>
       <?php endif; ?>
       <div class="fs-split-hero__overlay"></div>
       <div class="fs-split-hero__content">
-        <div class="fs-split-hero__label">
+        <div class="fs-split-hero__eyebrow fs-split-hero__eyebrow--golpe">
           <span class="fs-split-hero__dot"></span>
           Golpe em circulação
         </div>
         <?php if ($tipos_h && !is_wp_error($tipos_h)): ?>
-          <span class="fs-tag fs-tag--light"><?php echo esc_html($tipos_h[0]->name); ?></span>
+          <span class="fs-split-hero__type"><?php echo esc_html($tipos_h[0]->name); ?></span>
         <?php endif; ?>
         <h2 class="fs-split-hero__title">
           <a href="<?php echo get_permalink($golpe_hero); ?>"><?php echo esc_html($golpe_hero->post_title); ?></a>
         </h2>
-        <p class="fs-split-hero__desc"><?php echo wp_trim_words(get_the_excerpt($golpe_hero), 20); ?></p>
+        <p class="fs-split-hero__desc"><?php echo wp_trim_words(get_the_excerpt($golpe_hero), 22); ?></p>
         <div class="fs-split-hero__meta">
           <?php echo fs_badge_risco($nivel); ?>
-          <?php if ($canais_h && !is_wp_error($canais_h)): ?>
-            <span style="color:rgba(255,255,255,.5);font-size:.75rem;">📡 <?php echo esc_html($canais_h[0]->name); ?></span>
-          <?php endif; ?>
           <?php if ($prejuizo): ?>
-            <span style="color:rgba(255,255,255,.5);font-size:.75rem;">💸 <?php echo esc_html($prejuizo); ?></span>
+            <span style="color:rgba(255,255,255,.45);font-size:.7rem;">💸 <?php echo esc_html($prejuizo); ?></span>
           <?php endif; ?>
         </div>
         <a href="<?php echo get_permalink($golpe_hero); ?>" class="fs-split-hero__link">
           Ler análise completa
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
     <?php endif; wp_reset_postdata(); ?>
 
-    <!-- Divisor -->
-    <div class="fs-split-hero__divider" aria-hidden="true">VS</div>
+    <div class="fs-split-hero__divider" aria-hidden="true"></div>
 
-    <!-- Lado direito: Fraude -->
+    <!-- Fraude -->
     <?php if ($fraude_hero):
       $fnivel   = get_post_meta($fraude_hero->ID, 'nivel_risco', true) ?: 'alto';
       $fprejuizo= get_post_meta($fraude_hero->ID, 'prejuizo_estimado', true);
@@ -90,17 +83,17 @@ $total_posts   = wp_count_posts('post')->publish;
     <div class="fs-split-hero__panel fs-split-hero__panel--fraude">
       <?php if (has_post_thumbnail($fraude_hero->ID)): ?>
         <div class="fs-split-hero__bg">
-          <?php echo get_the_post_thumbnail($fraude_hero->ID, 'full', ['loading' => 'eager']); ?>
+          <?php echo get_the_post_thumbnail($fraude_hero->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
         </div>
       <?php endif; ?>
       <div class="fs-split-hero__overlay fs-split-hero__overlay--fraude"></div>
       <div class="fs-split-hero__content">
-        <div class="fs-split-hero__label" style="color:rgba(167,139,250,.9);">
-          <span class="fs-split-hero__dot" style="background:#a78bfa;"></span>
+        <div class="fs-split-hero__eyebrow fs-split-hero__eyebrow--fraude">
+          <span class="fs-split-hero__dot"></span>
           Nova fraude identificada
         </div>
         <?php if ($ftipos && !is_wp_error($ftipos)): ?>
-          <span class="fs-tag" style="background:rgba(124,58,237,.3);color:#c4b5fd;border-color:rgba(124,58,237,.4);"><?php echo esc_html($ftipos[0]->name); ?></span>
+          <span class="fs-split-hero__type"><?php echo esc_html($ftipos[0]->name); ?></span>
         <?php endif; ?>
         <h2 class="fs-split-hero__title">
           <a href="<?php echo get_permalink($fraude_hero); ?>"><?php echo esc_html($fraude_hero->post_title); ?></a>
@@ -113,12 +106,12 @@ $total_posts   = wp_count_posts('post')->publish;
           ?>
           <span class="fs-badge <?php echo $bc; ?>"><?php echo $bl2; ?></span>
           <?php if ($fprejuizo): ?>
-            <span style="color:rgba(255,255,255,.5);font-size:.75rem;">💸 <?php echo esc_html($fprejuizo); ?></span>
+            <span style="color:rgba(255,255,255,.45);font-size:.7rem;">💸 <?php echo esc_html($fprejuizo); ?></span>
           <?php endif; ?>
         </div>
-        <a href="<?php echo get_permalink($fraude_hero); ?>" class="fs-split-hero__link" style="border-color:rgba(167,139,250,.4);color:#c4b5fd;">
+        <a href="<?php echo get_permalink($fraude_hero); ?>" class="fs-split-hero__link">
           Ler análise completa
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
@@ -140,26 +133,24 @@ $total_posts   = wp_count_posts('post')->publish;
 
   </section>
 
-  <!-- Diferença conceitual -->
+  <!-- Concept bar compacta -->
   <div class="fs-concept-bar">
     <div class="container fs-concept-bar__inner">
-      <div class="fs-concept-bar__item">
-        <span class="fs-concept-bar__icon" style="color:var(--red);">🪤</span>
-        <div>
+      <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-concept-bar__item">
+        <span class="fs-concept-bar__icon">🪤</span>
+        <div class="fs-concept-bar__item-text">
           <strong>Golpe</strong>
-          <span>Você é manipulado a agir — pagar, transferir, entregar dados</span>
+          <span>Você é manipulado a agir — pagar, transferir ou entregar dados</span>
         </div>
-        <a href="<?php echo get_post_type_archive_link('golpe'); ?>">Ver golpes →</a>
-      </div>
+      </a>
       <div class="fs-concept-bar__sep"></div>
-      <div class="fs-concept-bar__item">
-        <span class="fs-concept-bar__icon" style="color:#a78bfa;">🔓</span>
-        <div>
+      <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-concept-bar__item">
+        <span class="fs-concept-bar__icon">🔓</span>
+        <div class="fs-concept-bar__item-text">
           <strong>Fraude</strong>
           <span>Acontece sem sua ação — conta invadida, cartão clonado, dados vazados</span>
         </div>
-        <a href="<?php echo get_post_type_archive_link('fraude'); ?>">Ver fraudes →</a>
-      </div>
+      </a>
     </div>
   </div>
 
