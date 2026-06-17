@@ -1,31 +1,22 @@
 #!/bin/bash
-# Deploy do tema guiaantifraude para o container WordPress em produção.
-# Executado via SSH pelo GitHub Actions.
+# Deploy do tema guiaantifraude para produção.
+# Executa no servidor via GitHub Actions.
 set -euo pipefail
 
-CONTAINER="wordpress-pjn7ad04hr2r75ocaa68yeki"
-REMOTE_THEME="/var/www/html/wp-content/themes/guiaantifraude"
-TMP_TAR="/tmp/guiaantifraude-theme.tar.gz"
-TMP_DIR="/tmp/guiaantifraude-theme"
+VOLUME="pjn7ad04hr2r75ocaa68yeki_wordpress-files"
+IMAGE="guiaantifraude:latest"
 
-echo "→ Verificando container..."
-if ! docker inspect "$CONTAINER" > /dev/null 2>&1; then
-  echo "ERRO: Container $CONTAINER não encontrado."
-  exit 1
-fi
+echo "→ Buildando imagem do GitHub..."
+docker build -t "$IMAGE" https://github.com/uchidate/faroseguro.git#main
 
-echo "→ Extraindo tema do arquivo recebido..."
-rm -rf "$TMP_DIR"
-mkdir -p "$TMP_DIR"
-tar xzf "$TMP_TAR" -C "$TMP_DIR"
-
-echo "→ Copiando tema para o container (sem downtime)..."
-docker cp "$TMP_DIR/guiaantifraude/." "$CONTAINER:$REMOTE_THEME/"
-
-echo "→ Ajustando permissões..."
-docker exec "$CONTAINER" chown -R www-data:www-data "$REMOTE_THEME"
-
-echo "→ Limpando temporários..."
-rm -rf "$TMP_TAR" "$TMP_DIR"
+echo "→ Copiando tema para o volume (sem downtime)..."
+docker run --rm \
+  -v "${VOLUME}:/html" \
+  "$IMAGE" \
+  bash -c '
+    cp -r /var/www/html/wp-content/themes/guiaantifraude/. /html/wp-content/themes/guiaantifraude/
+    cp -r /var/www/html/wp-content/themes/faroseguro/. /html/wp-content/themes/faroseguro/
+    chown -R www-data:www-data /html/wp-content/themes/guiaantifraude /html/wp-content/themes/faroseguro
+  '
 
 echo "✓ Deploy concluído."

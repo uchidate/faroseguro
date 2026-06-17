@@ -21,8 +21,6 @@ jobs:
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v4
-
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -30,11 +28,8 @@ jobs:
       - name: Add known host
         run: echo "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy tema
-        run: |
-          tar czf /tmp/theme.tar.gz -C wp-content/themes guiaantifraude
-          scp /tmp/theme.tar.gz scripts/deploy-theme.sh root@31.97.255.107:/tmp/
-          ssh root@31.97.255.107 "chmod +x /tmp/deploy-theme.sh && /tmp/deploy-theme.sh"
+      - name: Deploy
+        run: ssh root@31.97.255.107 "bash <(curl -fsSL https://raw.githubusercontent.com/uchidate/faroseguro/main/scripts/deploy-theme.sh)"
 
       - name: Verificar site
         run: |
