@@ -1,11 +1,18 @@
 <?php
 /**
  * Faro Seguro — Child theme do Kadence
- * Foco: informação e alertas sobre fraudes e golpes bancários
+ * Arquitetura de conteúdo para alertas de fraudes e golpes bancários.
  */
 
-// Garantir que o pai (Kadence) carrega primeiro
+defined('ABSPATH') || exit;
+
+/* ────────────────────────────────────────────
+   1. ENQUEUE
+   ──────────────────────────────────────────── */
+
 add_action('wp_enqueue_scripts', function () {
+    $ver = wp_get_theme()->get('Version');
+
     wp_enqueue_style(
         'kadence-parent-style',
         get_template_directory_uri() . '/style.css',
@@ -14,146 +21,692 @@ add_action('wp_enqueue_scripts', function () {
     );
 
     wp_enqueue_style(
-        'faro-seguro-child',
+        'fs-style',
         get_stylesheet_uri(),
         ['kadence-parent-style'],
-        wp_get_theme()->get('Version')
+        $ver
+    );
+
+    // Inter via Bunny Fonts (sem Google, GDPR-friendly)
+    wp_enqueue_style(
+        'fs-inter',
+        'https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap',
+        [],
+        null
     );
 
     wp_enqueue_script(
-        'faro-seguro-main',
+        'fs-main',
         get_stylesheet_directory_uri() . '/assets/js/main.js',
         [],
-        '1.0.0',
+        $ver,
         true
     );
+
+    // Passar dados para o JS
+    wp_localize_script('fs-main', 'FS', [
+        'ajaxUrl'   => admin_url('admin-ajax.php'),
+        'nonce'     => wp_create_nonce('fs_ajax'),
+        'searchUrl' => home_url('/?s='),
+    ]);
 });
 
-// Suporte a features do tema
+/* ────────────────────────────────────────────
+   2. THEME SUPPORT
+   ──────────────────────────────────────────── */
+
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
-    add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption']);
+    add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'script', 'style']);
     add_theme_support('align-wide');
     add_theme_support('wp-block-styles');
     add_theme_support('editor-styles');
+    add_theme_support('responsive-embeds');
     add_editor_style('style.css');
 
-    // Tamanhos de imagem
-    add_image_size('fs-card', 760, 430, true);
-    add_image_size('fs-thumb', 380, 215, true);
+    add_image_size('fs-hero',  1400, 600,  true);
+    add_image_size('fs-card',   760, 430,  true);
+    add_image_size('fs-thumb',  380, 215,  true);
+    add_image_size('fs-square', 320, 320,  true);
 
     load_child_theme_textdomain('faro-seguro', get_stylesheet_directory() . '/languages');
 });
 
-// Menus
+/* ────────────────────────────────────────────
+   3. MENUS & WIDGETS
+   ──────────────────────────────────────────── */
+
 add_action('after_setup_theme', function () {
     register_nav_menus([
-        'primary' => __('Menu Principal', 'faro-seguro'),
-        'footer'  => __('Menu Rodapé', 'faro-seguro'),
+        'primary' => 'Menu Principal',
+        'footer'  => 'Menu Rodapé',
     ]);
 });
 
-// Widgets
 add_action('widgets_init', function () {
-    register_sidebar([
-        'name'          => __('Sidebar Principal', 'faro-seguro'),
-        'id'            => 'sidebar-main',
-        'description'   => __('Sidebar exibida em posts e páginas internas.', 'faro-seguro'),
+    $defaults = [
         'before_widget' => '<div class="sidebar-widget">',
         'after_widget'  => '</div>',
         'before_title'  => '<h3 class="widget-title">',
         'after_title'   => '</h3>',
-    ]);
-});
-
-// Custom Post Type: Tipo de Golpe
-add_action('init', function () {
-    register_post_type('golpe', [
-        'label'               => 'Golpes e Fraudes',
-        'labels'              => [
-            'name'          => 'Golpes e Fraudes',
-            'singular_name' => 'Golpe',
-            'add_new_item'  => 'Novo Alerta de Golpe',
-            'edit_item'     => 'Editar Golpe',
-            'view_item'     => 'Ver Golpe',
-            'search_items'  => 'Buscar Golpes',
-            'not_found'     => 'Nenhum golpe cadastrado.',
-        ],
-        'public'              => true,
-        'has_archive'         => true,
-        'rewrite'             => ['slug' => 'golpes'],
-        'supports'            => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'],
-        'menu_icon'           => 'dashicons-warning',
-        'show_in_rest'        => true, // habilita Gutenberg
-    ]);
-
-    // Taxonomia: Categoria de Golpe
-    register_taxonomy('tipo_golpe', 'golpe', [
-        'label'        => 'Tipos de Golpe',
-        'hierarchical' => true,
-        'rewrite'      => ['slug' => 'tipo-golpe'],
-        'show_in_rest' => true,
-    ]);
-});
-
-// Shortcode: [alerta-golpe tipo="pix" nivel="alto"]
-add_shortcode('alerta-golpe', function ($atts) {
-    $a = shortcode_atts([
-        'tipo'  => 'Golpe',
-        'nivel' => 'alto',
-    ], $atts);
-
-    $cores = [
-        'alto'   => ['bg' => '#fee2e2', 'border' => '#ef4444', 'icon' => '🚨'],
-        'medio'  => ['bg' => '#fef3c7', 'border' => '#f59e0b', 'icon' => '⚠️'],
-        'baixo'  => ['bg' => '#dbeafe', 'border' => '#3b82f6', 'icon' => 'ℹ️'],
     ];
 
-    $c = $cores[$a['nivel']] ?? $cores['alto'];
+    register_sidebar($defaults + [
+        'name'        => 'Sidebar de Artigos',
+        'id'          => 'sidebar-artigos',
+        'description' => 'Exibida nos artigos e categorias.',
+    ]);
 
-    return sprintf(
-        '<div class="fs-alerta" style="background:%s;border-left:4px solid %s;padding:1rem 1.25rem;border-radius:8px;margin:1.5rem 0;">
-            <strong>%s Alerta: %s</strong>
-        </div>',
-        esc_attr($c['bg']),
-        esc_attr($c['border']),
-        $c['icon'],
-        esc_html($a['tipo'])
+    register_sidebar($defaults + [
+        'name'        => 'Sidebar de Golpes',
+        'id'          => 'sidebar-golpes',
+        'description' => 'Exibida nos alertas de golpes.',
+    ]);
+});
+
+/* ────────────────────────────────────────────
+   4. POST TYPES
+   ──────────────────────────────────────────── */
+
+add_action('init', function () {
+
+    /* 4a. Golpe — Alerta específico de fraude */
+    register_post_type('golpe', [
+        'label'         => 'Alertas de Golpe',
+        'labels'        => [
+            'name'               => 'Alertas de Golpe',
+            'singular_name'      => 'Alerta de Golpe',
+            'menu_name'          => 'Alertas',
+            'add_new_item'       => 'Novo Alerta',
+            'edit_item'          => 'Editar Alerta',
+            'new_item'           => 'Novo Alerta',
+            'view_item'          => 'Ver Alerta',
+            'search_items'       => 'Buscar Alertas',
+            'not_found'          => 'Nenhum alerta encontrado.',
+            'not_found_in_trash' => 'Nenhum alerta na lixeira.',
+            'all_items'          => 'Todos os Alertas',
+        ],
+        'public'            => true,
+        'has_archive'       => true,
+        'rewrite'           => ['slug' => 'golpes', 'with_front' => false],
+        'supports'          => ['title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'author'],
+        'menu_icon'         => 'dashicons-shield-alt',
+        'menu_position'     => 5,
+        'show_in_rest'      => true,
+        'taxonomies'        => ['tipo_golpe', 'canal_golpe', 'publico_alvo'],
+    ]);
+
+    /* 4b. Glossário — Dicionário de termos */
+    register_post_type('glossario', [
+        'label'         => 'Glossário',
+        'labels'        => [
+            'name'          => 'Glossário',
+            'singular_name' => 'Termo',
+            'add_new_item'  => 'Novo Termo',
+            'edit_item'     => 'Editar Termo',
+            'all_items'     => 'Todos os Termos',
+        ],
+        'public'        => true,
+        'has_archive'   => true,
+        'rewrite'       => ['slug' => 'glossario', 'with_front' => false],
+        'supports'      => ['title', 'editor', 'excerpt'],
+        'menu_icon'     => 'dashicons-book',
+        'menu_position' => 6,
+        'show_in_rest'  => true,
+    ]);
+});
+
+/* ────────────────────────────────────────────
+   5. TAXONOMIAS
+   ──────────────────────────────────────────── */
+
+add_action('init', function () {
+
+    /* 5a. Tipo de Golpe */
+    register_taxonomy('tipo_golpe', ['golpe'], [
+        'label'         => 'Tipo de Golpe',
+        'labels'        => [
+            'name'          => 'Tipos de Golpe',
+            'singular_name' => 'Tipo de Golpe',
+            'all_items'     => 'Todos os Tipos',
+            'add_new_item'  => 'Novo Tipo',
+        ],
+        'hierarchical'  => true,
+        'rewrite'       => ['slug' => 'tipo-golpe', 'with_front' => false],
+        'show_in_rest'  => true,
+        'show_admin_column' => true,
+    ]);
+
+    /* 5b. Canal do Golpe */
+    register_taxonomy('canal_golpe', ['golpe'], [
+        'label'         => 'Canal',
+        'labels'        => [
+            'name'          => 'Canais',
+            'singular_name' => 'Canal',
+            'all_items'     => 'Todos os Canais',
+            'add_new_item'  => 'Novo Canal',
+        ],
+        'hierarchical'  => false,
+        'rewrite'       => ['slug' => 'canal', 'with_front' => false],
+        'show_in_rest'  => true,
+        'show_admin_column' => true,
+    ]);
+
+    /* 5c. Público-alvo */
+    register_taxonomy('publico_alvo', ['golpe', 'post'], [
+        'label'         => 'Público-Alvo',
+        'labels'        => [
+            'name'          => 'Públicos-Alvo',
+            'singular_name' => 'Público-Alvo',
+            'all_items'     => 'Todos os Públicos',
+        ],
+        'hierarchical'  => false,
+        'rewrite'       => ['slug' => 'publico', 'with_front' => false],
+        'show_in_rest'  => true,
+        'show_admin_column' => true,
+    ]);
+
+    /* 5d. Categorias de Artigos — usa a nativa 'category'
+       mas adiciona categorias específicas via admin.
+       Aqui só garantimos que está habilitada para 'post'. */
+});
+
+/* ────────────────────────────────────────────
+   6. CUSTOM FIELDS — Metaboxes (Golpe)
+   ──────────────────────────────────────────── */
+
+add_action('add_meta_boxes', function () {
+
+    add_meta_box(
+        'fs_golpe_meta',
+        '🚨 Dados do Alerta',
+        'fs_render_golpe_metabox',
+        'golpe',
+        'side',
+        'high'
+    );
+
+    add_meta_box(
+        'fs_golpe_conteudo',
+        '📋 Estrutura do Golpe',
+        'fs_render_golpe_conteudo_metabox',
+        'golpe',
+        'normal',
+        'high'
     );
 });
 
-// Nível de risco no loop de posts
-add_filter('the_excerpt', function ($excerpt) {
-    global $post;
-    if ($post->post_type !== 'golpe') return $excerpt;
+function fs_render_golpe_metabox($post) {
+    wp_nonce_field('fs_golpe_meta_save', 'fs_golpe_nonce');
+    $nivel     = get_post_meta($post->ID, 'nivel_risco', true) ?: 'alto';
+    $prejuizo  = get_post_meta($post->ID, 'prejuizo_estimado', true);
+    $novidade  = get_post_meta($post->ID, 'novo_modus', true);
+    $fonte     = get_post_meta($post->ID, 'fonte_referencia', true);
+    ?>
+    <p>
+      <label><strong>Nível de Risco</strong></label><br>
+      <select name="nivel_risco" style="width:100%;margin-top:4px">
+        <?php foreach (['alto' => '🚨 Alto', 'medio' => '⚠️ Médio', 'baixo' => 'ℹ️ Baixo'] as $v => $l): ?>
+          <option value="<?= $v ?>" <?= selected($nivel, $v, false) ?>><?= $l ?></option>
+        <?php endforeach; ?>
+      </select>
+    </p>
+    <p>
+      <label><strong>Prejuízo Médio Estimado</strong></label><br>
+      <input type="text" name="prejuizo_estimado" value="<?= esc_attr($prejuizo) ?>"
+             placeholder="ex: R$ 2.000" style="width:100%;margin-top:4px">
+    </p>
+    <p>
+      <label>
+        <input type="checkbox" name="novo_modus" value="1" <?= checked($novidade, '1', false) ?>>
+        <strong>Novo modus operandi</strong>
+      </label>
+    </p>
+    <p>
+      <label><strong>Fonte / Referência</strong></label><br>
+      <input type="url" name="fonte_referencia" value="<?= esc_attr($fonte) ?>"
+             placeholder="https://..." style="width:100%;margin-top:4px">
+    </p>
+    <?php
+}
 
-    $nivel = get_post_meta($post->ID, 'nivel_risco', true);
-    if (!$nivel) return $excerpt;
-
-    $badges = [
-        'alto'  => '<span class="fs-badge fs-badge--red">🚨 Risco Alto</span>',
-        'medio' => '<span class="fs-badge fs-badge--yellow">⚠️ Risco Médio</span>',
-        'baixo' => '<span class="fs-badge fs-badge--blue">ℹ️ Risco Baixo</span>',
+function fs_render_golpe_conteudo_metabox($post) {
+    $como_age      = get_post_meta($post->ID, 'como_age', true);
+    $sinais        = get_post_meta($post->ID, 'sinais_alerta', true);
+    $como_proteger = get_post_meta($post->ID, 'como_se_proteger', true);
+    $o_que_fazer   = get_post_meta($post->ID, 'o_que_fazer', true);
+    ?>
+    <p style="color:#666;font-size:12px;margin-bottom:12px">
+      Preencha estes campos estruturados para gerar automaticamente seções no post.
+      O editor principal é para contexto adicional e casos reais.
+    </p>
+    <?php
+    $fields = [
+        'como_age'         => ['Como o Golpe Funciona', 'Descreva o passo a passo do modus operandi...', $como_age, 5],
+        'sinais_alerta'    => ['Sinais de Alerta (um por linha)', "Ligação não solicitada pedindo dados\nUrgência excessiva na conversa", $sinais, 4],
+        'como_se_proteger' => ['Como se Proteger (um por linha)', "Nunca transfira dinheiro por pedido telefônico\nConfirme pelo app oficial do banco", $como_proteger, 4],
+        'o_que_fazer'      => ['O que Fazer se Cair no Golpe', 'Contate o banco imediatamente, registre boletim de ocorrência...', $o_que_fazer, 3],
     ];
-
-    return ($badges[$nivel] ?? '') . $excerpt;
-});
-
-// Adiciona metabox de Nível de Risco no CPT Golpe
-add_action('add_meta_boxes', function () {
-    add_meta_box('fs_nivel_risco', 'Nível de Risco', function ($post) {
-        $valor = get_post_meta($post->ID, 'nivel_risco', true);
-        echo '<label>Nível: <select name="nivel_risco">
-            <option value="alto"  ' . selected($valor, 'alto',  false) . '>🚨 Alto</option>
-            <option value="medio" ' . selected($valor, 'medio', false) . '>⚠️ Médio</option>
-            <option value="baixo" ' . selected($valor, 'baixo', false) . '>ℹ️ Baixo</option>
-        </select></label>';
-    }, 'golpe', 'side');
-});
+    foreach ($fields as $key => [$label, $placeholder, $value, $rows]): ?>
+    <p>
+      <label><strong><?= $label ?></strong></label><br>
+      <textarea name="<?= $key ?>" rows="<?= $rows ?>" placeholder="<?= $placeholder ?>"
+        style="width:100%;margin-top:4px;font-family:inherit"><?= esc_textarea($value) ?></textarea>
+    </p>
+    <?php endforeach;
+}
 
 add_action('save_post_golpe', function ($post_id) {
-    if (isset($_POST['nivel_risco'])) {
-        update_post_meta($post_id, 'nivel_risco', sanitize_text_field($_POST['nivel_risco']));
+    if (!isset($_POST['fs_golpe_nonce']) ||
+        !wp_verify_nonce($_POST['fs_golpe_nonce'], 'fs_golpe_meta_save') ||
+        defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
     }
+
+    $text_fields = ['prejuizo_estimado', 'fonte_referencia', 'como_age', 'sinais_alerta', 'como_se_proteger', 'o_que_fazer'];
+    foreach ($text_fields as $field) {
+        if (isset($_POST[$field])) {
+            update_post_meta($post_id, $field, sanitize_textarea_field($_POST[$field]));
+        }
+    }
+
+    $nivel = sanitize_text_field($_POST['nivel_risco'] ?? 'alto');
+    update_post_meta($post_id, 'nivel_risco', in_array($nivel, ['alto', 'medio', 'baixo']) ? $nivel : 'alto');
+    update_post_meta($post_id, 'novo_modus', isset($_POST['novo_modus']) ? '1' : '0');
+});
+
+/* ────────────────────────────────────────────
+   7. CUSTOM FIELDS — Artigos (post)
+   ──────────────────────────────────────────── */
+
+add_action('add_meta_boxes', function () {
+    add_meta_box(
+        'fs_artigo_meta',
+        '📝 Dados do Artigo',
+        function ($post) {
+            wp_nonce_field('fs_artigo_meta_save', 'fs_artigo_nonce');
+            $minutos     = get_post_meta($post->ID, 'leitura_minutos', true);
+            $atualizado  = get_post_meta($post->ID, 'atualizado_em', true);
+            $destaque    = get_post_meta($post->ID, 'artigo_destaque', true);
+            ?>
+            <p>
+              <label><strong>Tempo de Leitura (min)</strong></label><br>
+              <input type="number" name="leitura_minutos" value="<?= esc_attr($minutos) ?>"
+                     min="1" max="60" style="width:80px;margin-top:4px">
+              <span style="color:#888;font-size:12px;margin-left:6px">Se vazio, calcula automaticamente.</span>
+            </p>
+            <p>
+              <label><strong>Última Atualização</strong></label><br>
+              <input type="date" name="atualizado_em" value="<?= esc_attr($atualizado) ?>" style="margin-top:4px">
+            </p>
+            <p>
+              <label>
+                <input type="checkbox" name="artigo_destaque" value="1" <?= checked($destaque, '1', false) ?>>
+                <strong>Artigo em Destaque</strong> (aparece no topo da Home)
+              </label>
+            </p>
+            <?php
+        },
+        'post',
+        'side',
+        'default'
+    );
+});
+
+add_action('save_post_post', function ($post_id) {
+    if (!isset($_POST['fs_artigo_nonce']) ||
+        !wp_verify_nonce($_POST['fs_artigo_nonce'], 'fs_artigo_meta_save') ||
+        defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    $minutos = (int) ($_POST['leitura_minutos'] ?? 0);
+    if ($minutos > 0) {
+        update_post_meta($post_id, 'leitura_minutos', $minutos);
+    } else {
+        // Auto-calcular: ~200 palavras por minuto
+        $content = get_post_field('post_content', $post_id);
+        $words   = str_word_count(strip_tags($content));
+        update_post_meta($post_id, 'leitura_minutos', max(1, round($words / 200)));
+    }
+
+    if (!empty($_POST['atualizado_em'])) {
+        update_post_meta($post_id, 'atualizado_em', sanitize_text_field($_POST['atualizado_em']));
+    }
+
+    update_post_meta($post_id, 'artigo_destaque', isset($_POST['artigo_destaque']) ? '1' : '0');
+});
+
+/* ────────────────────────────────────────────
+   8. HELPERS — funções reutilizáveis nos templates
+   ──────────────────────────────────────────── */
+
+/**
+ * Retorna o badge HTML de nível de risco.
+ */
+function fs_badge_risco(string $nivel = 'alto'): string {
+    $map = [
+        'alto'  => ['fs-badge--red',    '🚨 Risco Alto'],
+        'medio' => ['fs-badge--yellow', '⚠️ Risco Médio'],
+        'baixo' => ['fs-badge--blue',   'ℹ️ Risco Baixo'],
+    ];
+    [$cls, $label] = $map[$nivel] ?? $map['alto'];
+    return "<span class=\"fs-badge {$cls}\">{$label}</span>";
+}
+
+/**
+ * Retorna o tempo de leitura formatado.
+ */
+function fs_leitura(int $post_id = 0): string {
+    $post_id = $post_id ?: get_the_ID();
+    $min     = (int) get_post_meta($post_id, 'leitura_minutos', true);
+    if (!$min) {
+        $words = str_word_count(strip_tags(get_post_field('post_content', $post_id)));
+        $min   = max(1, round($words / 200));
+    }
+    return $min . ' min de leitura';
+}
+
+/**
+ * Retorna lista de tags de categorias/taxonomias do post.
+ */
+function fs_post_tags(int $post_id = 0, string $taxonomy = 'category'): string {
+    $post_id = $post_id ?: get_the_ID();
+    $terms   = get_the_terms($post_id, $taxonomy);
+    if (!$terms || is_wp_error($terms)) return '';
+
+    $out = '';
+    foreach ($terms as $t) {
+        $url  = get_term_link($t);
+        $out .= "<a href=\"" . esc_url($url) . "\" class=\"fs-tag\">" . esc_html($t->name) . "</a>";
+    }
+    return $out;
+}
+
+/**
+ * Renderiza um card de golpe.
+ */
+function fs_golpe_card(WP_Post $post, bool $show_excerpt = true): void {
+    $nivel   = get_post_meta($post->ID, 'nivel_risco', true) ?: 'alto';
+    $novo    = get_post_meta($post->ID, 'novo_modus', true) === '1';
+    $border  = ['alto' => '#ef4444', 'medio' => '#f59e0b', 'baixo' => '#3b82f6'][$nivel] ?? '#ef4444';
+    $canal   = fs_post_tags($post->ID, 'canal_golpe');
+    ?>
+    <article class="fs-card fs-golpe-card" style="border-top:3px solid <?= $border ?>">
+      <?php if (has_post_thumbnail($post->ID)): ?>
+        <div class="fs-card__image">
+          <a href="<?= get_permalink($post) ?>">
+            <?= get_the_post_thumbnail($post->ID, 'fs-card') ?>
+          </a>
+        </div>
+      <?php endif; ?>
+      <div class="fs-card__body">
+        <div class="fs-card__meta">
+          <?= fs_badge_risco($nivel) ?>
+          <?php if ($novo): ?>
+            <span class="fs-badge fs-badge--novo">✦ Novo</span>
+          <?php endif; ?>
+          <?= $canal ?>
+        </div>
+        <h2 class="fs-card__title">
+          <a href="<?= get_permalink($post) ?>"><?= get_the_title($post) ?></a>
+        </h2>
+        <?php if ($show_excerpt): ?>
+          <p class="fs-card__excerpt"><?= wp_trim_words(get_the_excerpt($post), 22) ?></p>
+        <?php endif; ?>
+        <div class="fs-card__footer">
+          <time class="fs-card__date" datetime="<?= get_the_date('c', $post) ?>">
+            <?= get_the_date('d M Y', $post) ?>
+          </time>
+          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler alerta →</a>
+        </div>
+      </div>
+    </article>
+    <?php
+}
+
+/**
+ * Renderiza um card de artigo.
+ */
+function fs_artigo_card(WP_Post $post, bool $large = false): void {
+    $leitura   = fs_leitura($post->ID);
+    $categorias = fs_post_tags($post->ID, 'category');
+    ?>
+    <article class="fs-card fs-artigo-card <?= $large ? 'fs-artigo-card--large' : '' ?>">
+      <?php if (has_post_thumbnail($post->ID)): ?>
+        <div class="fs-card__image">
+          <a href="<?= get_permalink($post) ?>">
+            <?= get_the_post_thumbnail($post->ID, $large ? 'fs-hero' : 'fs-card') ?>
+          </a>
+        </div>
+      <?php endif; ?>
+      <div class="fs-card__body">
+        <div class="fs-card__meta">
+          <?= $categorias ?>
+          <span class="fs-card__date"><?= $leitura ?></span>
+        </div>
+        <<?= $large ? 'h2' : 'h3' ?> class="fs-card__title">
+          <a href="<?= get_permalink($post) ?>"><?= get_the_title($post) ?></a>
+        </<?= $large ? 'h2' : 'h3' ?>>
+        <p class="fs-card__excerpt"><?= wp_trim_words(get_the_excerpt($post), $large ? 30 : 20) ?></p>
+        <div class="fs-card__footer">
+          <time class="fs-card__date" datetime="<?= get_the_date('c', $post) ?>">
+            <?= get_the_date('d M Y', $post) ?>
+          </time>
+          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler artigo →</a>
+        </div>
+      </div>
+    </article>
+    <?php
+}
+
+/* ────────────────────────────────────────────
+   9. SCHEMA MARKUP (JSON-LD)
+   ──────────────────────────────────────────── */
+
+add_action('wp_head', function () {
+    if (is_singular('post')) {
+        $post = get_queried_object();
+        $schema = [
+            '@context'      => 'https://schema.org',
+            '@type'         => 'Article',
+            'headline'      => get_the_title($post),
+            'description'   => get_the_excerpt($post),
+            'datePublished' => get_the_date('c', $post),
+            'dateModified'  => get_the_modified_date('c', $post),
+            'author'        => [
+                '@type' => 'Organization',
+                'name'  => get_bloginfo('name'),
+                'url'   => home_url('/'),
+            ],
+            'publisher'     => [
+                '@type' => 'Organization',
+                'name'  => get_bloginfo('name'),
+                'url'   => home_url('/'),
+            ],
+        ];
+        if (has_post_thumbnail($post)) {
+            $schema['image'] = get_the_post_thumbnail_url($post, 'fs-hero');
+        }
+        echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+    }
+
+    if (is_singular('golpe')) {
+        $post   = get_queried_object();
+        $nivel  = get_post_meta($post->ID, 'nivel_risco', true);
+        $sinais = get_post_meta($post->ID, 'sinais_alerta', true);
+        $protec = get_post_meta($post->ID, 'como_se_proteger', true);
+
+        $schema = [
+            '@context'      => 'https://schema.org',
+            '@type'         => 'Article',
+            'headline'      => get_the_title($post),
+            'description'   => get_the_excerpt($post),
+            'datePublished' => get_the_date('c', $post),
+            'dateModified'  => get_the_modified_date('c', $post),
+            'author'        => ['@type' => 'Organization', 'name' => get_bloginfo('name')],
+            'publisher'     => ['@type' => 'Organization', 'name' => get_bloginfo('name'), 'url' => home_url('/')],
+            'keywords'      => 'golpe, fraude, ' . $nivel . ' risco',
+        ];
+
+        // HowTo para "como se proteger"
+        if ($protec) {
+            $steps = array_values(array_filter(array_map('trim', explode("\n", $protec))));
+            $schema['@graph'][] = [
+                '@type'   => 'HowTo',
+                'name'    => 'Como se proteger: ' . get_the_title($post),
+                'step'    => array_map(fn($s, $i) => [
+                    '@type' => 'HowToStep',
+                    'position' => $i + 1,
+                    'text' => $s,
+                ], $steps, array_keys($steps)),
+            ];
+        }
+
+        echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+    }
+});
+
+/* ────────────────────────────────────────────
+   10. BUSCA — incluir CPTs
+   ──────────────────────────────────────────── */
+
+add_filter('pre_get_posts', function (WP_Query $q) {
+    if ($q->is_search() && $q->is_main_query() && !is_admin()) {
+        $q->set('post_type', ['post', 'golpe', 'glossario']);
+    }
+
+    // Paginação dos arquivos de CPT
+    if (!is_admin() && $q->is_main_query()) {
+        if ($q->is_post_type_archive('golpe') || $q->is_tax(['tipo_golpe', 'canal_golpe', 'publico_alvo'])) {
+            $q->set('posts_per_page', 12);
+            $q->set('orderby', 'date');
+            $q->set('order', 'DESC');
+        }
+        if ($q->is_home() || $q->is_archive('post')) {
+            $q->set('posts_per_page', 10);
+        }
+    }
+});
+
+/* ────────────────────────────────────────────
+   11. SHORTCODES
+   ──────────────────────────────────────────── */
+
+// [alerta nivel="alto"]Texto do aviso[/alerta]
+add_shortcode('alerta', function ($atts, $content = '') {
+    $a = shortcode_atts(['nivel' => 'alto'], $atts);
+    $map = [
+        'alto'  => ['#fee2e2', '#dc2626', '#fecaca', '🚨'],
+        'medio' => ['#fffbeb', '#d97706', '#fde68a', '⚠️'],
+        'baixo' => ['#eff6ff', '#2563eb', '#bfdbfe', 'ℹ️'],
+    ];
+    [$bg, $color, $border_color, $icon] = $map[$a['nivel']] ?? $map['alto'];
+    return "<div class=\"fs-alerta\" style=\"background:{$bg};border:1px solid {$border_color};border-left:4px solid {$color};border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0\">"
+         . "<strong style=\"color:{$color}\">{$icon} Atenção:</strong> "
+         . do_shortcode($content)
+         . "</div>";
+});
+
+// [ultimos-golpes qtd="4"]
+add_shortcode('ultimos-golpes', function ($atts) {
+    $a = shortcode_atts(['qtd' => 4], $atts);
+    $posts = get_posts(['post_type' => 'golpe', 'numberposts' => (int) $a['qtd'], 'post_status' => 'publish']);
+    if (!$posts) return '';
+
+    ob_start();
+    echo '<div class="fs-grid fs-grid--4">';
+    foreach ($posts as $post) {
+        setup_postdata($post);
+        fs_golpe_card($post, false);
+    }
+    wp_reset_postdata();
+    echo '</div>';
+    return ob_get_clean();
+});
+
+// [ultimos-artigos qtd="3"]
+add_shortcode('ultimos-artigos', function ($atts) {
+    $a = shortcode_atts(['qtd' => 3], $atts);
+    $posts = get_posts(['post_type' => 'post', 'numberposts' => (int) $a['qtd'], 'post_status' => 'publish']);
+    if (!$posts) return '';
+
+    ob_start();
+    echo '<div class="fs-grid fs-grid--3">';
+    foreach ($posts as $post) {
+        setup_postdata($post);
+        fs_artigo_card($post, false);
+    }
+    wp_reset_postdata();
+    echo '</div>';
+    return ob_get_clean();
+});
+
+/* ────────────────────────────────────────────
+   12. ADMIN — melhorias editoriais
+   ──────────────────────────────────────────── */
+
+// Colunas customizadas na listagem de golpes
+add_filter('manage_golpe_posts_columns', function ($cols) {
+    return array_merge(
+        array_slice($cols, 0, 2),
+        [
+            'nivel_risco'   => '🚨 Risco',
+            'novo_modus'    => '✦ Novo',
+            'canal_golpe'   => 'Canal',
+        ],
+        array_slice($cols, 2)
+    );
+});
+
+add_action('manage_golpe_posts_custom_column', function ($col, $post_id) {
+    if ($col === 'nivel_risco') {
+        $n = get_post_meta($post_id, 'nivel_risco', true) ?: 'alto';
+        $labels = ['alto' => '🚨 Alto', 'medio' => '⚠️ Médio', 'baixo' => 'ℹ️ Baixo'];
+        echo $labels[$n] ?? '—';
+    }
+    if ($col === 'novo_modus') {
+        echo get_post_meta($post_id, 'novo_modus', true) === '1' ? '✦ Sim' : '—';
+    }
+    if ($col === 'canal_golpe') {
+        $terms = get_the_terms($post_id, 'canal_golpe');
+        echo $terms && !is_wp_error($terms) ? implode(', ', wp_list_pluck($terms, 'name')) : '—';
+    }
+}, 10, 2);
+
+// Colunas de artigo: leitura + destaque
+add_filter('manage_posts_columns', function ($cols) {
+    $cols['leitura_min'] = '⏱ Leitura';
+    $cols['destaque']    = '⭐ Destaque';
+    return $cols;
+});
+
+add_action('manage_posts_custom_column', function ($col, $post_id) {
+    if ($col === 'leitura_min') echo fs_leitura($post_id);
+    if ($col === 'destaque')    echo get_post_meta($post_id, 'artigo_destaque', true) === '1' ? '⭐ Sim' : '—';
+}, 10, 2);
+
+/* ────────────────────────────────────────────
+   13. SEGURANÇA & PERFORMANCE
+   ──────────────────────────────────────────── */
+
+// Remover versão do WP do HTML
+remove_action('wp_head', 'wp_generator');
+
+// Desabilitar XML-RPC (vetor de ataque)
+add_filter('xmlrpc_enabled', '__return_false');
+
+// Remover emojis (desnecessários, carregam JS extra)
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+remove_action('admin_print_scripts', 'print_emoji_detection_script');
+remove_action('admin_print_styles', 'print_emoji_styles');
+
+// Headers de segurança
+add_action('send_headers', function () {
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
 });
