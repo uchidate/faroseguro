@@ -34,14 +34,12 @@ jobs:
     steps:
       - name: Trigger Coolify deploy
         run: |
-          if [ -z "${{ secrets.COOLIFY_WEBHOOK_URL }}" ]; then
-            echo "::warning::COOLIFY_WEBHOOK_URL não configurado. Deploy não disparado."
-            echo "Configure em: Settings → Secrets → COOLIFY_WEBHOOK_URL"
-            exit 0
-          fi
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}")
+          response=$(curl -s -o /tmp/coolify_resp.txt -w "%{http_code}" \
+            -X GET \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            "https://coolify.hallyuhub.com.br/api/v1/deploy?uuid=pjn7ad04hr2r75ocaa68yeki")
           echo "Coolify respondeu: $response"
+          cat /tmp/coolify_resp.txt
           if [ "$response" != "200" ] && [ "$response" != "201" ]; then
             echo "::error::Deploy falhou. HTTP $response"
             exit 1
