@@ -1,5 +1,7 @@
 <?php get_header(); ?>
 
+<div id="fs-read-progress-wrap"><div id="fs-read-progress"></div></div>
+
 <?php while (have_posts()) : the_post();
   $leitura    = fs_leitura();
   $atualizado = get_post_meta(get_the_ID(), 'atualizado_em', true);
