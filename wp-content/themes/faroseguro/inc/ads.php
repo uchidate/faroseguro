@@ -18,7 +18,7 @@ defined('ABSPATH') || exit;
 
 // Publisher ID — altere após aprovação do AdSense
 if (!defined('FS_ADSENSE_ID')) {
-    define('FS_ADSENSE_ID', '');           // ex: ca-pub-1234567890123456
+    define('FS_ADSENSE_ID', 'ca-pub-6015098995926392');
 }
 
 // Desabilitar ads em ambientes de dev
@@ -37,7 +37,7 @@ $GLOBALS['fs_ad_slots'] = [
 /* ── Carregar script do AdSense (uma vez) ────── */
 
 add_action('wp_head', function () {
-    if (!FS_ADS_ENABLED) return;
+    if (empty(FS_ADSENSE_ID) || is_admin()) return;
     echo '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' . esc_attr(FS_ADSENSE_ID) . '" crossorigin="anonymous"></script>' . "\n";
 }, 1);
 
