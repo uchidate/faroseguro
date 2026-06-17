@@ -15,7 +15,7 @@ wp-content/plugins/
 
 # Temas de terceiros (apenas nosso child theme)
 wp-content/themes/*/
-!wp-content/themes/faroseguro/
+!wp-content/themes/guiaantifraude/
 
 # WordPress config
 wp-config.php
