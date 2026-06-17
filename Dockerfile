@@ -6,6 +6,7 @@ RUN curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
     && mv wp-cli.phar /usr/local/bin/wp
 
 # Plugins (download direto do wordpress.org, sem necessidade de DB)
+RUN apt-get update -qq && apt-get install -y -qq unzip && rm -rf /var/lib/apt/lists/*
 RUN for plugin in akismet contact-form-7 kadence-blocks really-simple-ssl \
         regenerate-thumbnails w3-total-cache wordfence wordpress-seo; do \
       curl -sL "https://downloads.wordpress.org/plugin/${plugin}.latest-stable.zip" \
