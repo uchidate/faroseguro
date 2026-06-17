@@ -1,5 +1,7 @@
 <?php get_header(); ?>
 
+<div id="fs-read-progress-wrap"><div id="fs-read-progress"></div></div>
+
 <?php while (have_posts()) : the_post();
   $id          = get_the_ID();
   $nivel       = get_post_meta($id, 'nivel_risco',       true) ?: 'alto';
