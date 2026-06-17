@@ -30,7 +30,47 @@ $total_posts   = wp_count_posts('post')->publish;
 
 <main class="fs-homepage">
 
-  <!-- ÚLTIMOS ALERTAS — hero compacto editorial -->
+  <!-- HERO DE BOAS-VINDAS -->
+  <section class="fs-hero">
+    <div class="container fs-hero__inner">
+      <div class="fs-hero__copy">
+        <span class="fs-eyebrow">Guia independente e gratuito</span>
+        <h1 class="fs-hero__title">Caiu em um golpe ou suspeita de fraude?</h1>
+        <p class="fs-hero__desc">Aqui você encontra o que precisa: identifique o que aconteceu, saiba o que fazer agora e onde denunciar — sem juridiquês.</p>
+      </div>
+      <div class="fs-hero__paths">
+        <a href="<?php echo esc_url(home_url('/?s=pix')); ?>" class="fs-hero-path fs-hero-path--red">
+          <span class="fs-hero-path__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          </span>
+          <span class="fs-hero-path__text">
+            <strong>Recebi uma mensagem suspeita</strong>
+            <small>Phishing, falso atendimento, golpe do Pix</small>
+          </span>
+        </a>
+        <a href="<?php echo esc_url(get_post_type_archive_link('fraude')); ?>" class="fs-hero-path fs-hero-path--purple">
+          <span class="fs-hero-path__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <span class="fs-hero-path__text">
+            <strong>Minha conta foi acessada</strong>
+            <small>SIM swap, cartão clonado, invasão</small>
+          </span>
+        </a>
+        <a href="<?php echo esc_url(home_url('/contato/')); ?>" class="fs-hero-path fs-hero-path--orange">
+          <span class="fs-hero-path__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+          </span>
+          <span class="fs-hero-path__text">
+            <strong>Quero denunciar um caso</strong>
+            <small>Canais oficiais e como registrar a ocorrência</small>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÚLTIMOS ALERTAS — editorial -->
   <section class="fs-latest-alerts">
     <div class="container fs-latest-alerts__inner">
       <div class="fs-latest-alerts__bar">
@@ -133,32 +173,6 @@ $total_posts   = wp_count_posts('post')->publish;
       </a>
     </div>
   </div>
-
-  <!-- Trilhas rápidas por intenção do usuário -->
-  <section class="fs-user-paths">
-    <div class="container">
-      <div class="fs-user-paths__grid">
-        <a href="<?php echo esc_url(home_url('/?s=pix')); ?>" class="fs-user-path fs-user-path--red">
-          <span class="fs-user-path__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-          </span>
-          <span><strong>Recebi uma mensagem suspeita</strong><small>Compare sinais de phishing, falso atendimento e golpe do Pix.</small></span>
-        </a>
-        <a href="<?php echo esc_url(get_post_type_archive_link('fraude')); ?>" class="fs-user-path fs-user-path--purple">
-          <span class="fs-user-path__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </span>
-          <span><strong>Minha conta foi acessada</strong><small>Veja fraudes por invasão, SIM swap, vazamento e cartão clonado.</small></span>
-        </a>
-        <a href="<?php echo esc_url(home_url('/contato/')); ?>" class="fs-user-path fs-user-path--orange">
-          <span class="fs-user-path__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
-          </span>
-          <span><strong>Quero denunciar um caso</strong><small>Envie detalhes para ajudar outras pessoas e reúna canais oficiais.</small></span>
-        </a>
-      </div>
-    </div>
-  </section>
 
   <!-- ── GOLPES ─────────────────────────────── -->
   <?php if ($golpes_grid): ?>

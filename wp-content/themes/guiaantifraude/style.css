@@ -748,6 +748,79 @@ button { cursor: pointer; font: inherit; }
 }
 
 /* ─────────────────────────────────────────
+   HERO HOMEPAGE
+───────────────────────────────────────── */
+.fs-hero {
+  background: linear-gradient(135deg, #0d1b2a 0%, #1b2d42 100%);
+  padding: 56px 0 48px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.fs-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  align-items: center;
+}
+.fs-hero__copy .fs-eyebrow {
+  color: var(--orange);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  display: block;
+  margin-bottom: 12px;
+}
+.fs-hero__title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.fs-hero__desc {
+  font-size: var(--text-base);
+  color: rgba(255,255,255,.55);
+  line-height: 1.7;
+  max-width: 440px;
+}
+.fs-hero__paths {
+  display: grid;
+  gap: 10px;
+}
+.fs-hero-path {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur-md) var(--ease);
+}
+.fs-hero-path:hover { background: rgba(255,255,255,.08); transform: translateX(3px); }
+.fs-hero-path__icon {
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fs-hero-path strong { display: block; font-size: var(--text-sm); font-weight: 700; color: #fff; margin-bottom: 2px; }
+.fs-hero-path small  { display: block; font-size: var(--text-xs); color: rgba(255,255,255,.42); }
+.fs-hero-path__text  { display: flex; flex-direction: column; }
+.fs-hero-path--red    { border-left: 3px solid var(--red); }
+.fs-hero-path--red    .fs-hero-path__icon { background: rgba(220,38,38,.15); color: #fca5a5; }
+.fs-hero-path--purple { border-left: 3px solid var(--purple); }
+.fs-hero-path--purple .fs-hero-path__icon { background: rgba(124,58,237,.15); color: #c4b5fd; }
+.fs-hero-path--orange { border-left: 3px solid var(--orange); }
+.fs-hero-path--orange .fs-hero-path__icon { background: rgba(249,115,22,.15); color: #fdba74; }
+
+@media (max-width: 768px) {
+  .fs-hero__inner { grid-template-columns: 1fr; gap: 32px; }
+  .fs-hero { padding: 40px 0 36px; }
+}
+
+/* ─────────────────────────────────────────
    UX editorial — trilhas, confiança e guias
 ───────────────────────────────────────── */
 .fs-user-paths { background: #fff; border-bottom: 1px solid var(--border); padding: 22px 0; }
