@@ -1,7 +1,7 @@
 /*
 Theme Name: Faro Seguro
 Template:   kadence
-Version:    3.0.0
+Version:    3.2.0
 Text Domain: faro-seguro
 */
 
@@ -598,31 +598,57 @@ button { cursor: pointer; font: inherit; }
 .fs-home-fraudes .fs-filter-pill span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
 
 /* ─────────────────────────────────────────
-   LATEST ALERTS — Hero compacto editorial
+   LATEST ALERTS — Hero editorial
 ───────────────────────────────────────── */
 .fs-latest-alerts {
-  background: var(--navy);
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: #0d1117;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: 0 0 4px;
 }
+
+/* Faixa "em tempo real" no topo */
+.fs-latest-alerts::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, #ef4444 0%, #ef4444 50%, #7c3aed 50%, #7c3aed 100%);
+}
+
+.fs-latest-alerts__inner { padding: 0; }
+
+.fs-latest-alerts__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 0;
+}
+.fs-latest-alerts__bar-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+}
+.fs-latest-alerts__bar-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
+  animation: pulse 1.4s ease infinite;
+}
+
 .fs-latest-alerts__grid {
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
-  align-items: stretch;
 }
+
 .fs-latest-alert {
-  padding: 28px 36px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 3px solid transparent;
+  padding: 24px 32px 28px;
+  display: flex; flex-direction: column; gap: 10px;
+  border-left: 3px solid transparent;
 }
-.fs-latest-alert--golpe  { border-top-color: var(--red); }
-.fs-latest-alert--fraude { border-top-color: #7c3aed; }
+.fs-latest-alert--golpe  { border-left-color: #ef4444; }
+.fs-latest-alert--fraude { border-left-color: #7c3aed; }
 
 .fs-latest-alerts__sep {
-  background: rgba(255,255,255,.07);
+  background: rgba(255,255,255,.06);
   width: 1px;
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
 .fs-latest-alert__label {
@@ -641,41 +667,42 @@ button { cursor: pointer; font: inherit; }
 
 .fs-latest-alert__type {
   font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  padding: 2px 7px; border-radius: 4px; align-self: flex-start;
+  padding: 2px 8px; border-radius: 3px; align-self: flex-start;
 }
-.fs-latest-alert--golpe  .fs-latest-alert__type { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
-.fs-latest-alert--fraude .fs-latest-alert__type { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.25); }
+.fs-latest-alert--golpe  .fs-latest-alert__type { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.22); }
+.fs-latest-alert--fraude .fs-latest-alert__type { background: rgba(139,92,246,.12); color: #c4b5fd; border: 1px solid rgba(139,92,246,.22); }
 
 .fs-latest-alert__title {
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
-  font-weight: 800; color: #fff; letter-spacing: -.02em; line-height: 1.25; margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 800; color: #f1f5f9; letter-spacing: -.025em; line-height: 1.3; margin: 0;
 }
 .fs-latest-alert__title a { color: inherit; text-decoration: none; transition: color var(--dur) var(--ease); }
-.fs-latest-alert--golpe  .fs-latest-alert__title a:hover { color: #fb923c; }
-.fs-latest-alert--fraude .fs-latest-alert__title a:hover { color: #a78bfa; }
+.fs-latest-alert--golpe  .fs-latest-alert__title a:hover { color: #fca5a5; }
+.fs-latest-alert--fraude .fs-latest-alert__title a:hover { color: #c4b5fd; }
 
 .fs-latest-alert__desc {
-  font-size: .8125rem; color: rgba(255,255,255,.45); line-height: 1.6; margin: 0;
+  font-size: .8125rem; color: rgba(255,255,255,.38); line-height: 1.65; margin: 0;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
 .fs-latest-alert__foot {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 2px;
 }
 
 .fs-latest-alert__link {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: .75rem; font-weight: 700; text-decoration: none;
-  transition: color var(--dur) var(--ease);
+  font-size: .75rem; font-weight: 700; text-decoration: none; letter-spacing: .02em;
+  transition: opacity var(--dur) var(--ease);
 }
 .fs-latest-alert--golpe  .fs-latest-alert__link { color: #fb923c; }
 .fs-latest-alert--fraude .fs-latest-alert__link { color: #a78bfa; }
-.fs-latest-alert__link:hover { text-decoration: underline; }
+.fs-latest-alert__link:hover { opacity: .75; }
 
 @media (max-width: 700px) {
   .fs-latest-alerts__grid { grid-template-columns: 1fr; }
-  .fs-latest-alerts__sep { width: 100%; height: 1px; margin: 0 20px; width: calc(100% - 40px); }
-  .fs-latest-alert { padding: 22px 20px 24px; }
+  .fs-latest-alerts__sep { display: none; }
+  .fs-latest-alert { padding: 20px 16px 22px; border-left: none; border-top: 2px solid; }
+  .fs-latest-alert--golpe  { border-top-color: #ef4444; }
+  .fs-latest-alert--fraude { border-top-color: #7c3aed; }
 }
 
 /* ─────────────────────────────────────────
@@ -708,4 +735,40 @@ button { cursor: pointer; font: inherit; }
   .fs-concept-bar__sep { width: 100%; height: 1px; margin: 0; }
   .fs-concept-bar__item { padding: 12px 20px; }
   .fs-concept-bar__item span { display: none; }
+}
+
+/* ─────────────────────────────────────────
+   CONTATO
+───────────────────────────────────────── */
+.fs-contact-hero { background: var(--navy); padding: 52px 0 44px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.fs-contact-hero h1 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800; color: #fff; margin: 0 0 12px; letter-spacing: -.03em; }
+.fs-contact-hero p { font-size: 1rem; color: rgba(255,255,255,.5); max-width: 560px; line-height: 1.7; margin: 0; }
+
+.fs-contact-body { padding: 56px 0 72px; }
+.fs-contact-grid { display: grid; grid-template-columns: 1fr 340px; gap: 48px; align-items: start; }
+
+.fs-contact-card { background: #fff; border-radius: 12px; padding: 36px 40px; border: 1px solid var(--border); }
+.fs-contact-card h2 { font-size: 1.25rem; font-weight: 800; color: var(--navy); margin: 0 0 6px; }
+.fs-contact-card__sub { font-size: .875rem; color: var(--muted); margin: 0 0 24px; line-height: 1.6; }
+
+.fs-contact-side { display: flex; flex-direction: column; gap: 20px; }
+
+.fs-contact-info { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+.fs-contact-info h3 { font-size: .875rem; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+.fs-contact-info p { font-size: .9375rem; color: var(--navy); margin: 0 0 8px; }
+.fs-contact-info a { color: var(--blue); text-decoration: none; font-weight: 600; }
+.fs-contact-note { font-size: .8125rem !important; color: var(--muted) !important; }
+
+.fs-contact-official { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+.fs-contact-official h3 { font-size: .875rem; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 14px; }
+.fs-contact-official ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.fs-contact-official li { font-size: .875rem; color: var(--body); line-height: 1.5; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.fs-contact-official li:last-child { border-bottom: none; padding-bottom: 0; }
+.fs-contact-official a { color: var(--blue); text-decoration: none; }
+.fs-contact-official a:hover { text-decoration: underline; }
+
+.fs-contact-disclaimer { background: rgba(251,146,60,.08); border: 1px solid rgba(251,146,60,.2); border-radius: 10px; padding: 16px 20px; font-size: .8125rem; color: var(--body); line-height: 1.6; }
+
+@media (max-width: 900px) {
+  .fs-contact-grid { grid-template-columns: 1fr; }
 }
