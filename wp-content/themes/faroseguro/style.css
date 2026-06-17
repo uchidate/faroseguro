@@ -575,3 +575,22 @@ button { cursor: pointer; font: inherit; }
 .fs-btn--sm { padding: .45rem .875rem; font-size: var(--text-xs); }
 
 .fs-filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+
+/* ─────────────────────────────────────────
+   FRAUDES — identidade visual roxa/azul
+   (distinta dos Golpes que são laranja/vermelho)
+───────────────────────────────────────── */
+.fs-badge--fraude-alto  { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+.fs-badge--fraude-medio { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.fs-badge--fraude-baixo { background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; }
+
+/* Seção fraudes na homepage */
+.fs-home-fraudes { background: #0f0a2a; padding: 56px 0; border-top: 4px solid #7c3aed; }
+.fs-home-fraudes .fs-home-section__title { color: #fff; }
+.fs-home-fraudes .fs-home-section__sub   { color: rgba(255,255,255,.5); }
+.fs-home-fraudes .fs-home-section__dot   { background: #7c3aed !important; }
+.fs-home-fraudes .fs-btn--ghost { background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); border-color: rgba(255,255,255,.15); }
+.fs-home-fraudes .fs-btn--ghost:hover { background: rgba(255,255,255,.14); color: #fff; }
+.fs-home-fraudes .fs-filter-pill { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.6); }
+.fs-home-fraudes .fs-filter-pill:hover, .fs-home-fraudes .fs-filter-pill.is-active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.fs-home-fraudes .fs-filter-pill span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
