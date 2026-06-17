@@ -38,6 +38,7 @@ $GLOBALS['fs_ad_slots'] = [
 
 add_action('wp_head', function () {
     if (empty(FS_ADSENSE_ID) || is_admin()) return;
+    echo '<meta name="google-adsense-account" content="' . esc_attr(FS_ADSENSE_ID) . '">' . "\n";
     echo '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' . esc_attr(FS_ADSENSE_ID) . '" crossorigin="anonymous"></script>' . "\n";
 }, 1);
 
