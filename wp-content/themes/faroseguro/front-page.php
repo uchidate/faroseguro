@@ -32,7 +32,13 @@ $total_posts   = wp_count_posts('post')->publish;
 
   <!-- ÚLTIMOS ALERTAS — hero compacto editorial -->
   <section class="fs-latest-alerts">
-    <div class="container">
+    <div class="container fs-latest-alerts__inner">
+      <div class="fs-latest-alerts__bar">
+        <span class="fs-latest-alerts__bar-label">
+          <span class="fs-latest-alerts__bar-dot"></span>
+          Alertas em tempo real
+        </span>
+      </div>
       <div class="fs-latest-alerts__grid">
 
         <!-- Golpe -->
@@ -103,8 +109,8 @@ $total_posts   = wp_count_posts('post')->publish;
         </div>
         <?php endif; wp_reset_postdata(); ?>
 
-      </div>
-    </div>
+      </div><!-- .fs-latest-alerts__grid -->
+    </div><!-- .container -->
   </section>
 
   <!-- Concept bar compacta -->
