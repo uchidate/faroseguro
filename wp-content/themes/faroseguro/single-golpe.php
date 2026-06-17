@@ -111,7 +111,7 @@
                 <?php endforeach; ?>
               </ul>
               <div class="fs-emergency">
-                <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
+                <a href="https://www.bcb.gov.br/meubc/registrar_reclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
                 <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener" class="fs-emergency__link">Consumidor.gov</a>
                 <a href="/contato/" class="fs-emergency__link">Denunciar ao portal</a>
               </div>
@@ -153,7 +153,7 @@
             <h3>Proteja-se agora</h3>
             <p>Conheceu este golpe? Denuncie para proteger outras pessoas.</p>
             <a href="/contato/" class="fs-btn fs-btn--primary">Denunciar ao Portal</a>
-            <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-btn fs-btn--outline-w" style="margin-top:8px;">Registrar no Bacen</a>
+            <a href="https://www.bcb.gov.br/meubc/registrar_reclamacao" target="_blank" rel="noopener" class="fs-btn fs-btn--outline-w" style="margin-top:8px;">Registrar no Bacen</a>
           </div>
 
           <div class="fs-sidebar-widget fs-sidebar-widget--official">

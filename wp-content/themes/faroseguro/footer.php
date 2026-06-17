@@ -54,7 +54,7 @@
           <li><a href="<?php echo home_url('/glossario/'); ?>">Glossário de Termos</a></li>
           <li><a href="<?php echo home_url('/sobre-nos/'); ?>">Sobre o Portal</a></li>
           <li><a href="<?php echo home_url('/contato/'); ?>">Denunciar um Golpe</a></li>
-          <li><a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener">Registrar no Bacen</a></li>
+          <li><a href="https://www.bcb.gov.br/meubc/registrar_reclamacao" target="_blank" rel="noopener">Registrar no Bacen</a></li>
           <li><a href="https://www.consumidor.gov.br" target="_blank" rel="noopener">Consumidor.gov.br</a></li>
           <li><a href="<?php echo home_url('/feed/'); ?>">Feed RSS</a></li>
         </ul>

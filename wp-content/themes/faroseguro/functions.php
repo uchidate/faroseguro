@@ -764,7 +764,7 @@ function fs_artigo_card_hero(WP_Post $post): void {
  */
 function fs_official_channels(string $class = ''): void {
     $channels = [
-        ['Banco Central', 'Reclame contra banco, instituição de pagamento ou financeira.', 'https://www.bcb.gov.br/meubc/registrarreclamacao'],
+        ['Banco Central', 'Reclame contra banco, instituição de pagamento ou financeira.', 'https://www.bcb.gov.br/meubc/registrar_reclamacao'],
         ['Consumidor.gov.br', 'Abra uma reclamação formal contra empresas participantes.', 'https://www.consumidor.gov.br'],
         ['Delegacia Virtual', 'Registre boletim de ocorrência conforme o estado onde ocorreu o caso.', 'https://www.gov.br/pt-br/servicos/registrar-boletim-de-ocorrencia-online'],
     ];
