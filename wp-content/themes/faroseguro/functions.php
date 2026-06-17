@@ -300,8 +300,8 @@ add_action('init', function () {
    ──────────────────────────────────────────── */
 
 add_action('add_meta_boxes', function () {
-    add_meta_box('fs_fraude_meta',      '⚠️ Dados da Fraude',    'fs_render_fraude_metabox',  'fraude', 'side', 'high');
-    add_meta_box('fs_fraude_conteudo',  '📋 Estrutura da Fraude','fs_render_fraude_conteudo_metabox', 'fraude', 'normal', 'high');
+    add_meta_box('fs_fraude_meta',      'Dados da Fraude',    'fs_render_fraude_metabox',  'fraude', 'side', 'high');
+    add_meta_box('fs_fraude_conteudo',  'Estrutura da Fraude','fs_render_fraude_conteudo_metabox', 'fraude', 'normal', 'high');
 });
 
 function fs_render_fraude_metabox($post) {
@@ -313,7 +313,7 @@ function fs_render_fraude_metabox($post) {
     ?>
     <p><label><strong>Nível de Risco</strong></label><br>
     <select name="nivel_risco" style="width:100%;margin-top:4px">
-      <?php foreach (['alto' => '🔴 Alto', 'medio' => '🟡 Médio', 'baixo' => '🔵 Baixo'] as $v => $l): ?>
+      <?php foreach (['alto' => 'Alto', 'medio' => 'Médio', 'baixo' => 'Baixo'] as $v => $l): ?>
         <option value="<?php echo $v; ?>" <?php selected($nivel, $v); ?>><?php echo $l; ?></option>
       <?php endforeach; ?>
     </select></p>
@@ -369,7 +369,7 @@ add_action('add_meta_boxes', function () {
 
     add_meta_box(
         'fs_golpe_meta',
-        '🚨 Dados do Alerta',
+        'Dados do Alerta',
         'fs_render_golpe_metabox',
         'golpe',
         'side',
@@ -378,7 +378,7 @@ add_action('add_meta_boxes', function () {
 
     add_meta_box(
         'fs_golpe_conteudo',
-        '📋 Estrutura do Golpe',
+        'Estrutura do Golpe',
         'fs_render_golpe_conteudo_metabox',
         'golpe',
         'normal',
@@ -396,7 +396,7 @@ function fs_render_golpe_metabox($post) {
     <p>
       <label><strong>Nível de Risco</strong></label><br>
       <select name="nivel_risco" style="width:100%;margin-top:4px">
-        <?php foreach (['alto' => '🚨 Alto', 'medio' => '⚠️ Médio', 'baixo' => 'ℹ️ Baixo'] as $v => $l): ?>
+        <?php foreach (['alto' => 'Alto', 'medio' => 'Médio', 'baixo' => 'Baixo'] as $v => $l): ?>
           <option value="<?= $v ?>" <?= selected($nivel, $v, false) ?>><?= $l ?></option>
         <?php endforeach; ?>
       </select>
@@ -472,7 +472,7 @@ add_action('save_post_golpe', function ($post_id) {
 add_action('add_meta_boxes', function () {
     add_meta_box(
         'fs_artigo_meta',
-        '📝 Dados do Artigo',
+        'Dados do Artigo',
         function ($post) {
             wp_nonce_field('fs_artigo_meta_save', 'fs_artigo_nonce');
             $minutos     = get_post_meta($post->ID, 'leitura_minutos', true);
@@ -594,7 +594,7 @@ function fs_golpe_card(WP_Post $post, bool $show_excerpt = true): void {
         <div class="fs-card__meta">
           <?= fs_badge_risco($nivel) ?>
           <?php if ($novo): ?>
-            <span class="fs-badge fs-badge--novo">✦ Novo</span>
+            <span class="fs-badge fs-badge--novo">Novo</span>
           <?php endif; ?>
           <?= $canal ?>
         </div>
@@ -608,7 +608,7 @@ function fs_golpe_card(WP_Post $post, bool $show_excerpt = true): void {
           <time class="fs-card__date" datetime="<?= get_the_date('c', $post) ?>">
             <?= get_the_date('d M Y', $post) ?>
           </time>
-          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler alerta →</a>
+          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler alerta</a>
         </div>
       </div>
     </article>
@@ -635,7 +635,7 @@ function fs_fraude_card(WP_Post $post, bool $show_excerpt = true): void {
       <div class="fs-card__body">
         <div class="fs-card__meta">
           <span class="fs-badge <?php echo $badge_cls; ?>"><?php echo $badge_label; ?></span>
-          <?php if ($nova): ?><span class="fs-badge fs-badge--novo">✦ Nova técnica</span><?php endif; ?>
+          <?php if ($nova): ?><span class="fs-badge fs-badge--novo">Nova técnica</span><?php endif; ?>
           <?php if ($tipos && !is_wp_error($tipos)): ?><span class="fs-tag"><?php echo esc_html($tipos[0]->name); ?></span><?php endif; ?>
         </div>
         <h2 class="fs-card__title"><a href="<?php echo get_permalink($post); ?>"><?php echo get_the_title($post); ?></a></h2>
@@ -644,7 +644,7 @@ function fs_fraude_card(WP_Post $post, bool $show_excerpt = true): void {
         <?php endif; ?>
         <div class="fs-card__footer">
           <time class="fs-card__date" datetime="<?php echo get_the_date('c', $post); ?>"><?php echo get_the_date('d M Y', $post); ?></time>
-          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link" style="color:var(--purple);">Ver detalhes →</a>
+          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link" style="color:var(--purple);">Ver detalhes</a>
         </div>
       </div>
     </article>
@@ -679,7 +679,7 @@ function fs_artigo_card(WP_Post $post, bool $large = false): void {
           <time class="fs-card__date" datetime="<?= get_the_date('c', $post) ?>">
             <?= get_the_date('d M Y', $post) ?>
           </time>
-          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler artigo →</a>
+          <a href="<?= get_permalink($post) ?>" class="fs-card__link">Ler artigo</a>
         </div>
       </div>
     </article>
@@ -746,13 +746,13 @@ function fs_artigo_card_hero(WP_Post $post): void {
       <div class="fs-card__body">
         <div class="fs-card__meta">
           <?php echo $cat_html; ?>
-          <span style="font-size:.72rem;color:var(--subtle);">⏱ <?php echo esc_html($leitura); ?></span>
+          <span style="font-size:.72rem;color:var(--subtle);"><?php echo esc_html($leitura); ?></span>
         </div>
         <h2 class="fs-card__title"><a href="<?php echo get_permalink($post); ?>"><?php echo get_the_title($post); ?></a></h2>
         <p class="fs-card__excerpt"><?php echo wp_trim_words(get_the_excerpt($post), 35); ?></p>
         <div class="fs-card__footer">
           <time class="fs-card__date" datetime="<?php echo get_the_date('c', $post); ?>"><?php echo get_the_date('d \d\e F \d\e Y', $post); ?></time>
-          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link">Ler artigo completo →</a>
+          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link">Ler artigo completo</a>
         </div>
       </div>
     </article>
@@ -812,7 +812,7 @@ function fs_guides_section(array $exclude_ids = []): void {
             </h2>
             <p class="fs-home-section__sub">Orientações diretas para reconhecer, bloquear e denunciar golpes financeiros.</p>
           </div>
-          <a href="<?php echo esc_url(home_url('/artigos/')); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver biblioteca →</a>
+          <a href="<?php echo esc_url(home_url('/artigos/')); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver biblioteca</a>
         </div>
         <div class="fs-guide-list">
           <?php foreach ($guides as $i => $guide): ?>
@@ -928,13 +928,13 @@ add_filter('pre_get_posts', function (WP_Query $q) {
 add_shortcode('alerta', function ($atts, $content = '') {
     $a = shortcode_atts(['nivel' => 'alto'], $atts);
     $map = [
-        'alto'  => ['#fee2e2', '#dc2626', '#fecaca', '🚨'],
-        'medio' => ['#fffbeb', '#d97706', '#fde68a', '⚠️'],
-        'baixo' => ['#eff6ff', '#2563eb', '#bfdbfe', 'ℹ️'],
+        'alto'  => ['#fee2e2', '#dc2626', '#fecaca', 'Atenção'],
+        'medio' => ['#fffbeb', '#d97706', '#fde68a', 'Atenção'],
+        'baixo' => ['#eff6ff', '#2563eb', '#bfdbfe', 'Nota'],
     ];
     [$bg, $color, $border_color, $icon] = $map[$a['nivel']] ?? $map['alto'];
     return "<div class=\"fs-alerta\" style=\"background:{$bg};border:1px solid {$border_color};border-left:4px solid {$color};border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0\">"
-         . "<strong style=\"color:{$color}\">{$icon} Atenção:</strong> "
+         . "<strong style=\"color:{$color}\">{$icon}:</strong> "
          . do_shortcode($content)
          . "</div>";
 });
@@ -989,8 +989,8 @@ add_filter('manage_golpe_posts_columns', function ($cols) {
     return array_merge(
         array_slice($cols, 0, 2),
         [
-            'nivel_risco'   => '🚨 Risco',
-            'novo_modus'    => '✦ Novo',
+            'nivel_risco'   => 'Risco',
+            'novo_modus'    => 'Novo',
             'canal_golpe'   => 'Canal',
         ],
         array_slice($cols, 2)
@@ -1000,28 +1000,28 @@ add_filter('manage_golpe_posts_columns', function ($cols) {
 add_action('manage_golpe_posts_custom_column', function ($col, $post_id) {
     if ($col === 'nivel_risco') {
         $n = get_post_meta($post_id, 'nivel_risco', true) ?: 'alto';
-        $labels = ['alto' => '🚨 Alto', 'medio' => '⚠️ Médio', 'baixo' => 'ℹ️ Baixo'];
-        echo $labels[$n] ?? '—';
+        $labels = ['alto' => 'Alto', 'medio' => 'Médio', 'baixo' => 'Baixo'];
+        echo $labels[$n] ?? '-';
     }
     if ($col === 'novo_modus') {
-        echo get_post_meta($post_id, 'novo_modus', true) === '1' ? '✦ Sim' : '—';
+        echo get_post_meta($post_id, 'novo_modus', true) === '1' ? 'Sim' : '-';
     }
     if ($col === 'canal_golpe') {
         $terms = get_the_terms($post_id, 'canal_golpe');
-        echo $terms && !is_wp_error($terms) ? implode(', ', wp_list_pluck($terms, 'name')) : '—';
+        echo $terms && !is_wp_error($terms) ? implode(', ', wp_list_pluck($terms, 'name')) : '-';
     }
 }, 10, 2);
 
 // Colunas de artigo: leitura + destaque
 add_filter('manage_posts_columns', function ($cols) {
-    $cols['leitura_min'] = '⏱ Leitura';
-    $cols['destaque']    = '⭐ Destaque';
+    $cols['leitura_min'] = 'Leitura';
+    $cols['destaque']    = 'Destaque';
     return $cols;
 });
 
 add_action('manage_posts_custom_column', function ($col, $post_id) {
     if ($col === 'leitura_min') echo fs_leitura($post_id);
-    if ($col === 'destaque')    echo get_post_meta($post_id, 'artigo_destaque', true) === '1' ? '⭐ Sim' : '—';
+    if ($col === 'destaque')    echo get_post_meta($post_id, 'artigo_destaque', true) === '1' ? 'Sim' : '-';
 }, 10, 2);
 
 /* ────────────────────────────────────────────

@@ -35,7 +35,7 @@ $cat_atual = is_category() ? get_queried_object() : null;
         <?php while (have_posts()): the_post(); fs_artigo_card(get_post()); endwhile; ?>
       </div>
       <div class="fs-pagination">
-        <?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximos →', 'mid_size' => 2]); ?>
+        <?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximos', 'mid_size' => 2]); ?>
       </div>
     <?php else: ?>
       <div class="fs-empty">

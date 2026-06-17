@@ -9,7 +9,7 @@ $desc         = $tipo_atual ? $tipo_atual->description : 'Fraudes bancárias ond
 
 <div class="fs-archive__hero" style="background:#0f0a2a;border-bottom:4px solid #7c3aed;">
   <div class="container">
-    <span class="fs-eyebrow" style="color:rgba(167,139,250,.8);">⚠️ Fraudes</span>
+    <span class="fs-eyebrow" style="color:rgba(167,139,250,.8);">Fraudes</span>
     <h1 class="fs-archive__title" style="color:#fff;"><?php echo esc_html($title); ?></h1>
     <p class="fs-archive__desc" style="color:rgba(255,255,255,.55);"><?php echo esc_html($desc); ?></p>
   </div>
@@ -34,7 +34,7 @@ $desc         = $tipo_atual ? $tipo_atual->description : 'Fraudes bancárias ond
       <div class="fs-grid fs-grid--3">
         <?php while (have_posts()) : the_post(); fs_fraude_card(get_post(), true); endwhile; ?>
       </div>
-      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximas →', 'mid_size' => 2]); ?></div>
+      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximas', 'mid_size' => 2]); ?></div>
     <?php else: ?>
       <div class="fs-empty">
         <p>Nenhuma fraude encontrada nesta categoria.</p>

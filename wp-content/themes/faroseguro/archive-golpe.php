@@ -49,7 +49,7 @@ $hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_a
       <div class="fs-grid fs-grid--3">
         <?php while (have_posts()) : the_post(); fs_golpe_card(get_post(), true); endwhile; ?>
       </div>
-      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximos →', 'mid_size' => 2]); ?></div>
+      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximos', 'mid_size' => 2]); ?></div>
     <?php else: ?>
       <div class="fs-empty">
         <p>Nenhum alerta encontrado nesta categoria.</p>

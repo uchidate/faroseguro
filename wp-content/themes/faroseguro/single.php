@@ -20,7 +20,7 @@
           <a href="<?php echo get_category_link($c); ?>" class="fs-cat fs-cat--default"><?php echo esc_html($c->name); ?></a>
         <?php endforeach; endif; ?>
         <?php if ($destaque): ?>
-          <span class="fs-badge fs-badge--novo">⭐ Destaque</span>
+          <span class="fs-badge fs-badge--novo">Destaque editorial</span>
         <?php endif; ?>
       </div>
       <h1 class="fs-single__title"><?php the_title(); ?></h1>
@@ -28,12 +28,12 @@
         <p class="fs-single__lead"><?php the_excerpt(); ?></p>
       <?php endif; ?>
       <div class="fs-single__byline">
-        <span>📅 <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
+        <span>Publicado em <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
         <?php if ($atualizado): ?>
-          <span>🔄 Atualizado em <?php echo esc_html(date('d/m/Y', strtotime($atualizado))); ?></span>
+          <span>Atualizado em <?php echo esc_html(date('d/m/Y', strtotime($atualizado))); ?></span>
         <?php endif; ?>
-        <span>⏱ <?php echo esc_html($leitura); ?> de leitura</span>
-        <span>✍️ <strong>Equipe Faro Seguro</strong></span>
+        <span><?php echo esc_html($leitura); ?></span>
+        <span>Por <strong>Equipe Faro Seguro</strong></span>
       </div>
     </div>
   </div>
@@ -83,20 +83,20 @@
 
           <!-- Fonte -->
           <p style="font-size:.75rem;color:var(--subtle);margin-top:24px;">
-            ℹ️ Conteúdo verificado pela equipe editorial. Fontes: Banco Central do Brasil, Febraban, Senacon.
+            Conteúdo verificado pela equipe editorial. Fontes: Banco Central do Brasil, Febraban, Senacon.
           </p>
 
           <!-- Nav prev/next -->
           <nav class="fs-post-nav" aria-label="Navegar entre artigos">
             <div class="fs-post-nav__item">
               <?php $prev = get_previous_post(); if ($prev): ?>
-                <span class="fs-post-nav__label">← Anterior</span>
+                <span class="fs-post-nav__label">Anterior</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html($prev->post_title); ?></a></div>
               <?php endif; ?>
             </div>
             <div class="fs-post-nav__item fs-post-nav__item--next">
               <?php $next = get_next_post(); if ($next): ?>
-                <span class="fs-post-nav__label">Próximo →</span>
+                <span class="fs-post-nav__label">Próximo</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html($next->post_title); ?></a></div>
               <?php endif; ?>
             </div>
@@ -123,7 +123,7 @@
 
           <!-- CTA -->
           <div class="fs-sidebar-widget fs-sidebar-widget--cta">
-            <h3>🚨 Receber Alertas</h3>
+            <h3>Receber alertas</h3>
             <p>Identificamos novos golpes em até 24h. Denuncie se você viu algo suspeito.</p>
             <a href="/contato/" class="fs-btn fs-btn--primary">Denunciar Golpe</a>
           </div>
@@ -140,7 +140,7 @@
           <!-- Alertas recentes -->
           <div class="fs-sidebar-widget">
             <div class="fs-sidebar-widget__head">
-              <p class="fs-sidebar-widget__title">🚨 Alertas Recentes</p>
+              <p class="fs-sidebar-widget__title">Alertas recentes</p>
             </div>
             <div class="fs-sidebar-widget__body">
               <?php
@@ -161,7 +161,7 @@
           <!-- Categorias -->
           <div class="fs-sidebar-widget">
             <div class="fs-sidebar-widget__head">
-              <p class="fs-sidebar-widget__title">📂 Categorias</p>
+              <p class="fs-sidebar-widget__title">Categorias</p>
             </div>
             <div class="fs-sidebar-widget__body">
               <ul class="fs-sidebar-categories">

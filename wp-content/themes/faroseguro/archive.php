@@ -9,7 +9,7 @@ $desc   = $is_cat && category_description() ? category_description() : 'Guias co
 
 <div class="fs-archive__hero">
   <div class="container">
-    <span class="fs-eyebrow">📰 Artigos</span>
+    <span class="fs-eyebrow">Artigos</span>
     <h1 class="fs-archive__title"><?php echo esc_html($title); ?></h1>
     <p class="fs-archive__desc"><?php echo wp_kses_post($desc); ?></p>
   </div>
@@ -49,7 +49,7 @@ if ($cats): ?>
       endwhile;
       if (!$first) echo '</div>';
       ?>
-      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximos →', 'mid_size' => 2]); ?></div>
+      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximos', 'mid_size' => 2]); ?></div>
     <?php else: ?>
       <div class="fs-empty"><p>Nenhum artigo encontrado.</p></div>
     <?php endif; ?>
