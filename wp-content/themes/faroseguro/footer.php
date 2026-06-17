@@ -1,48 +1,73 @@
 <footer class="fs-footer">
-  <div class="fs-footer__inner">
+  <div class="fs-footer__main">
+    <div class="container fs-footer__grid">
 
-    <div class="fs-footer__brand">
-      <a href="<?php echo esc_url(home_url('/')); ?>" class="fs-footer__logo">
-        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <path d="M14 2L4 7v7c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V7L14 2z" fill="#f97316"/>
-          <path d="M14 6L8 9.5v5c0 3.47 2.67 6.71 6 7.5 3.33-.79 6-4.03 6-7.5v-5L14 6z" fill="rgba(255,255,255,0.15)"/>
-          <circle cx="14" cy="14.5" r="3" fill="#fff"/>
-        </svg>
-        <?php bloginfo('name'); ?>
-      </a>
-      <p class="fs-footer__tagline"><?php bloginfo('description'); ?></p>
+      <div class="fs-footer__col fs-footer__col--brand">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="fs-footer__logo">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 2L4 8v8c0 6.63 5.12 12.84 12 14.4C22.88 28.84 28 22.63 28 16V8L16 2z" fill="#f97316"/>
+            <path d="M16 6.5L8 10.5V16c0 4.17 3.22 8.07 8 9.1 4.78-1.03 8-4.93 8-9.1v-5.5L16 6.5z" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="16" cy="16" r="3.5" fill="#f97316"/>
+            <path d="M16 12.5v7M12.5 16h7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>Faro Seguro</span>
+        </a>
+        <p class="fs-footer__about">Portal de alertas e educação sobre fraudes e golpes financeiros no Brasil. Conteúdo verificado, publicado em até 24h após identificação de novos modus operandi.</p>
+        <div class="fs-footer__badges">
+          <span class="fs-footer__badge">🔒 SSL Seguro</span>
+          <span class="fs-footer__badge">📊 Baseado no BCB</span>
+          <span class="fs-footer__badge">✅ Conteúdo verificado</span>
+        </div>
+      </div>
+
+      <div class="fs-footer__col">
+        <h3 class="fs-footer__col-title">Alertas</h3>
+        <?php
+        $tipos = get_terms(['taxonomy' => 'tipo_golpe', 'hide_empty' => true, 'number' => 6]);
+        if ($tipos && !is_wp_error($tipos)): ?>
+        <ul class="fs-footer__links">
+          <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Todos os alertas</a></li>
+          <?php foreach ($tipos as $t): ?>
+            <li><a href="<?php echo get_term_link($t); ?>"><?php echo esc_html($t->name); ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+      </div>
+
+      <div class="fs-footer__col">
+        <h3 class="fs-footer__col-title">Artigos</h3>
+        <?php
+        $cats = get_categories(['hide_empty' => true, 'number' => 6]);
+        if ($cats): ?>
+        <ul class="fs-footer__links">
+          <li><a href="<?php echo home_url('/artigos/'); ?>">Todos os artigos</a></li>
+          <?php foreach ($cats as $c): ?>
+            <li><a href="<?php echo get_category_link($c); ?>"><?php echo esc_html($c->name); ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+      </div>
+
+      <div class="fs-footer__col">
+        <h3 class="fs-footer__col-title">Recursos</h3>
+        <ul class="fs-footer__links">
+          <li><a href="<?php echo home_url('/glossario/'); ?>">Glossário de Termos</a></li>
+          <li><a href="<?php echo home_url('/sobre-nos/'); ?>">Sobre o Portal</a></li>
+          <li><a href="<?php echo home_url('/contato/'); ?>">Denunciar um Golpe</a></li>
+          <li><a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener">Registrar no Bacen ↗</a></li>
+          <li><a href="https://www.consumidor.gov.br" target="_blank" rel="noopener">Consumidor.gov.br ↗</a></li>
+          <li><a href="<?php echo home_url('/feed/'); ?>">Feed RSS</a></li>
+        </ul>
+      </div>
+
     </div>
-
-    <nav class="fs-footer__nav" aria-label="Links do rodapé">
-      <span class="fs-footer__nav-title">Navegação</span>
-      <?php
-      wp_nav_menu([
-        'theme_location' => 'footer',
-        'container'      => false,
-        'menu_class'     => 'fs-footer__nav-list',
-        'fallback_cb'    => function () {
-          echo '<ul class="fs-footer__nav-list">
-            <li><a href="/">Home</a></li>
-            <li><a href="/golpes/">Alertas</a></li>
-            <li><a href="/sobre-nos/">Sobre</a></li>
-            <li><a href="/contato/">Contato</a></li>
-          </ul>';
-        },
-      ]);
-      ?>
-    </nav>
-
-    <div class="fs-footer__contact">
-      <span class="fs-footer__nav-title">Denuncie um golpe</span>
-      <p>Identificou um novo modus operandi? Envie para nossa equipe.</p>
-      <a href="/contato/" class="fs-footer__contact-link">Enviar relato →</a>
-    </div>
-
   </div>
 
   <div class="fs-footer__bottom">
-    <p>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. Conteúdo informativo — não nos responsabilizamos por decisões financeiras.</p>
-    <p>Dados baseados em fontes públicas: Banco Central do Brasil, Febraban e Senacon.</p>
+    <div class="container fs-footer__bottom-inner">
+      <p>© <?php echo date('Y'); ?> Faro Seguro. Todos os direitos reservados.</p>
+      <p>Conteúdo de caráter informativo. Não nos responsabilizamos por decisões financeiras individuais. Fontes: Banco Central do Brasil, Febraban, Senacon e Ministério da Justiça.</p>
+    </div>
   </div>
 </footer>
 
