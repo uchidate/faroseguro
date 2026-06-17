@@ -496,9 +496,9 @@ add_action('save_post_post', function ($post_id) {
  */
 function fs_badge_risco(string $nivel = 'alto'): string {
     $map = [
-        'alto'  => ['fs-badge--red',    '🚨 Risco Alto'],
-        'medio' => ['fs-badge--yellow', '⚠️ Risco Médio'],
-        'baixo' => ['fs-badge--blue',   'ℹ️ Risco Baixo'],
+        'alto'  => ['fs-badge--red',    'Alto Risco'],
+        'medio' => ['fs-badge--yellow', 'Risco Médio'],
+        'baixo' => ['fs-badge--blue',   'Risco Baixo'],
     ];
     [$cls, $label] = $map[$nivel] ?? $map['alto'];
     return "<span class=\"fs-badge {$cls}\">{$label}</span>";
@@ -583,7 +583,7 @@ function fs_fraude_card(WP_Post $post, bool $show_excerpt = true): void {
     $nova    = get_post_meta($post->ID, 'nova_tecnica', true) === '1';
     $tipos   = get_the_terms($post->ID, 'tipo_fraude');
     $border  = ['alto' => '#7c3aed', 'medio' => '#2563eb', 'baixo' => '#0891b2'][$nivel] ?? '#7c3aed';
-    $badge_map = ['alto' => ['fs-badge--fraude-alto', '🔓 Alto Risco'], 'medio' => ['fs-badge--fraude-medio', '⚠️ Risco Médio'], 'baixo' => ['fs-badge--fraude-baixo', 'ℹ️ Baixo Risco']];
+    $badge_map = ['alto' => ['fs-badge--fraude-alto', 'Alto Risco'], 'medio' => ['fs-badge--fraude-medio', 'Risco Médio'], 'baixo' => ['fs-badge--fraude-baixo', 'Baixo Risco']];
     [$badge_cls, $badge_label] = $badge_map[$nivel] ?? $badge_map['alto'];
     ?>
     <article class="fs-card fs-fraude-card" style="border-top:3px solid <?php echo esc_attr($border); ?>">
@@ -699,7 +699,7 @@ function fs_artigo_card_hero(WP_Post $post): void {
             <?php echo get_the_post_thumbnail($post->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
           </a>
           <?php if ($destaque): ?>
-            <div class="fs-card__image-badge"><span class="fs-badge fs-badge--novo">⭐ Destaque</span></div>
+            <div class="fs-card__image-badge"><span class="fs-badge fs-badge--novo">Destaque</span></div>
           <?php endif; ?>
         </div>
       <?php endif; ?>
