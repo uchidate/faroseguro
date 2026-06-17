@@ -11,7 +11,7 @@ $hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_a
 
 <div class="fs-archive__hero fs-archive__hero--dark">
   <div class="container">
-    <span class="fs-eyebrow">🚨 Alertas</span>
+    <span class="fs-eyebrow">Alertas</span>
     <h1 class="fs-archive__title"><?php echo esc_html($hero_title); ?></h1>
     <p class="fs-archive__desc"><?php echo esc_html($hero_desc); ?></p>
   </div>
