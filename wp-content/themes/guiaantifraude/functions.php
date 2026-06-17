@@ -828,7 +828,7 @@ function fs_official_channels(string $class = ''): void {
     $channels = [
         ['Banco Central', 'Reclame contra banco, instituição de pagamento ou financeira.', 'https://www.bcb.gov.br/meubc/registrar_reclamacao'],
         ['Consumidor.gov.br', 'Abra uma reclamação formal contra empresas participantes.', 'https://www.consumidor.gov.br'],
-        ['Delegacia Virtual', 'Registre boletim de ocorrência conforme o estado onde ocorreu o caso.', 'https://www.gov.br/pt-br/servicos/registrar-boletim-de-ocorrencia-online'],
+        ['Delegacia Virtual', 'Registre boletim de ocorrência online via SINESP.', 'https://delegaciavirtual.sinesp.gov.br'],
     ];
     ?>
     <div class="fs-official-channels <?php echo esc_attr($class); ?>">
