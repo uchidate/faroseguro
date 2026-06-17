@@ -15,7 +15,7 @@ $latest_golpes = get_posts(['post_type' => 'golpe', 'numberposts' => 6, 'post_st
   'meta_query' => [['key' => 'nivel_risco', 'value' => 'alto']]]);
 if ($latest_golpes): ?>
 <div class="fs-ticker" role="marquee" aria-label="Alertas recentes">
-  <span class="fs-ticker__label">🚨 ALERTAS</span>
+  <span class="fs-ticker__label">ALERTAS</span>
   <div class="fs-ticker__track">
     <div class="fs-ticker__inner" id="fs-ticker">
       <?php foreach ($latest_golpes as $g): ?>

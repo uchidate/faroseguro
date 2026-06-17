@@ -146,7 +146,7 @@
       try {
         await navigator.clipboard.writeText(url);
         const orig = btn.textContent;
-        btn.textContent = '✓ Link copiado!';
+        btn.textContent = 'Link copiado';
         btn.classList.add('copied');
         setTimeout(() => {
           btn.textContent = orig;

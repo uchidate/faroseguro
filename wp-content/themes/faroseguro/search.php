@@ -2,7 +2,7 @@
 
 <div class="fs-archive__hero fs-archive__hero--dark">
   <div class="container">
-    <span class="fs-eyebrow">🔍 Busca</span>
+    <span class="fs-eyebrow">Busca</span>
     <h1 class="fs-archive__title">
       <?php if (get_search_query()): ?>Resultados para "<?php the_search_query(); ?>"
       <?php else: ?>Buscar no Faro Seguro<?php endif; ?>
@@ -24,7 +24,7 @@
       <div style="border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden;">
         <?php while (have_posts()) : the_post();
           $type = get_post_type();
-          $type_labels = ['post' => '📰 Artigo', 'golpe' => '🚨 Alerta', 'glossario' => '📖 Glossário'];
+          $type_labels = ['post' => 'Artigo', 'golpe' => 'Alerta', 'fraude' => 'Fraude', 'glossario' => 'Glossário'];
           $type_label  = $type_labels[$type] ?? $type;
         ?>
           <article class="fs-search-result">
@@ -41,7 +41,7 @@
           </article>
         <?php endwhile; ?>
       </div>
-      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximos →']); ?></div>
+      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximos']); ?></div>
     <?php else: ?>
       <div class="fs-empty">
         <p>Nenhum resultado para "<?php the_search_query(); ?>".</p>

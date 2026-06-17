@@ -61,7 +61,7 @@ $total_posts   = wp_count_posts('post')->publish;
           <div class="fs-latest-alert__foot">
             <?php echo fs_badge_risco($nivel); ?>
             <a href="<?php echo get_permalink($golpe_hero); ?>" class="fs-latest-alert__link">
-              Ler análise completa →
+              Ler análise completa
             </a>
           </div>
         </div>
@@ -91,7 +91,7 @@ $total_posts   = wp_count_posts('post')->publish;
           <div class="fs-latest-alert__foot">
             <span class="fs-badge <?php echo $fbc; ?>"><?php echo $fbl2; ?></span>
             <a href="<?php echo get_permalink($fraude_hero); ?>" class="fs-latest-alert__link">
-              Ler análise completa →
+              Ler análise completa
             </a>
           </div>
         </div>
@@ -104,7 +104,7 @@ $total_posts   = wp_count_posts('post')->publish;
           <h2 class="fs-latest-alert__title" style="font-size:1.1rem;">Cartão clonado, SIM Swap, Credential Stuffing…</h2>
           <p class="fs-latest-alert__desc">Acontece sem sua ação. Acesso não autorizado à sua conta bancária.</p>
           <div class="fs-latest-alert__foot">
-            <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-latest-alert__link">Ver todas as fraudes →</a>
+            <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-latest-alert__link">Ver todas as fraudes</a>
           </div>
         </div>
         <?php endif; wp_reset_postdata(); ?>
@@ -172,7 +172,7 @@ $total_posts   = wp_count_posts('post')->publish;
           </h2>
           <p class="fs-home-section__sub">Engenharia social — vítima é manipulada a agir</p>
         </div>
-        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver todos →</a>
+        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver todos</a>
       </div>
       <?php if ($tipos_golpe && !is_wp_error($tipos_golpe)): ?>
       <div class="fs-filter-bar">
@@ -217,7 +217,7 @@ $total_posts   = wp_count_posts('post')->publish;
           </h2>
           <p class="fs-home-section__sub">Acesso não autorizado — acontece sem que você perceba</p>
         </div>
-        <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver todas →</a>
+        <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver todas</a>
       </div>
       <?php if ($tipos_fraude && !is_wp_error($tipos_fraude)): ?>
       <div class="fs-filter-bar">
@@ -266,7 +266,7 @@ $total_posts   = wp_count_posts('post')->publish;
             Leitura Recomendada
           </h2>
         </div>
-        <a href="<?php echo home_url('/artigos/'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Todos os artigos →</a>
+        <a href="<?php echo home_url('/artigos/'); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Todos os artigos</a>
       </div>
       <?php fs_artigo_card_hero($artigo_hero); ?>
     </div>

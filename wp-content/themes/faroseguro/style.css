@@ -385,6 +385,7 @@ button { cursor: pointer; font: inherit; }
 .fs-block__header { padding: 14px 20px; display: flex; align-items: center; gap: 8px; }
 .fs-block__header h2 { font-size: var(--text-sm); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin: 0; }
 .fs-block__body { padding: 20px; }
+.fs-block__mark { width: 6px; height: 22px; border-radius: 99px; background: currentColor; opacity: .45; flex-shrink: 0; }
 
 .fs-block--how  { border: 1px solid #e0e7ff; }
 .fs-block--how .fs-block__header  { background: #eef2ff; }
@@ -401,8 +402,17 @@ button { cursor: pointer; font: inherit; }
 
 .fs-checklist { list-style: none; display: grid; gap: 10px; }
 .fs-checklist li { padding-left: 28px; position: relative; font-size: var(--text-base); line-height: 1.6; color: var(--ink-soft); }
-.fs-checklist--warn li::before { content: '🚩'; position: absolute; left: 0; font-size: .85rem; }
-.fs-checklist--safe li::before { content: '✅'; position: absolute; left: 0; font-size: .85rem; }
+.fs-checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .55em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.fs-checklist--warn li::before { background: var(--amber); box-shadow: 0 0 0 4px rgba(217,119,6,.12); }
+.fs-checklist--safe li::before { background: var(--green); box-shadow: 0 0 0 4px rgba(22,163,74,.12); }
 
 .fs-emergency { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .fs-emergency__link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--r-md); font-size: var(--text-sm); font-weight: 600; color: var(--blue); background: var(--white); border: 1.5px solid #bfdbfe; transition: all var(--dur) var(--ease); }

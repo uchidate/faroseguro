@@ -16,7 +16,7 @@
 
   $border_map   = ['alto' => '#7c3aed', 'medio' => '#2563eb', 'baixo' => '#0891b2'];
   $hero_border  = $border_map[$nivel] ?? '#7c3aed';
-  $badge_map    = ['alto' => ['fs-badge--fraude-alto', '🔓 Alto Risco'], 'medio' => ['fs-badge--fraude-medio', '⚠️ Risco Médio'], 'baixo' => ['fs-badge--fraude-baixo', 'ℹ️ Baixo Risco']];
+  $badge_map    = ['alto' => ['fs-badge--fraude-alto', 'Risco alto'], 'medio' => ['fs-badge--fraude-medio', 'Risco médio'], 'baixo' => ['fs-badge--fraude-baixo', 'Risco baixo']];
   [$badge_cls, $badge_label] = $badge_map[$nivel] ?? $badge_map['alto'];
 ?>
 
@@ -26,7 +26,7 @@
     <div class="container">
       <div class="fs-single__meta-top">
         <span class="fs-badge <?php echo $badge_cls; ?>"><?php echo $badge_label; ?></span>
-        <?php if ($nova_tecnica): ?><span class="fs-badge fs-badge--novo">✦ Nova técnica</span><?php endif; ?>
+        <?php if ($nova_tecnica): ?><span class="fs-badge fs-badge--novo">Nova técnica</span><?php endif; ?>
         <?php if ($tipos && !is_wp_error($tipos)): foreach ($tipos as $t): ?>
           <a href="<?php echo get_term_link($t); ?>" class="fs-tag fs-tag--light"><?php echo esc_html($t->name); ?></a>
         <?php endforeach; endif; ?>
@@ -34,10 +34,10 @@
       <h1 class="fs-single__title"><?php the_title(); ?></h1>
       <?php if (has_excerpt()): ?><p class="fs-single__lead"><?php the_excerpt(); ?></p><?php endif; ?>
       <div class="fs-single__byline">
-        <span>📅 <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
-        <?php if ($canais && !is_wp_error($canais)): ?><span>📡 <?php echo esc_html(implode(', ', wp_list_pluck($canais, 'name'))); ?></span><?php endif; ?>
-        <?php if ($publicos && !is_wp_error($publicos)): ?><span>🎯 <?php echo esc_html(implode(', ', wp_list_pluck($publicos, 'name'))); ?></span><?php endif; ?>
-        <?php if ($prejuizo): ?><span>💸 <strong style="color:#a78bfa;"><?php echo esc_html($prejuizo); ?></strong></span><?php endif; ?>
+        <span>Publicado em <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
+        <?php if ($canais && !is_wp_error($canais)): ?><span>Canal: <?php echo esc_html(implode(', ', wp_list_pluck($canais, 'name'))); ?></span><?php endif; ?>
+        <?php if ($publicos && !is_wp_error($publicos)): ?><span>Público-alvo: <?php echo esc_html(implode(', ', wp_list_pluck($publicos, 'name'))); ?></span><?php endif; ?>
+        <?php if ($prejuizo): ?><span>Prejuízo estimado: <strong style="color:#a78bfa;"><?php echo esc_html($prejuizo); ?></strong></span><?php endif; ?>
       </div>
     </div>
   </div>
@@ -66,17 +66,20 @@
           </div>
 
           <?php $sections = [
-            'como_funciona'    => ['fs-block--how',   '🔍', 'Como a fraude acontece'],
-            'sinais_alerta'    => ['fs-block--warn',  '🚩', 'Sinais de alerta', 'warn'],
-            'como_se_proteger' => ['fs-block--safe',  '🛡️', 'Como se proteger', 'safe'],
-            'o_que_fazer'      => ['fs-block--action', '🆘', 'Fui vítima — o que fazer'],
+            'como_funciona'    => ['fs-block--how', 'Como a fraude acontece'],
+            'sinais_alerta'    => ['fs-block--warn', 'Sinais de alerta', 'warn'],
+            'como_se_proteger' => ['fs-block--safe', 'Como se proteger', 'safe'],
+            'o_que_fazer'      => ['fs-block--action', 'Fui vítima — o que fazer'],
           ];
-          foreach ($sections as $key => [$cls, $icon, $label, $checklist_type]):
+          foreach ($sections as $key => $section):
+            $cls = $section[0];
+            $label = $section[1];
+            $checklist_type = $section[2] ?? 'safe';
             $val = get_post_meta($id, $key, true);
             if (!trim((string)$val)) continue;
           ?>
           <div class="fs-block <?php echo $cls; ?>">
-            <div class="fs-block__header"><span><?php echo $icon; ?></span><h2><?php echo $label; ?></h2></div>
+            <div class="fs-block__header"><span aria-hidden="true" class="fs-block__mark"></span><h2><?php echo esc_html($label); ?></h2></div>
             <div class="fs-block__body">
               <?php if ($key === 'como_funciona'): ?>
                 <div class="fs-prose"><?php echo wpautop(wp_kses_post($val)); ?></div>
@@ -88,9 +91,9 @@
                 </ul>
                 <?php if ($key === 'o_que_fazer'): ?>
                 <div class="fs-emergency">
-                  <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-emergency__link">📞 Bacen</a>
-                  <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener" class="fs-emergency__link">📋 Consumidor.gov</a>
-                  <a href="/contato/" class="fs-emergency__link">🚨 Denunciar</a>
+                  <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
+                  <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener" class="fs-emergency__link">Consumidor.gov</a>
+                  <a href="/contato/" class="fs-emergency__link">Denunciar ao portal</a>
                 </div>
                 <?php endif; ?>
               <?php endif; ?>
@@ -99,24 +102,24 @@
           <?php endforeach; ?>
 
           <?php the_content(); ?>
-          <?php if ($fonte): ?><p class="fs-fonte">📎 Fonte: <?php echo wp_kses_post($fonte); ?></p><?php endif; ?>
+          <?php if ($fonte): ?><p class="fs-fonte">Fonte: <?php echo wp_kses_post($fonte); ?></p><?php endif; ?>
 
           <div class="fs-share" style="margin-top:32px;">
             <span class="fs-share__label">Compartilhar</span>
-            <a href="https://wa.me/?text=<?php echo urlencode('⚠️ ' . get_the_title() . ' — ' . get_permalink()); ?>" target="_blank" rel="noopener" class="fs-share__btn fs-share__btn--wa">WhatsApp</a>
+            <a href="https://wa.me/?text=<?php echo urlencode(get_the_title() . ' — ' . get_permalink()); ?>" target="_blank" rel="noopener" class="fs-share__btn fs-share__btn--wa">WhatsApp</a>
             <button class="fs-share__btn fs-share__btn--copy" data-share-copy="<?php echo esc_attr(get_permalink()); ?>">Copiar link</button>
           </div>
 
           <nav class="fs-post-nav">
             <div class="fs-post-nav__item">
               <?php $prev = get_previous_post(); if ($prev): ?>
-                <span class="fs-post-nav__label">← Anterior</span>
+                <span class="fs-post-nav__label">Anterior</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html($prev->post_title); ?></a></div>
               <?php endif; ?>
             </div>
             <div class="fs-post-nav__item fs-post-nav__item--next">
               <?php $next = get_next_post(); if ($next): ?>
-                <span class="fs-post-nav__label">Próxima →</span>
+                <span class="fs-post-nav__label">Próxima</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html($next->post_title); ?></a></div>
               <?php endif; ?>
             </div>
@@ -126,7 +129,7 @@
 
         <aside class="fs-sidebar">
           <div class="fs-sidebar-widget" style="background:#1a0f3a;border-color:#2d1f5a;padding:20px;">
-            <h3 style="color:#fff;font-size:var(--text-base);font-weight:700;margin-bottom:10px;">⚠️ Diferença importante</h3>
+            <h3 style="color:#fff;font-size:var(--text-base);font-weight:700;margin-bottom:10px;">Diferença importante</h3>
             <p style="color:rgba(255,255,255,.6);font-size:var(--text-sm);line-height:1.65;">Na <strong style="color:#a78bfa;">fraude</strong>, o criminoso age por conta própria — você não precisa fazer nada para ser vítima. Verifique seu extrato regularmente.</p>
             <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-btn" style="margin-top:14px;width:100%;justify-content:center;background:#7c3aed;color:#fff;">Ver outras fraudes</a>
           </div>
