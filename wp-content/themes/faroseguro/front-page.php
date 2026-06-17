@@ -30,107 +30,81 @@ $total_posts   = wp_count_posts('post')->publish;
 
 <main class="fs-homepage">
 
-  <!-- SPLIT HERO -->
-  <section class="fs-split-hero">
+  <!-- ÚLTIMOS ALERTAS — hero compacto editorial -->
+  <section class="fs-latest-alerts">
+    <div class="container">
+      <div class="fs-latest-alerts__grid">
 
-    <?php if ($golpe_hero):
-      $nivel    = get_post_meta($golpe_hero->ID, 'nivel_risco', true) ?: 'alto';
-      $prejuizo = get_post_meta($golpe_hero->ID, 'prejuizo_estimado', true);
-      $tipos_h  = get_the_terms($golpe_hero->ID, 'tipo_golpe');
-      $canais_h = get_the_terms($golpe_hero->ID, 'canal_golpe');
-    ?>
-    <div class="fs-split-hero__panel fs-split-hero__panel--golpe">
-      <?php if (has_post_thumbnail($golpe_hero->ID)): ?>
-        <div class="fs-split-hero__bg">
-          <?php echo get_the_post_thumbnail($golpe_hero->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
-        </div>
-      <?php endif; ?>
-      <div class="fs-split-hero__overlay"></div>
-      <div class="fs-split-hero__content">
-        <div class="fs-split-hero__eyebrow fs-split-hero__eyebrow--golpe">
-          <span class="fs-split-hero__dot"></span>
-          Golpe em circulação
-        </div>
-        <?php if ($tipos_h && !is_wp_error($tipos_h)): ?>
-          <span class="fs-split-hero__type"><?php echo esc_html($tipos_h[0]->name); ?></span>
-        <?php endif; ?>
-        <h2 class="fs-split-hero__title">
-          <a href="<?php echo get_permalink($golpe_hero); ?>"><?php echo esc_html($golpe_hero->post_title); ?></a>
-        </h2>
-        <p class="fs-split-hero__desc"><?php echo wp_trim_words(get_the_excerpt($golpe_hero), 22); ?></p>
-        <div class="fs-split-hero__meta">
-          <?php echo fs_badge_risco($nivel); ?>
-          <?php if ($prejuizo): ?>
-            <span style="color:rgba(255,255,255,.45);font-size:.7rem;">💸 <?php echo esc_html($prejuizo); ?></span>
+        <!-- Golpe -->
+        <?php if ($golpe_hero):
+          $nivel   = get_post_meta($golpe_hero->ID, 'nivel_risco', true) ?: 'alto';
+          $tipos_h = get_the_terms($golpe_hero->ID, 'tipo_golpe');
+        ?>
+        <div class="fs-latest-alert fs-latest-alert--golpe">
+          <div class="fs-latest-alert__label">
+            <span class="fs-latest-alert__dot"></span>
+            Golpe em circulação
+          </div>
+          <?php if ($tipos_h && !is_wp_error($tipos_h)): ?>
+            <span class="fs-latest-alert__type"><?php echo esc_html($tipos_h[0]->name); ?></span>
           <?php endif; ?>
+          <h2 class="fs-latest-alert__title">
+            <a href="<?php echo get_permalink($golpe_hero); ?>"><?php echo esc_html($golpe_hero->post_title); ?></a>
+          </h2>
+          <p class="fs-latest-alert__desc"><?php echo wp_trim_words(get_the_excerpt($golpe_hero), 20); ?></p>
+          <div class="fs-latest-alert__foot">
+            <?php echo fs_badge_risco($nivel); ?>
+            <a href="<?php echo get_permalink($golpe_hero); ?>" class="fs-latest-alert__link">
+              Ler análise completa →
+            </a>
+          </div>
         </div>
-        <a href="<?php echo get_permalink($golpe_hero); ?>" class="fs-split-hero__link">
-          Ler análise completa
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-    <?php endif; wp_reset_postdata(); ?>
+        <?php endif; wp_reset_postdata(); ?>
 
-    <div class="fs-split-hero__divider" aria-hidden="true"></div>
+        <div class="fs-latest-alerts__sep" aria-hidden="true"></div>
 
-    <!-- Fraude -->
-    <?php if ($fraude_hero):
-      $fnivel   = get_post_meta($fraude_hero->ID, 'nivel_risco', true) ?: 'alto';
-      $fprejuizo= get_post_meta($fraude_hero->ID, 'prejuizo_estimado', true);
-      $ftipos   = get_the_terms($fraude_hero->ID, 'tipo_fraude');
-    ?>
-    <div class="fs-split-hero__panel fs-split-hero__panel--fraude">
-      <?php if (has_post_thumbnail($fraude_hero->ID)): ?>
-        <div class="fs-split-hero__bg">
-          <?php echo get_the_post_thumbnail($fraude_hero->ID, 'full', ['loading' => 'eager', 'fetchpriority' => 'high']); ?>
-        </div>
-      <?php endif; ?>
-      <div class="fs-split-hero__overlay fs-split-hero__overlay--fraude"></div>
-      <div class="fs-split-hero__content">
-        <div class="fs-split-hero__eyebrow fs-split-hero__eyebrow--fraude">
-          <span class="fs-split-hero__dot"></span>
-          Nova fraude identificada
-        </div>
-        <?php if ($ftipos && !is_wp_error($ftipos)): ?>
-          <span class="fs-split-hero__type"><?php echo esc_html($ftipos[0]->name); ?></span>
-        <?php endif; ?>
-        <h2 class="fs-split-hero__title">
-          <a href="<?php echo get_permalink($fraude_hero); ?>"><?php echo esc_html($fraude_hero->post_title); ?></a>
-        </h2>
-        <p class="fs-split-hero__desc"><?php echo wp_trim_words(get_the_excerpt($fraude_hero), 20); ?></p>
-        <div class="fs-split-hero__meta">
-          <?php
-          $bl = ['alto' => ['fs-badge--fraude-alto','🔓 Alto Risco'],'medio' => ['fs-badge--fraude-medio','⚠️ Médio'],'baixo' => ['fs-badge--fraude-baixo','ℹ️ Baixo']];
-          [$bc,$bl2] = $bl[$fnivel] ?? $bl['alto'];
-          ?>
-          <span class="fs-badge <?php echo $bc; ?>"><?php echo $bl2; ?></span>
-          <?php if ($fprejuizo): ?>
-            <span style="color:rgba(255,255,255,.45);font-size:.7rem;">💸 <?php echo esc_html($fprejuizo); ?></span>
+        <!-- Fraude -->
+        <?php if ($fraude_hero):
+          $fnivel = get_post_meta($fraude_hero->ID, 'nivel_risco', true) ?: 'alto';
+          $ftipos = get_the_terms($fraude_hero->ID, 'tipo_fraude');
+          $fbl = ['alto' => ['fs-badge--fraude-alto','🔓 Alto Risco'],'medio' => ['fs-badge--fraude-medio','⚠️ Médio'],'baixo' => ['fs-badge--fraude-baixo','ℹ️ Baixo']];
+          [$fbc,$fbl2] = $fbl[$fnivel] ?? $fbl['alto'];
+        ?>
+        <div class="fs-latest-alert fs-latest-alert--fraude">
+          <div class="fs-latest-alert__label">
+            <span class="fs-latest-alert__dot"></span>
+            Nova fraude identificada
+          </div>
+          <?php if ($ftipos && !is_wp_error($ftipos)): ?>
+            <span class="fs-latest-alert__type"><?php echo esc_html($ftipos[0]->name); ?></span>
           <?php endif; ?>
+          <h2 class="fs-latest-alert__title">
+            <a href="<?php echo get_permalink($fraude_hero); ?>"><?php echo esc_html($fraude_hero->post_title); ?></a>
+          </h2>
+          <p class="fs-latest-alert__desc"><?php echo wp_trim_words(get_the_excerpt($fraude_hero), 20); ?></p>
+          <div class="fs-latest-alert__foot">
+            <span class="fs-badge <?php echo $fbc; ?>"><?php echo $fbl2; ?></span>
+            <a href="<?php echo get_permalink($fraude_hero); ?>" class="fs-latest-alert__link">
+              Ler análise completa →
+            </a>
+          </div>
         </div>
-        <a href="<?php echo get_permalink($fraude_hero); ?>" class="fs-split-hero__link">
-          Ler análise completa
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-    <?php else: ?>
-    <div class="fs-split-hero__panel fs-split-hero__panel--fraude fs-split-hero__panel--empty">
-      <div class="fs-split-hero__content" style="align-items:center;text-align:center;">
-        <div class="fs-split-hero__label" style="color:rgba(167,139,250,.7);justify-content:center;">
-          <span class="fs-split-hero__dot" style="background:#a78bfa;"></span>
-          Fraudes Bancárias
+        <?php else: ?>
+        <div class="fs-latest-alert fs-latest-alert--fraude">
+          <div class="fs-latest-alert__label">
+            <span class="fs-latest-alert__dot"></span>
+            Fraudes Bancárias
+          </div>
+          <h2 class="fs-latest-alert__title" style="font-size:1.1rem;">Cartão clonado, SIM Swap, Credential Stuffing…</h2>
+          <p class="fs-latest-alert__desc">Acontece sem sua ação. Acesso não autorizado à sua conta bancária.</p>
+          <div class="fs-latest-alert__foot">
+            <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-latest-alert__link">Ver todas as fraudes →</a>
+          </div>
         </div>
-        <h2 class="fs-split-hero__title" style="font-size:1.25rem;">Cartão clonado, SIM Swap, Credential Stuffing…</h2>
-        <p class="fs-split-hero__desc" style="font-size:.875rem;">Acontece sem sua ação. Acesso não autorizado à sua conta.</p>
-        <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-split-hero__link" style="border-color:rgba(167,139,250,.4);color:#c4b5fd;">
-          Ver todas as fraudes →
-        </a>
-      </div>
-    </div>
-    <?php endif; wp_reset_postdata(); ?>
+        <?php endif; wp_reset_postdata(); ?>
 
+      </div>
+    </div>
   </section>
 
   <!-- Concept bar compacta -->
