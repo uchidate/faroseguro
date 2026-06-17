@@ -1,7 +1,7 @@
 /*
 Theme Name: Guia Antifraude
 Template:   kadence
-Version:    3.8.0
+Version:    3.9.0
 Text Domain: guia-antifraude
 */
 
@@ -872,3 +872,73 @@ button { cursor: pointer; font: inherit; }
 @media (max-width: 900px) {
   .fs-contact-grid { grid-template-columns: 1fr; }
 }
+
+/* ─────────────────────────────────────────
+   CONTATO PAGE
+───────────────────────────────────────── */
+.fs-contato__hero { background: var(--navy); padding: 64px 0 56px; }
+.fs-contato__hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+.fs-contato__hero-text { flex: 1; max-width: 640px; }
+.fs-contato__hero-text h1 { font-size: var(--text-4xl); font-weight: 800; color: #fff; letter-spacing: -.03em; margin: 8px 0 16px; line-height: 1.1; }
+.fs-contato__hero-lead { font-size: var(--text-lg); color: rgba(255,255,255,.75); line-height: 1.7; margin-bottom: 32px; }
+.fs-contato__stats { display: flex; gap: 32px; }
+.fs-contato__stat { display: flex; flex-direction: column; gap: 2px; }
+.fs-contato__stat strong { font-size: var(--text-2xl); font-weight: 800; color: var(--orange); line-height: 1; }
+.fs-contato__stat span { font-size: var(--text-xs); color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .06em; }
+.fs-contato__hero-badge { flex-shrink: 0; }
+.fs-contato__shield { display: flex; flex-direction: column; align-items: center; gap: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: var(--r-xl); padding: 32px 40px; color: var(--green); }
+.fs-contato__shield span { font-size: var(--text-sm); font-weight: 600; color: rgba(255,255,255,.7); }
+.fs-contato__body { padding: 56px 0 80px; }
+.fs-contato__grid { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+.fs-contato__section { background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl); padding: 32px; margin-bottom: 24px; box-shadow: var(--sh-sm); }
+.fs-contato__section-title { display: flex; align-items: center; gap: 10px; font-size: var(--text-xl); font-weight: 700; color: var(--ink); margin-bottom: 24px; }
+.fs-contato__section-title svg { color: var(--orange); flex-shrink: 0; }
+.fs-contato__no-form-inner { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--r-lg); padding: 40px; text-align: center; }
+.fs-contato__no-form-title { font-size: var(--text-xl); font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.fs-contato__no-form-inner p { color: var(--ink-soft); line-height: 1.7; margin-bottom: 24px; }
+.fs-contato__no-form-tip { font-size: var(--text-sm); color: var(--muted); margin-top: 16px !important; margin-bottom: 0 !important; }
+.fs-contato__tips { background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl); padding: 28px 32px; box-shadow: var(--sh-sm); }
+.fs-contato__tips-title { font-size: var(--text-base); font-weight: 700; color: var(--ink); margin-bottom: 20px; }
+.fs-contato__tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.fs-contato__tip { display: flex; gap: 14px; align-items: flex-start; }
+.fs-contato__tip-icon { width: 40px; height: 40px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fs-contato__tip-icon--blue { background: rgba(29,78,216,.08); color: var(--blue); }
+.fs-contato__tip-icon--orange { background: rgba(249,115,22,.08); color: var(--orange); }
+.fs-contato__tip-icon--green { background: rgba(22,163,74,.08); color: var(--green); }
+.fs-contato__tip-icon--purple { background: rgba(124,58,237,.08); color: var(--purple); }
+.fs-contato__tip strong { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.fs-contato__tip span { font-size: var(--text-xs); color: var(--muted); line-height: 1.5; }
+.fs-contato__aside { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 80px; }
+.fs-contato__card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl); padding: 24px; box-shadow: var(--sh-sm); }
+.fs-contato__card--warn { background: rgba(251,146,60,.04); border-color: rgba(249,115,22,.2); }
+.fs-contato__card--emergency { background: rgba(220,38,38,.04); border-color: rgba(220,38,38,.2); }
+.fs-contato__card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.fs-contato__card-header h3 { font-size: var(--text-base); font-weight: 700; color: var(--ink); }
+.fs-contato__card-header svg { color: var(--orange); flex-shrink: 0; }
+.fs-contato__card--warn .fs-contato__card-header svg { color: var(--amber); }
+.fs-contato__card--emergency .fs-contato__card-header svg { color: var(--red); }
+.fs-contato__card-desc { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.6; margin-bottom: 16px; }
+.fs-contato__channels { display: flex; flex-direction: column; gap: 4px; }
+.fs-contato__channel { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--r-md); transition: background var(--dur) var(--ease); text-decoration: none; border: 1px solid transparent; }
+.fs-contato__channel:hover { background: var(--surface); border-color: var(--border); }
+.fs-contato__channel-icon { width: 40px; height: 40px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fs-contato__channel-icon--blue { background: rgba(29,78,216,.08); color: var(--blue); }
+.fs-contato__channel-icon--green { background: rgba(22,163,74,.08); color: var(--green); }
+.fs-contato__channel-icon--orange { background: rgba(249,115,22,.08); color: var(--orange); }
+.fs-contato__channel-icon--purple { background: rgba(124,58,237,.08); color: var(--purple); }
+.fs-contato__channel-info { flex: 1; }
+.fs-contato__channel-info strong { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--ink); }
+.fs-contato__channel-info span { font-size: var(--text-xs); color: var(--muted); }
+.fs-contato__channel-arrow { color: var(--subtle); flex-shrink: 0; }
+.fs-contato__warn-list { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.fs-contato__warn-list li { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.5; padding-left: 20px; position: relative; }
+.fs-contato__warn-list li::before { content: '•'; position: absolute; left: 0; color: var(--amber); font-weight: 700; }
+.fs-contato__card--emergency p { font-size: var(--text-sm); color: var(--ink-soft); margin-bottom: 12px; }
+.fs-contato__emergency-list { display: flex; flex-direction: column; gap: 8px; }
+.fs-contato__emergency-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(220,38,38,.06); border-radius: var(--r-md); }
+.fs-contato__emergency-label { font-size: var(--text-sm); color: var(--ink-soft); font-weight: 500; }
+.fs-contato__emergency-number { font-size: var(--text-xl); font-weight: 800; color: var(--red); text-decoration: none; }
+.fs-contato__emergency-number:hover { color: #b91c1c; }
+.fs-btn--lg { padding: .75rem 1.5rem; font-size: var(--text-base); }
+@media (max-width: 1024px) { .fs-contato__grid { grid-template-columns: 1fr; } .fs-contato__aside { position: static; } }
+@media (max-width: 768px) { .fs-contato__hero-inner { flex-direction: column; gap: 32px; } .fs-contato__hero-badge { display: none; } .fs-contato__stats { gap: 20px; } .fs-contato__tips-grid { grid-template-columns: 1fr; } .fs-contato__section { padding: 20px; } }
