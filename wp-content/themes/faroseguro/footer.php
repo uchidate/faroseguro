@@ -66,7 +66,12 @@
   <div class="fs-footer__bottom">
     <div class="container fs-footer__bottom-inner">
       <p>© <?php echo date('Y'); ?> Faro Seguro. Todos os direitos reservados.</p>
-      <p>Conteúdo de caráter informativo. Não nos responsabilizamos por decisões financeiras individuais. Fontes: Banco Central do Brasil, Febraban, Senacon e Ministério da Justiça.</p>
+      <p>
+        Conteúdo de caráter informativo. Não nos responsabilizamos por decisões financeiras individuais. Fontes: Banco Central do Brasil, Febraban, Senacon e Ministério da Justiça.
+        &nbsp;·&nbsp; <a href="<?php echo home_url('/politica-de-privacidade/'); ?>">Política de Privacidade</a>
+        &nbsp;·&nbsp; <a href="<?php echo home_url('/termos-de-uso/'); ?>">Termos de Uso</a>
+        &nbsp;·&nbsp; <a href="<?php echo home_url('/sobre-nos/'); ?>">Sobre o Portal</a>
+      </p>
     </div>
   </div>
 </footer>
