@@ -1,64 +1,60 @@
 <?php get_header(); ?>
 
-<main class="fs-archive fs-archive--artigos">
+<?php
+$cat    = get_queried_object();
+$is_cat = is_category();
+$title  = $is_cat ? single_cat_title('', false) : (is_tag() ? single_tag_title('', false) : 'Todos os Artigos');
+$desc   = $is_cat && category_description() ? category_description() : 'Guias completos, análises e orientações para você se proteger de fraudes e golpes bancários.';
+?>
 
-  <div class="fs-archive__hero">
-    <div class="container">
-      <?php if (is_category()): ?>
-        <span class="fs-eyebrow">Categoria</span>
-        <h1 class="fs-archive__title"><?php single_cat_title(); ?></h1>
-        <?php if (category_description()) echo '<p class="fs-archive__desc">' . category_description() . '</p>'; ?>
-      <?php elseif (is_tag()): ?>
-        <span class="fs-eyebrow">Tag</span>
-        <h1 class="fs-archive__title">#<?php single_tag_title(); ?></h1>
-      <?php elseif (is_tax('publico_alvo')): ?>
-        <span class="fs-eyebrow">Público-alvo</span>
-        <h1 class="fs-archive__title"><?php single_term_title(); ?></h1>
-      <?php else: ?>
-        <span class="fs-eyebrow">Artigos</span>
-        <h1 class="fs-archive__title">Todos os Artigos</h1>
-        <p class="fs-archive__desc">Conteúdo educativo sobre fraudes, golpes e como se proteger no ambiente digital e financeiro.</p>
-      <?php endif; ?>
-    </div>
+<div class="fs-archive__hero">
+  <div class="container">
+    <span class="fs-eyebrow">📰 Artigos</span>
+    <h1 class="fs-archive__title"><?php echo esc_html($title); ?></h1>
+    <p class="fs-archive__desc"><?php echo wp_kses_post($desc); ?></p>
   </div>
+</div>
 
-  <div class="container fs-archive__body">
-
-    <!-- Filtro de categorias -->
-    <div class="fs-filter-bar">
-      <?php
-      $cats = get_categories(['hide_empty' => true, 'number' => 10]);
-      $current_cat = get_queried_object_id();
-      ?>
-      <a href="<?php echo get_permalink(get_option('page_for_posts')); ?>" class="fs-filter-pill <?php echo !is_category() ? 'is-active' : ''; ?>">Todos</a>
-      <?php foreach ($cats as $cat): ?>
-        <a href="<?php echo get_category_link($cat); ?>" class="fs-filter-pill <?php echo is_category($cat->term_id) ? 'is-active' : ''; ?>">
-          <?php echo esc_html($cat->name); ?> <span><?php echo $cat->count; ?></span>
+<?php
+$cats = get_categories(['hide_empty' => true, 'number' => 8]);
+if ($cats): ?>
+<div class="fs-filter-strip">
+  <div class="fs-filter-strip__inner">
+    <div class="fs-filter-group">
+      <a href="<?php echo home_url('/artigos/'); ?>" class="fs-filter-pill <?php echo !$is_cat ? 'is-active' : ''; ?>">Todos</a>
+      <?php foreach ($cats as $c): ?>
+        <a href="<?php echo get_category_link($c); ?>" class="fs-filter-pill <?php echo ($is_cat && get_queried_object_id() === $c->term_id) ? 'is-active' : ''; ?>">
+          <?php echo esc_html($c->name); ?> <span><?php echo $c->count; ?></span>
         </a>
       <?php endforeach; ?>
     </div>
+  </div>
+</div>
+<?php endif; ?>
 
-    <!-- Grid de artigos -->
-    <?php if (have_posts()): ?>
-      <div class="fs-grid fs-grid--3">
-        <?php $i = 0; while (have_posts()) : the_post(); $i++;
-          fs_artigo_card(get_post(), $i === 1);
-        endwhile; ?>
-      </div>
+<div class="fs-archive__body">
+  <div class="container">
 
-      <div class="fs-pagination">
-        <?php the_posts_pagination(['mid_size' => 2, 'prev_text' => '← Anterior', 'next_text' => 'Próxima →']); ?>
-      </div>
-
+    <?php if (have_posts()):
+      $first = true; ?>
+      <?php while (have_posts()) : the_post();
+        if ($first) {
+          echo '<div class="fs-featured"><p class="fs-featured__label">Em Destaque</p>';
+          fs_artigo_card_hero(get_post());
+          echo '</div><p class="fs-section-title" style="margin-top:40px;">Mais Artigos</p><div class="fs-grid fs-grid--3">';
+          $first = false;
+          continue;
+        }
+        fs_artigo_card(get_post());
+      endwhile;
+      if (!$first) echo '</div>';
+      ?>
+      <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => '← Anterior', 'next_text' => 'Próximos →', 'mid_size' => 2]); ?></div>
     <?php else: ?>
-      <div class="fs-empty">
-        <p>Nenhum artigo encontrado.</p>
-        <a href="<?php echo home_url('/'); ?>" class="fs-btn fs-btn--ghost">← Voltar ao início</a>
-      </div>
+      <div class="fs-empty"><p>Nenhum artigo encontrado.</p></div>
     <?php endif; ?>
 
   </div>
-
-</main>
+</div>
 
 <?php get_footer(); ?>

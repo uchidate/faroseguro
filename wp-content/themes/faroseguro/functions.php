@@ -503,6 +503,79 @@ function fs_artigo_card(WP_Post $post, bool $large = false): void {
     <?php
 }
 
+/**
+ * Gera TOC a partir dos H2s do conteúdo.
+ * Adiciona IDs nos headings para anchor links.
+ *
+ * @return array [['id' => 'slug', 'text' => 'Título'], …]
+ */
+function fs_build_toc(string $content): array {
+    if (!preg_match_all('/<h2[^>]*>(.*?)<\/h2>/i', $content, $matches)) return [];
+
+    $items = [];
+    foreach ($matches[1] as $text) {
+        $clean = wp_strip_all_tags($text);
+        $id    = sanitize_title($clean);
+        if ($id) $items[] = ['id' => $id, 'text' => $clean];
+    }
+
+    // Injetar IDs nos headings do conteúdo via filtro
+    add_filter('the_content', function ($c) use ($items) {
+        foreach ($items as $item) {
+            $c = preg_replace(
+                '/<h2([^>]*)>(' . preg_quote($item['text'], '/') . ')<\/h2>/i',
+                '<h2$1 id="' . esc_attr($item['id']) . '">' . $item['text'] . '</h2>',
+                $c,
+                1
+            );
+        }
+        return $c;
+    }, 5);
+
+    return $items;
+}
+
+/**
+ * Renderiza um card de artigo em layout hero (ocupando grid completo).
+ */
+function fs_artigo_card_hero(WP_Post $post): void {
+    $leitura   = fs_leitura($post->ID);
+    $destaque  = get_post_meta($post->ID, 'artigo_destaque', true) === '1';
+    $cats      = get_the_terms($post->ID, 'category');
+    $cat_html  = '';
+    if ($cats && !is_wp_error($cats)) {
+        foreach (array_slice($cats, 0, 1) as $c) {
+            $cat_html = '<a href="' . get_term_link($c) . '" class="fs-cat fs-cat--default">' . esc_html($c->name) . '</a>';
+        }
+    }
+    ?>
+    <article class="fs-card fs-card--hero">
+      <?php if (has_post_thumbnail($post->ID)): ?>
+        <div class="fs-card__image">
+          <a href="<?php echo get_permalink($post); ?>">
+            <?php echo get_the_post_thumbnail($post->ID, 'full'); ?>
+          </a>
+          <?php if ($destaque): ?>
+            <div class="fs-card__image-badge"><span class="fs-badge fs-badge--novo">⭐ Destaque</span></div>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+      <div class="fs-card__body">
+        <div class="fs-card__meta">
+          <?php echo $cat_html; ?>
+          <span style="font-size:.72rem;color:var(--subtle);">⏱ <?php echo esc_html($leitura); ?></span>
+        </div>
+        <h2 class="fs-card__title"><a href="<?php echo get_permalink($post); ?>"><?php echo get_the_title($post); ?></a></h2>
+        <p class="fs-card__excerpt"><?php echo wp_trim_words(get_the_excerpt($post), 35); ?></p>
+        <div class="fs-card__footer">
+          <time class="fs-card__date" datetime="<?php echo get_the_date('c', $post); ?>"><?php echo get_the_date('d \d\e F \d\e Y', $post); ?></time>
+          <a href="<?php echo get_permalink($post); ?>" class="fs-card__link">Ler artigo completo →</a>
+        </div>
+      </div>
+    </article>
+    <?php
+}
+
 /* ────────────────────────────────────────────
    9. SCHEMA MARKUP (JSON-LD)
    ──────────────────────────────────────────── */
