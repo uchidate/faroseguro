@@ -598,103 +598,84 @@ button { cursor: pointer; font: inherit; }
 .fs-home-fraudes .fs-filter-pill span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
 
 /* ─────────────────────────────────────────
-   SPLIT HERO — Golpe + Fraude lado a lado
+   LATEST ALERTS — Hero compacto editorial
 ───────────────────────────────────────── */
-.fs-split-hero {
+.fs-latest-alerts {
+  background: var(--navy);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.fs-latest-alerts__grid {
   display: grid;
-  grid-template-columns: 1fr 2px 1fr;
-  min-height: 400px;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: stretch;
 }
-.fs-split-hero__panel {
-  position: relative;
+.fs-latest-alert {
+  padding: 28px 36px 32px;
   display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  min-height: 400px;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 3px solid transparent;
 }
-.fs-split-hero__panel--golpe  { background: #0f0808; }
-.fs-split-hero__panel--fraude { background: #07050f; }
-.fs-split-hero__panel--empty  { align-items: center; }
-.fs-split-hero__panel--golpe::after  { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--red); z-index:4; }
-.fs-split-hero__panel--fraude::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:#7c3aed; z-index:4; }
+.fs-latest-alert--golpe  { border-top-color: var(--red); }
+.fs-latest-alert--fraude { border-top-color: #7c3aed; }
 
-.fs-split-hero__bg { position: absolute; inset: 0; z-index: 0; }
-.fs-split-hero__bg img { width: 100%; height: 100%; object-fit: cover; opacity: .18; filter: saturate(.6); }
-
-.fs-split-hero__overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(160deg, transparent 0%, rgba(15,8,8,.55) 40%, rgba(15,8,8,.97) 100%);
-}
-.fs-split-hero__overlay--fraude {
-  background: linear-gradient(160deg, transparent 0%, rgba(7,5,15,.55) 40%, rgba(7,5,15,.97) 100%);
+.fs-latest-alerts__sep {
+  background: rgba(255,255,255,.07);
+  width: 1px;
+  margin: 20px 0;
 }
 
-.fs-split-hero__content {
-  position: relative; z-index: 2;
-  padding: 48px 40px 52px;
-  display: flex; flex-direction: column; gap: 14px; width: 100%;
+.fs-latest-alert__label {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
 }
+.fs-latest-alert--golpe  .fs-latest-alert__label { color: #f87171; }
+.fs-latest-alert--fraude .fs-latest-alert__label { color: #a78bfa; }
 
-.fs-split-hero__eyebrow {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; font-weight: 800; letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.fs-split-hero__eyebrow--golpe  { color: #f87171; }
-.fs-split-hero__eyebrow--fraude { color: #a78bfa; }
-
-.fs-split-hero__dot {
-  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+.fs-latest-alert__dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
   animation: pulse 1.4s ease infinite;
 }
-.fs-split-hero__eyebrow--golpe  .fs-split-hero__dot { background: #ef4444; }
-.fs-split-hero__eyebrow--fraude .fs-split-hero__dot { background: #8b5cf6; }
+.fs-latest-alert--golpe  .fs-latest-alert__dot { background: #ef4444; }
+.fs-latest-alert--fraude .fs-latest-alert__dot { background: #8b5cf6; }
 
-.fs-split-hero__type {
-  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 4px; align-self: flex-start;
+.fs-latest-alert__type {
+  font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px; align-self: flex-start;
 }
-.fs-split-hero__panel--golpe  .fs-split-hero__type { background: rgba(239,68,68,.18); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
-.fs-split-hero__panel--fraude .fs-split-hero__type { background: rgba(139,92,246,.18); color: #c4b5fd; border: 1px solid rgba(139,92,246,.3); }
+.fs-latest-alert--golpe  .fs-latest-alert__type { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
+.fs-latest-alert--fraude .fs-latest-alert__type { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.25); }
 
-.fs-split-hero__title {
-  font-size: clamp(1.25rem, 2.2vw, 1.85rem);
-  font-weight: 800; color: #fff; letter-spacing: -.03em; line-height: 1.2; margin: 0;
+.fs-latest-alert__title {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  font-weight: 800; color: #fff; letter-spacing: -.02em; line-height: 1.25; margin: 0;
 }
-.fs-split-hero__title a { color: inherit; transition: color var(--dur) var(--ease); }
-.fs-split-hero__panel--golpe  .fs-split-hero__title a:hover { color: #fb923c; }
-.fs-split-hero__panel--fraude .fs-split-hero__title a:hover { color: #a78bfa; }
+.fs-latest-alert__title a { color: inherit; text-decoration: none; transition: color var(--dur) var(--ease); }
+.fs-latest-alert--golpe  .fs-latest-alert__title a:hover { color: #fb923c; }
+.fs-latest-alert--fraude .fs-latest-alert__title a:hover { color: #a78bfa; }
 
-.fs-split-hero__desc {
-  font-size: .875rem; color: rgba(255,255,255,.5); line-height: 1.65; margin: 0;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-}
-
-.fs-split-hero__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-
-.fs-split-hero__link {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 18px; border-radius: 6px; font-size: .8125rem; font-weight: 700;
-  transition: all var(--dur) var(--ease); margin-top: 4px; align-self: flex-start;
-}
-.fs-split-hero__panel--golpe  .fs-split-hero__link { border: 1.5px solid rgba(239,68,68,.45); color: #fca5a5; }
-.fs-split-hero__panel--fraude .fs-split-hero__link { border: 1.5px solid rgba(139,92,246,.45); color: #c4b5fd; }
-.fs-split-hero__panel--golpe  .fs-split-hero__link:hover { background: rgba(239,68,68,.18); border-color: #ef4444; color: #fff; }
-.fs-split-hero__panel--fraude .fs-split-hero__link:hover { background: rgba(139,92,246,.18); border-color: #8b5cf6; color: #fff; }
-
-/* Divisor fino entre os dois painéis */
-.fs-split-hero__divider {
-  background: rgba(255,255,255,.06);
-  width: 2px; z-index: 3; flex-shrink: 0;
-  display: block;
+.fs-latest-alert__desc {
+  font-size: .8125rem; color: rgba(255,255,255,.45); line-height: 1.6; margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-@media (max-width: 860px) {
-  .fs-split-hero { grid-template-columns: 1fr; }
-  .fs-split-hero__divider { width: 100%; height: 2px; }
-  .fs-split-hero__panel { min-height: 280px; }
-  .fs-split-hero__content { padding: 32px 24px 40px; }
-  .fs-split-hero__title { font-size: clamp(1.1rem, 5vw, 1.4rem); }
+.fs-latest-alert__foot {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px;
+}
+
+.fs-latest-alert__link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .75rem; font-weight: 700; text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.fs-latest-alert--golpe  .fs-latest-alert__link { color: #fb923c; }
+.fs-latest-alert--fraude .fs-latest-alert__link { color: #a78bfa; }
+.fs-latest-alert__link:hover { text-decoration: underline; }
+
+@media (max-width: 700px) {
+  .fs-latest-alerts__grid { grid-template-columns: 1fr; }
+  .fs-latest-alerts__sep { width: 100%; height: 1px; margin: 0 20px; width: calc(100% - 40px); }
+  .fs-latest-alert { padding: 22px 20px 24px; }
 }
 
 /* ─────────────────────────────────────────
