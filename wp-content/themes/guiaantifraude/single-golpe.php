@@ -34,7 +34,7 @@
         <?php endforeach; endif; ?>
       </div>
       <h1 class="fs-single__title"><?php the_title(); ?></h1>
-      <?php if (has_excerpt()): ?><p class="fs-single__lead"><?php the_excerpt(); ?></p><?php endif; ?>
+      <?php if (has_excerpt()): ?><p class="fs-single__lead"><?php echo esc_html(get_the_excerpt()); ?></p><?php endif; ?>
       <div class="fs-single__byline">
         <span>Publicado em <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('d \d\e F \d\e Y'); ?></time></span>
         <?php if ($canais && !is_wp_error($canais)): ?><span>Canal: <?php echo esc_html(implode(', ', wp_list_pluck($canais, 'name'))); ?></span><?php endif; ?>

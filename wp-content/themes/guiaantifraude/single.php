@@ -25,7 +25,7 @@
       </div>
       <h1 class="fs-single__title"><?php the_title(); ?></h1>
       <?php if (has_excerpt()): ?>
-        <p class="fs-single__lead"><?php the_excerpt(); ?></p>
+        <p class="fs-single__lead"><?php echo esc_html(get_the_excerpt()); ?></p>
       <?php endif; ?>
       <div class="fs-single__byline">
         <span>Publicado em <time datetime="<?php the_date('c'); ?>"><?php the_date('d \d\e F \d\e Y'); ?></time></span>
