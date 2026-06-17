@@ -114,13 +114,13 @@
             <div class="fs-post-nav__item">
               <?php $prev = get_previous_post(); if ($prev): ?>
                 <span class="fs-post-nav__label">Anterior</span>
-                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html($prev->post_title); ?></a></div>
+                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html(fs_editorial_text($prev->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
             <div class="fs-post-nav__item fs-post-nav__item--next">
               <?php $next = get_next_post(); if ($next): ?>
                 <span class="fs-post-nav__label">Próxima</span>
-                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html($next->post_title); ?></a></div>
+                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html(fs_editorial_text($next->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
           </nav>
@@ -147,7 +147,7 @@
                 <div class="fs-sidebar-item">
                   <div class="fs-sidebar-item__text">
                     <div class="fs-sidebar-item__meta"><span class="fs-badge <?php echo $badge_map_s[$fn] ?? 'fs-badge--fraude-alto'; ?>" style="font-size:10px;">Risco <?php echo ucfirst($fn); ?></span></div>
-                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($f); ?>"><?php echo esc_html($f->post_title); ?></a></div>
+                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($f); ?>"><?php echo esc_html(fs_editorial_text($f->post_title)); ?></a></div>
                   </div>
                 </div>
               <?php endforeach; wp_reset_postdata(); ?>

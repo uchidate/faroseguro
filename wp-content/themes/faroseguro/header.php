@@ -20,7 +20,7 @@ if ($latest_golpes): ?>
     <div class="fs-ticker__inner" id="fs-ticker">
       <?php foreach ($latest_golpes as $g): ?>
         <a href="<?= get_permalink($g) ?>" class="fs-ticker__item">
-          <?= esc_html($g->post_title) ?>
+          <?= esc_html(fs_editorial_text($g->post_title)) ?>
         </a>
         <span class="fs-ticker__sep" aria-hidden="true">·</span>
       <?php endforeach; wp_reset_postdata(); ?>

@@ -9,6 +9,34 @@ defined('ABSPATH') || exit;
 require_once get_stylesheet_directory() . '/inc/ads.php';
 require_once get_stylesheet_directory() . '/inc/seo-readiness.php';
 
+function fs_editorial_text(string $text): string {
+    if ($text === '') {
+        return '';
+    }
+
+    return trim((string) preg_replace('/[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}→←↗✓✦]/u', '', $text));
+}
+
+add_filter('the_title', function ($title) {
+    return is_admin() ? $title : fs_editorial_text((string) $title);
+}, 20);
+
+add_filter('the_excerpt', function ($excerpt) {
+    return is_admin() ? $excerpt : fs_editorial_text((string) $excerpt);
+}, 20);
+
+add_filter('the_content', function ($content) {
+    return is_admin() ? $content : fs_editorial_text((string) $content);
+}, 8);
+
+add_filter('document_title_parts', function ($parts) {
+    if (is_admin()) {
+        return $parts;
+    }
+
+    return array_map(fn($part) => fs_editorial_text((string) $part), $parts);
+}, 20);
+
 /* ────────────────────────────────────────────
    1. ENQUEUE
    ──────────────────────────────────────────── */

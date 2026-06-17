@@ -55,7 +55,7 @@ $total_posts   = wp_count_posts('post')->publish;
             <span class="fs-latest-alert__type"><?php echo esc_html($tipos_h[0]->name); ?></span>
           <?php endif; ?>
           <h2 class="fs-latest-alert__title">
-            <a href="<?php echo get_permalink($golpe_hero); ?>"><?php echo esc_html($golpe_hero->post_title); ?></a>
+            <a href="<?php echo get_permalink($golpe_hero); ?>"><?php echo esc_html(fs_editorial_text($golpe_hero->post_title)); ?></a>
           </h2>
           <p class="fs-latest-alert__desc"><?php echo wp_trim_words(get_the_excerpt($golpe_hero), 20); ?></p>
           <div class="fs-latest-alert__foot">
@@ -85,7 +85,7 @@ $total_posts   = wp_count_posts('post')->publish;
             <span class="fs-latest-alert__type"><?php echo esc_html($ftipos[0]->name); ?></span>
           <?php endif; ?>
           <h2 class="fs-latest-alert__title">
-            <a href="<?php echo get_permalink($fraude_hero); ?>"><?php echo esc_html($fraude_hero->post_title); ?></a>
+            <a href="<?php echo get_permalink($fraude_hero); ?>"><?php echo esc_html(fs_editorial_text($fraude_hero->post_title)); ?></a>
           </h2>
           <p class="fs-latest-alert__desc"><?php echo wp_trim_words(get_the_excerpt($fraude_hero), 20); ?></p>
           <div class="fs-latest-alert__foot">
