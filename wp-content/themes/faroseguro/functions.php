@@ -76,6 +76,45 @@ add_action('after_setup_theme', function () {
     load_child_theme_textdomain('faro-seguro', get_stylesheet_directory() . '/languages');
 });
 
+add_action('after_switch_theme', function () {
+    $pages = [
+        'sobre-nos' => [
+            'title' => 'Sobre o Faro Seguro',
+            'content' => '<p>O Faro Seguro é um portal editorial de alertas e educação sobre golpes, fraudes bancárias e segurança financeira no Brasil.</p><h2>Como trabalhamos</h2><p>Organizamos golpes por tipo, canal e público-alvo para que o leitor entenda rapidamente o risco, os sinais de alerta e os próximos passos.</p><h2>Compromisso editorial</h2><p>Nosso conteúdo tem caráter informativo e busca apontar fontes públicas, canais oficiais e medidas práticas de prevenção.</p>',
+        ],
+        'contato' => [
+            'title' => 'Contato e denúncia',
+            'content' => '<p>Use este canal para enviar relatos de golpes em circulação, links suspeitos, mensagens falsas ou padrões de fraude que possam ajudar outros leitores.</p><h2>Canais oficiais</h2><p>Se você teve prejuízo financeiro, registre também a ocorrência nos canais competentes.</p>[canais-oficiais]',
+        ],
+        'politica-de-privacidade' => [
+            'title' => 'Política de Privacidade',
+            'content' => '<p>Esta política explica, de forma resumida, como o Faro Seguro pode tratar informações de navegação, contato e segurança.</p><h2>Dados de navegação</h2><p>Podemos utilizar recursos de análise, segurança e publicidade para medir audiência, proteger o site e melhorar a experiência do usuário.</p><h2>Dados enviados pelo usuário</h2><p>Informações enviadas em formulários devem ser usadas apenas para análise editorial, contato e apuração de relatos. Evite enviar senhas, códigos de autenticação ou dados bancários completos.</p><h2>Publicidade</h2><p>O site pode exibir anúncios de terceiros, como Google AdSense, sujeitos às políticas desses provedores.</p>',
+        ],
+        'termos-de-uso' => [
+            'title' => 'Termos de Uso',
+            'content' => '<p>Ao acessar o Faro Seguro, você concorda em utilizar o conteúdo apenas para fins informativos e preventivos.</p><h2>Natureza do conteúdo</h2><p>As informações publicadas não substituem orientação jurídica, policial, bancária ou financeira individualizada.</p><h2>Responsabilidade do usuário</h2><p>Em caso de golpe ou fraude, entre em contato imediatamente com seu banco e registre a ocorrência nos canais oficiais.</p><h2>Atualizações</h2><p>Estes termos podem ser atualizados para refletir melhorias editoriais, técnicas ou legais.</p>',
+        ],
+    ];
+
+    foreach ($pages as $slug => $page) {
+        if (get_page_by_path($slug)) {
+            continue;
+        }
+
+        $page_id = wp_insert_post([
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'post_name' => $slug,
+            'post_title' => $page['title'],
+            'post_content' => $page['content'],
+        ]);
+
+        if ($slug === 'politica-de-privacidade' && !is_wp_error($page_id)) {
+            update_option('wp_page_for_privacy_policy', (int) $page_id);
+        }
+    }
+});
+
 /* ────────────────────────────────────────────
    3. MENUS & WIDGETS
    ──────────────────────────────────────────── */
@@ -720,6 +759,78 @@ function fs_artigo_card_hero(WP_Post $post): void {
     <?php
 }
 
+/**
+ * Renderiza canais oficiais úteis para vítimas e leitores.
+ */
+function fs_official_channels(string $class = ''): void {
+    $channels = [
+        ['Banco Central', 'Reclame contra banco, instituição de pagamento ou financeira.', 'https://www.bcb.gov.br/meubc/registrarreclamacao'],
+        ['Consumidor.gov.br', 'Abra uma reclamação formal contra empresas participantes.', 'https://www.consumidor.gov.br'],
+        ['Delegacia Virtual', 'Registre boletim de ocorrência conforme o estado onde ocorreu o caso.', 'https://www.gov.br/pt-br/servicos/registrar-boletim-de-ocorrencia-online'],
+    ];
+    ?>
+    <div class="fs-official-channels <?php echo esc_attr($class); ?>">
+      <?php foreach ($channels as [$title, $desc, $url]): ?>
+        <a href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener" class="fs-official-channel">
+          <span class="fs-official-channel__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-8h6v8"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+          </span>
+          <span>
+            <strong><?php echo esc_html($title); ?></strong>
+            <small><?php echo esc_html($desc); ?></small>
+          </span>
+        </a>
+      <?php endforeach; ?>
+    </div>
+    <?php
+}
+
+/**
+ * Renderiza uma seção editorial com guias essenciais.
+ */
+function fs_guides_section(array $exclude_ids = []): void {
+    $guides = get_posts([
+        'post_type'      => 'post',
+        'post_status'    => 'publish',
+        'posts_per_page' => 3,
+        'post__not_in'   => $exclude_ids,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ]);
+
+    if (!$guides) {
+        return;
+    }
+    ?>
+    <section class="fs-home-section fs-home-section--guides">
+      <div class="container">
+        <div class="fs-home-section__head">
+          <div>
+            <h2 class="fs-home-section__title">
+              <span class="fs-home-section__dot" style="background:var(--green)"></span>
+              Guias para agir com segurança
+            </h2>
+            <p class="fs-home-section__sub">Orientações diretas para reconhecer, bloquear e denunciar golpes financeiros.</p>
+          </div>
+          <a href="<?php echo esc_url(home_url('/artigos/')); ?>" class="fs-btn fs-btn--ghost fs-btn--sm">Ver biblioteca →</a>
+        </div>
+        <div class="fs-guide-list">
+          <?php foreach ($guides as $i => $guide): ?>
+            <a class="fs-guide-row" href="<?php echo esc_url(get_permalink($guide)); ?>">
+              <span class="fs-guide-row__num"><?php echo esc_html(str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT)); ?></span>
+              <span class="fs-guide-row__body">
+                <strong><?php echo esc_html(get_the_title($guide)); ?></strong>
+                <small><?php echo esc_html(wp_trim_words(get_the_excerpt($guide), 22)); ?></small>
+              </span>
+              <span class="fs-guide-row__meta"><?php echo esc_html(fs_leitura($guide->ID)); ?></span>
+            </a>
+          <?php endforeach; wp_reset_postdata(); ?>
+        </div>
+      </div>
+    </section>
+    <?php
+}
+
 /* ────────────────────────────────────────────
    9. SCHEMA MARKUP (JSON-LD)
    ──────────────────────────────────────────── */
@@ -793,7 +904,7 @@ add_action('wp_head', function () {
 
 add_filter('pre_get_posts', function (WP_Query $q) {
     if ($q->is_search() && $q->is_main_query() && !is_admin()) {
-        $q->set('post_type', ['post', 'golpe', 'glossario']);
+        $q->set('post_type', ['post', 'golpe', 'fraude', 'glossario']);
     }
 
     // Paginação dos arquivos de CPT
@@ -859,6 +970,13 @@ add_shortcode('ultimos-artigos', function ($atts) {
     }
     wp_reset_postdata();
     echo '</div>';
+    return ob_get_clean();
+});
+
+// [canais-oficiais]
+add_shortcode('canais-oficiais', function () {
+    ob_start();
+    fs_official_channels();
     return ob_get_clean();
 });
 

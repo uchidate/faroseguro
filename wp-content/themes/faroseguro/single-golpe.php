@@ -156,6 +156,13 @@
             <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-btn fs-btn--outline-w" style="margin-top:8px;">Registrar no Bacen</a>
           </div>
 
+          <div class="fs-sidebar-widget fs-sidebar-widget--official">
+            <div class="fs-sidebar-widget__head"><p class="fs-sidebar-widget__title">Resolver nos canais oficiais</p></div>
+            <div class="fs-sidebar-widget__body">
+              <?php fs_official_channels('fs-official-channels--compact'); ?>
+            </div>
+          </div>
+
           <?php
           $tipo_ids = ($tipos && !is_wp_error($tipos)) ? wp_list_pluck($tipos, 'term_id') : [];
           $similares = get_posts([

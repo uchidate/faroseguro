@@ -128,6 +128,15 @@
             <a href="/contato/" class="fs-btn fs-btn--primary">Denunciar Golpe</a>
           </div>
 
+          <div class="fs-sidebar-widget fs-sidebar-widget--official">
+            <div class="fs-sidebar-widget__head">
+              <p class="fs-sidebar-widget__title">Canais oficiais</p>
+            </div>
+            <div class="fs-sidebar-widget__body">
+              <?php fs_official_channels('fs-official-channels--compact'); ?>
+            </div>
+          </div>
+
           <!-- Alertas recentes -->
           <div class="fs-sidebar-widget">
             <div class="fs-sidebar-widget__head">

@@ -134,6 +134,32 @@ $total_posts   = wp_count_posts('post')->publish;
     </div>
   </div>
 
+  <!-- Trilhas rápidas por intenção do usuário -->
+  <section class="fs-user-paths">
+    <div class="container">
+      <div class="fs-user-paths__grid">
+        <a href="<?php echo esc_url(home_url('/?s=pix')); ?>" class="fs-user-path fs-user-path--red">
+          <span class="fs-user-path__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          </span>
+          <span><strong>Recebi uma mensagem suspeita</strong><small>Compare sinais de phishing, falso atendimento e golpe do Pix.</small></span>
+        </a>
+        <a href="<?php echo esc_url(get_post_type_archive_link('fraude')); ?>" class="fs-user-path fs-user-path--purple">
+          <span class="fs-user-path__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <span><strong>Minha conta foi acessada</strong><small>Veja fraudes por invasão, SIM swap, vazamento e cartão clonado.</small></span>
+        </a>
+        <a href="<?php echo esc_url(home_url('/contato/')); ?>" class="fs-user-path fs-user-path--orange">
+          <span class="fs-user-path__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+          </span>
+          <span><strong>Quero denunciar um caso</strong><small>Envie detalhes para ajudar outras pessoas e reúna canais oficiais.</small></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ── GOLPES ─────────────────────────────── -->
   <?php if ($golpes_grid): ?>
   <section class="fs-home-section">
@@ -165,6 +191,20 @@ $total_posts   = wp_count_posts('post')->publish;
     </div>
   </section>
   <?php endif; ?>
+
+  <section class="fs-trust-band">
+    <div class="container fs-trust-band__inner">
+      <div>
+        <p class="fs-eyebrow">Conteúdo verificado</p>
+        <h2>Informação prática antes de você clicar, pagar ou responder.</h2>
+      </div>
+      <div class="fs-trust-band__checks">
+        <span>Fontes oficiais citadas</span>
+        <span>Atualização editorial</span>
+        <span>Separação entre golpe e fraude</span>
+      </div>
+    </div>
+  </section>
 
   <!-- ── FRAUDES ────────────────────────────── -->
   <section class="fs-home-fraudes">
@@ -200,6 +240,8 @@ $total_posts   = wp_count_posts('post')->publish;
     </div>
   </section>
 
+  <?php fs_guides_section($artigo_hero ? [$artigo_hero->ID] : []); ?>
+
   <!-- Stats bar -->
   <div class="fs-stats-bar">
     <div class="container fs-stats-bar__inner">
@@ -230,6 +272,21 @@ $total_posts   = wp_count_posts('post')->publish;
     </div>
   </section>
   <?php endif; wp_reset_postdata(); ?>
+
+  <section class="fs-home-section fs-home-section--official">
+    <div class="container">
+      <div class="fs-home-section__head">
+        <div>
+          <h2 class="fs-home-section__title">
+            <span class="fs-home-section__dot" style="background:var(--blue)"></span>
+            Canais oficiais para resolver o problema
+          </h2>
+          <p class="fs-home-section__sub">Use o portal para se orientar, mas registre reclamações e ocorrências nos canais competentes.</p>
+        </div>
+      </div>
+      <?php fs_official_channels('fs-official-channels--home'); ?>
+    </div>
+  </section>
 
   <?php if ($artigos_grid): ?>
   <section class="fs-home-section">
