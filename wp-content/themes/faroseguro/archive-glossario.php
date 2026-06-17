@@ -23,7 +23,7 @@
     $all = get_posts(['post_type' => 'glossario', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC']);
     $grouped = [];
     foreach ($all as $p) {
-      $first = strtoupper(mb_substr($p->post_title, 0, 1));
+      $first = strtoupper(mb_substr(fs_editorial_text($p->post_title), 0, 1));
       $grouped[$first][] = $p;
     }
     ?>
@@ -35,7 +35,7 @@
           <?php foreach ($terms as $t): ?>
             <div class="fs-glossario-term">
               <h3 class="fs-glossario-term__title">
-                <a href="<?php echo get_permalink($t); ?>"><?php echo esc_html($t->post_title); ?></a>
+                <a href="<?php echo get_permalink($t); ?>"><?php echo esc_html(fs_editorial_text($t->post_title)); ?></a>
               </h3>
               <p class="fs-glossario-term__def"><?php echo wp_trim_words(get_the_excerpt($t), 25); ?></p>
             </div>

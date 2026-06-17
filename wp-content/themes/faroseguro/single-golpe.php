@@ -133,13 +133,13 @@
             <div class="fs-post-nav__item">
               <?php $prev = get_previous_post(); if ($prev): ?>
                 <span class="fs-post-nav__label">Alerta anterior</span>
-                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html($prev->post_title); ?></a></div>
+                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html(fs_editorial_text($prev->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
             <div class="fs-post-nav__item fs-post-nav__item--next">
               <?php $next = get_next_post(); if ($next): ?>
                 <span class="fs-post-nav__label">Próximo alerta</span>
-                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html($next->post_title); ?></a></div>
+                <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html(fs_editorial_text($next->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
           </nav>
@@ -178,7 +178,7 @@
                 <div class="fs-sidebar-item">
                   <div class="fs-sidebar-item__text">
                     <div class="fs-sidebar-item__meta"><?php echo fs_badge_risco($gnivel); ?></div>
-                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($g); ?>"><?php echo esc_html($g->post_title); ?></a></div>
+                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($g); ?>"><?php echo esc_html(fs_editorial_text($g->post_title)); ?></a></div>
                   </div>
                 </div>
               <?php endforeach; wp_reset_postdata(); ?>
@@ -194,7 +194,7 @@
                 <div class="fs-sidebar-item">
                   <?php if (has_post_thumbnail($art->ID)): ?><a href="<?php echo get_permalink($art); ?>"><?php echo get_the_post_thumbnail($art->ID, [64, 48]); ?></a><?php endif; ?>
                   <div class="fs-sidebar-item__text">
-                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($art); ?>"><?php echo esc_html($art->post_title); ?></a></div>
+                    <div class="fs-sidebar-item__title"><a href="<?php echo get_permalink($art); ?>"><?php echo esc_html(fs_editorial_text($art->post_title)); ?></a></div>
                     <div class="fs-sidebar-item__meta"><?php echo get_the_date('d/m/Y', $art->ID); ?></div>
                   </div>
                 </div>
