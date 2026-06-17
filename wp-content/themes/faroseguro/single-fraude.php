@@ -91,7 +91,7 @@
                 </ul>
                 <?php if ($key === 'o_que_fazer'): ?>
                 <div class="fs-emergency">
-                  <a href="https://www.bcb.gov.br/meubc/registrarreclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
+                  <a href="https://www.bcb.gov.br/meubc/registrar_reclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
                   <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener" class="fs-emergency__link">Consumidor.gov</a>
                   <a href="/contato/" class="fs-emergency__link">Denunciar ao portal</a>
                 </div>
