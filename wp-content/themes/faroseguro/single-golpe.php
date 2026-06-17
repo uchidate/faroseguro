@@ -137,6 +137,7 @@
         <?php endforeach; ?>
       </div>
 
+      <?php fs_ad('sidebar'); ?>
       <?php dynamic_sidebar('sidebar-golpes'); ?>
     </aside>
   </div>

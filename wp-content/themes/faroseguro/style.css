@@ -1415,3 +1415,60 @@ p { color: var(--ink-soft); line-height: 1.75; }
   margin-bottom: 28px;
   letter-spacing: -0.02em;
 }
+
+/* ═══════════════════════════════════════════
+   ANÚNCIOS — Google AdSense
+   ═══════════════════════════════════════════ */
+
+/* Wrapper de cada unidade */
+.fs-ad {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Espaçamento contextual */
+.fs-ad--in_article {
+  margin: 2rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.fs-ad--sidebar {
+  margin: 20px 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.fs-ad--between {
+  margin: 40px 0;
+}
+
+.fs-ad--leaderboard {
+  margin: 24px 0;
+}
+
+/* Placeholder de debug (WP_DEBUG=true, sem publisher ID) */
+.fs-ad-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 90px;
+  background: repeating-linear-gradient(
+    45deg,
+    #f8fafc,
+    #f8fafc 10px,
+    #f1f5f9 10px,
+    #f1f5f9 20px
+  );
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r-md);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1rem;
+}
