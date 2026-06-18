@@ -123,6 +123,16 @@ if ($latest_golpes): ?>
           <li><a href="<?php echo get_term_link($tipos[0]); ?>"><?php echo esc_html($tipos[0]->name); ?></a></li>
         <?php endif; ?>
         <li aria-current="page"><?php echo wp_trim_words(get_the_title(), 6); ?></li>
+      <?php elseif (is_singular('fraude')): ?>
+        <li><a href="<?php echo get_post_type_archive_link('fraude'); ?>">Fraudes</a></li>
+        <?php $tfs = get_the_terms(get_the_ID(), 'tipo_fraude');
+        if ($tfs && !is_wp_error($tfs)): ?>
+          <li><a href="<?php echo get_term_link($tfs[0]); ?>"><?php echo esc_html($tfs[0]->name); ?></a></li>
+        <?php endif; ?>
+        <li aria-current="page"><?php echo wp_trim_words(get_the_title(), 6); ?></li>
+      <?php elseif (is_singular('glossario')): ?>
+        <li><a href="<?php echo get_post_type_archive_link('glossario'); ?>">Glossário</a></li>
+        <li aria-current="page"><?php echo wp_trim_words(get_the_title(), 6); ?></li>
       <?php elseif (is_singular('post')): ?>
         <li><a href="<?php echo home_url('/artigos/'); ?>">Artigos</a></li>
         <?php $cats = get_the_category();
@@ -133,8 +143,15 @@ if ($latest_golpes): ?>
       <?php elseif (is_post_type_archive('golpe') || is_tax('tipo_golpe') || is_tax('canal_golpe')): ?>
         <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Golpes</a></li>
         <?php if (is_tax()): ?><li aria-current="page"><?php single_term_title(); ?></li><?php endif; ?>
+      <?php elseif (is_post_type_archive('fraude') || is_tax('tipo_fraude')): ?>
+        <li><a href="<?php echo get_post_type_archive_link('fraude'); ?>">Fraudes</a></li>
+        <?php if (is_tax()): ?><li aria-current="page"><?php single_term_title(); ?></li><?php endif; ?>
+      <?php elseif (is_post_type_archive('glossario')): ?>
+        <li aria-current="page">Glossário</li>
+      <?php elseif (is_home()): ?>
+        <li aria-current="page">Artigos</li>
       <?php elseif (is_category()): ?>
-        <li>Artigos</li>
+        <li><a href="<?php echo home_url('/artigos/'); ?>">Artigos</a></li>
         <li aria-current="page"><?php single_cat_title(); ?></li>
       <?php elseif (is_search()): ?>
         <li aria-current="page">Busca: "<?php the_search_query(); ?>"</li>
