@@ -5,29 +5,19 @@ $tipo_atual   = is_tax('tipo_fraude') ? get_queried_object() : null;
 $tipos_fraude = get_terms(['taxonomy' => 'tipo_fraude', 'hide_empty' => true]);
 $title        = $tipo_atual ? $tipo_atual->name : 'Central de Fraudes';
 $desc         = $tipo_atual ? $tipo_atual->description : 'Fraudes bancárias onde o acesso não autorizado ocorre sem ação direta da vítima — cartão clonado, conta invadida, SIM swap, vazamento de dados.';
+
+fs_archive_hero('Fraudes', $title, $desc, 'fraude');
+
+fs_archive_filter_strip([
+    [
+        'label'      => 'Tipo',
+        'all_url'    => get_post_type_archive_link('fraude'),
+        'all_active' => !$tipo_atual,
+        'terms'      => $tipos_fraude ?: [],
+        'current_id' => $tipo_atual ? $tipo_atual->term_id : null,
+    ],
+], 'fraude');
 ?>
-
-<div class="fs-archive__hero fs-archive__hero--fraude">
-  <div class="container">
-    <span class="fs-eyebrow">Fraudes</span>
-    <h1 class="fs-archive__title"><?php echo esc_html($title); ?></h1>
-    <p class="fs-archive__desc"><?php echo esc_html($desc); ?></p>
-  </div>
-</div>
-
-<div class="fs-filter-strip fs-filter-strip--fraude">
-  <div class="fs-filter-strip__inner">
-    <div class="fs-filter-group">
-      <span class="fs-filter-group__label">Tipo</span>
-      <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-filter-pill <?php echo !$tipo_atual ? 'is-active' : ''; ?>">Todas</a>
-      <?php if ($tipos_fraude && !is_wp_error($tipos_fraude)): foreach ($tipos_fraude as $t): ?>
-        <a href="<?php echo get_term_link($t); ?>" class="fs-filter-pill <?php echo ($tipo_atual && $tipo_atual->term_id === $t->term_id) ? 'is-active' : ''; ?>">
-          <?php echo esc_html($t->name); ?> <span><?php echo $t->count; ?></span>
-        </a>
-      <?php endforeach; endif; ?>
-    </div>
-  </div>
-</div>
 
 <div class="fs-archive__body">
   <div class="container">

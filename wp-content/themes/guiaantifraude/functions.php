@@ -637,6 +637,54 @@ function fs_post_tags(int $post_id = 0, string $taxonomy = 'category'): string {
 }
 
 /**
+ * Renderiza o hero de uma página de arquivo.
+ * @param string $modifier  Sufixo CSS: 'dark', 'fraude' ou '' (claro)
+ */
+function fs_archive_hero(string $eyebrow, string $title, string $desc, string $modifier = ''): void {
+    $mod = $modifier ? ' fs-archive__hero--' . esc_attr($modifier) : '';
+    echo '<div class="fs-archive__hero' . $mod . '">';
+    echo '<div class="container">';
+    echo '<span class="fs-eyebrow">' . esc_html($eyebrow) . '</span>';
+    echo '<h1 class="fs-archive__title">' . esc_html($title) . '</h1>';
+    echo '<p class="fs-archive__desc">' . esc_html($desc) . '</p>';
+    echo '</div></div>';
+}
+
+/**
+ * Renderiza a barra de filtros de arquivo.
+ * Cada grupo: ['label' => '', 'all_url' => '', 'all_active' => bool, 'terms' => WP_Term[], 'current_id' => int|null]
+ * @param string $modifier  Sufixo CSS: 'fraude' ou ''
+ */
+function fs_archive_filter_strip(array $groups, string $modifier = ''): void {
+    $has_terms = false;
+    foreach ($groups as $g) {
+        if (!empty($g['terms']) || !empty($g['all_url'])) { $has_terms = true; break; }
+    }
+    if (!$has_terms) return;
+    $mod = $modifier ? ' fs-filter-strip--' . esc_attr($modifier) : '';
+    echo '<div class="fs-filter-strip' . $mod . '"><div class="fs-filter-strip__inner">';
+    foreach ($groups as $g) {
+        $terms = array_filter((array)($g['terms'] ?? []), fn($t) => !is_wp_error($t));
+        if (empty($terms) && empty($g['all_url'])) continue;
+        echo '<div class="fs-filter-group">';
+        if (!empty($g['label'])) {
+            echo '<span class="fs-filter-group__label">' . esc_html($g['label']) . '</span>';
+        }
+        if (!empty($g['all_url'])) {
+            $act = !empty($g['all_active']) ? ' is-active' : '';
+            echo '<a href="' . esc_url($g['all_url']) . '" class="fs-filter-pill' . $act . '">Todos</a>';
+        }
+        foreach ($terms as $t) {
+            $act = (!empty($g['current_id']) && $g['current_id'] === $t->term_id) ? ' is-active' : '';
+            echo '<a href="' . esc_url(get_term_link($t)) . '" class="fs-filter-pill' . $act . '">'
+                . esc_html($t->name) . ' <span>' . intval($t->count) . '</span></a>';
+        }
+        echo '</div>';
+    }
+    echo '</div></div>';
+}
+
+/**
  * Renderiza um card de golpe.
  */
 function fs_golpe_card(WP_Post $post, bool $show_excerpt = true): void {
