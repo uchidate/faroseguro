@@ -57,7 +57,8 @@ if ($latest_golpes): ?>
               echo '<ul class="fs-nav__list">
                 <li><a href="/">Home</a></li>
                 <li><a href="/golpes/">Golpes</a></li>
-                <li><a href="/artigos/" class="current-menu-item">Artigos</a></li>
+                <li><a href="/fraudes/">Fraudes</a></li>
+                <li><a href="/artigos/">Artigos</a></li>
                 <li><a href="/glossario/">Glossário</a></li>
                 <li><a href="/sobre-nos/">Sobre</a></li>
               </ul>';
