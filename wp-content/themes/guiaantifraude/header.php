@@ -111,7 +111,7 @@ if ($latest_golpes): ?>
 <?php endif; ?>
 
 <!-- Breadcrumbs -->
-<?php if (!is_front_page() && !is_home()): ?>
+<?php if (!is_front_page()): ?>
 <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
   <div class="container">
     <ol class="fs-breadcrumbs__list">
