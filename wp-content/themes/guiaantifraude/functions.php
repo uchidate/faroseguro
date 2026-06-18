@@ -1,10 +1,13 @@
 <?php
 /**
- * Guia Antifraude — Child theme do Kadence
+ * Guia Antifraude — Tema standalone
  * Arquitetura de conteúdo para alertas de fraudes e golpes bancários.
  */
 
 defined('ABSPATH') || exit;
+
+require_once get_stylesheet_directory() . '/inc/newsletter.php';
+require_once get_stylesheet_directory() . '/inc/features.php';
 
 if (!defined('FS_BRAND_NAME')) {
     define('FS_BRAND_NAME', 'Guia Antifraude');

@@ -43,6 +43,12 @@
         <?php if ($canais && !is_wp_error($canais)): ?><span>Canal: <?php echo esc_html(implode(', ', wp_list_pluck($canais, 'name'))); ?></span><?php endif; ?>
         <?php if ($publicos && !is_wp_error($publicos)): ?><span>Público-alvo: <?php echo esc_html(implode(', ', wp_list_pluck($publicos, 'name'))); ?></span><?php endif; ?>
         <?php if ($prejuizo): ?><span>Prejuízo estimado: <strong style="color:#fb923c;"><?php echo esc_html($prejuizo); ?></strong></span><?php endif; ?>
+        <?php $views_label = fs_views_label($id); if ($views_label): ?>
+          <span class="fs-views-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <?php echo esc_html($views_label); ?>
+          </span>
+        <?php endif; ?>
       </div>
     </div>
   </div>
@@ -104,33 +110,15 @@
           </div>
           <?php endif; ?>
 
-          <?php if (trim((string)$o_que_fazer)): ?>
-          <div class="fs-block fs-block--action">
-            <div class="fs-block__header"><span aria-hidden="true" class="fs-block__mark"></span><h2>Fui vítima — o que fazer agora</h2></div>
-            <div class="fs-block__body">
-              <ul class="fs-checklist fs-checklist--safe">
-                <?php foreach (array_filter(array_map('trim', explode("\n", $o_que_fazer))) as $a): ?>
-                  <li><?php echo esc_html($a); ?></li>
-                <?php endforeach; ?>
-              </ul>
-              <div class="fs-emergency">
-                <a href="https://www.bcb.gov.br/meubc/registrar_reclamacao" target="_blank" rel="noopener" class="fs-emergency__link">Registrar no Bacen</a>
-                <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener" class="fs-emergency__link">Consumidor.gov</a>
-                <a href="/contato/" class="fs-emergency__link">Denunciar ao portal</a>
-              </div>
-            </div>
-          </div>
-          <?php endif; ?>
+          <?php if (trim((string)$o_que_fazer)): fs_checklist_interativo($o_que_fazer, $id); endif; ?>
 
           <?php the_content(); ?>
 
           <?php if ($fonte): ?><p class="fs-fonte">Fonte: <?php echo wp_kses_post($fonte); ?></p><?php endif; ?>
 
-          <div class="fs-share" style="margin-top:32px;">
-            <span class="fs-share__label">Compartilhar alerta</span>
-            <a href="https://wa.me/?text=<?php echo urlencode(get_the_title() . ' — ' . get_permalink()); ?>" target="_blank" rel="noopener" class="fs-share__btn fs-share__btn--wa">WhatsApp</a>
-            <button class="fs-share__btn fs-share__btn--copy" data-share-copy="<?php echo esc_attr(get_permalink()); ?>">Copiar link</button>
-          </div>
+          <?php fs_share_bar($id); ?>
+          <?php fs_related_posts($id, 'golpe', 'tipo_golpe'); ?>
+          <?php fs_newsletter_widget('inline'); ?>
 
           <nav class="fs-post-nav">
             <div class="fs-post-nav__item">
