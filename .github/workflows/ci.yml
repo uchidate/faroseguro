@@ -25,6 +25,8 @@ jobs:
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
+      - uses: actions/checkout@v4
+
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -32,22 +34,36 @@ jobs:
       - name: Add known host
         run: echo "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      - name: Deploy via rsync + docker cp
         run: |
+          SERVER="root@31.97.255.107"
+          SSH_OPTS="-o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=6"
+
           for attempt in 1 2 3; do
             echo "→ Tentativa $attempt/3..."
-            ssh -o ConnectTimeout=60 root@31.97.255.107 \
-              "bash <(curl -fsSL https://raw.githubusercontent.com/uchidate/faroseguro/main/scripts/deploy-theme.sh)" \
-              && echo "✓ Deploy concluído na tentativa $attempt" && exit 0
-            echo "✗ Tentativa $attempt falhou. Aguardando 30s..."
-            sleep 30
+
+            # 1. Envia apenas os arquivos alterados via rsync (~segundos)
+            rsync -az --delete \
+              -e "ssh $SSH_OPTS" \
+              wp-content/themes/guiaantifraude/ \
+              "$SERVER:/tmp/guiaantifraude-theme/" \
+            && \
+            # 2. Copia do temp para o container e ajusta permissões
+            ssh $SSH_OPTS "$SERVER" "bash /tmp/guiaantifraude-theme/../guiaantifraude-deploy.sh 2>/dev/null || \
+              (docker cp /tmp/guiaantifraude-theme/. wordpress-pjn7ad04hr2r75ocaa68yeki:/var/www/html/wp-content/themes/guiaantifraude/ && \
+               docker exec wordpress-pjn7ad04hr2r75ocaa68yeki chown -R www-data:www-data /var/www/html/wp-content/themes/guiaantifraude && \
+               rm -rf /tmp/guiaantifraude-theme)" \
+            && echo "✓ Deploy concluído na tentativa $attempt" && exit 0
+
+            echo "✗ Tentativa $attempt falhou. Aguardando 20s..."
+            sleep 20
           done
           echo "✗ Deploy falhou após 3 tentativas."
           exit 1
 
       - name: Verificar site
         run: |
-          sleep 3
+          sleep 5
           status=$(curl -s -o /dev/null -w "%{http_code}" https://guiaantifraude.com)
           [ "$status" = "200" ] || [ "$status" = "301" ] || { echo "Site retornou $status"; exit 1; }
-          echo "Site OK ($status)"
+          echo "✓ Site OK ($status)"
