@@ -134,13 +134,13 @@
           <nav class="fs-post-nav">
             <div class="fs-post-nav__item">
               <?php $prev = get_previous_post(); if ($prev): ?>
-                <span class="fs-post-nav__label">Alerta anterior</span>
+                <span class="fs-post-nav__label">Golpe anterior</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($prev); ?>"><?php echo esc_html(fs_editorial_text($prev->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
             <div class="fs-post-nav__item fs-post-nav__item--next">
               <?php $next = get_next_post(); if ($next): ?>
-                <span class="fs-post-nav__label">Próximo alerta</span>
+                <span class="fs-post-nav__label">Próximo golpe</span>
                 <div class="fs-post-nav__title"><a href="<?php echo get_permalink($next); ?>"><?php echo esc_html(fs_editorial_text($next->post_title)); ?></a></div>
               <?php endif; ?>
             </div>
@@ -219,7 +219,7 @@
   if ($mais): ?>
   <section class="fs-related">
     <div class="container">
-      <h2 class="fs-related__title">Outros Alertas Recentes</h2>
+      <h2 class="fs-related__title">Outros Golpes Recentes</h2>
       <div class="fs-grid fs-grid--3">
         <?php foreach ($mais as $g): fs_golpe_card($g, true); endforeach; wp_reset_postdata(); ?>
       </div>

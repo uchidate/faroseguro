@@ -1130,3 +1130,24 @@ button { cursor: pointer; font: inherit; }
   .fs-passo { flex-direction: column; gap: 8px; }
   .fs-destaque { flex-direction: row; }
 }
+
+/* ─────────────────────────────────────────
+   TEMA FRAUDES (roxo) — archive hero + filtros
+───────────────────────────────────────── */
+.fs-archive__hero--fraude { background: #0f0a2a; border-bottom: 4px solid #7c3aed; }
+.fs-archive__hero--fraude .fs-archive__title { color: #fff; }
+.fs-archive__hero--fraude .fs-archive__desc  { color: rgba(255,255,255,.55); }
+.fs-archive__hero--fraude .fs-eyebrow { color: rgba(167,139,250,.8); }
+
+.fs-filter-strip--fraude { background: #1a0f3a; border-bottom: 1px solid rgba(124,58,237,.3); }
+.fs-filter-strip--fraude .fs-filter-group__label { color: rgba(167,139,250,.6); }
+.fs-filter-strip--fraude .fs-filter-pill { background: rgba(124,58,237,.1); border-color: rgba(124,58,237,.25); color: rgba(167,139,250,.8); }
+.fs-filter-strip--fraude .fs-filter-pill span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.4); }
+.fs-filter-strip--fraude .fs-filter-pill:hover,
+.fs-filter-strip--fraude .fs-filter-pill.is-active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.fs-filter-strip--fraude .fs-filter-pill.is-active span,
+.fs-filter-strip--fraude .fs-filter-pill:hover span { background: rgba(255,255,255,.2); color: rgba(255,255,255,.9); }
+
+/* Botão roxo — CTAs de fraudes */
+.fs-btn--purple { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+.fs-btn--purple:hover { background: #6d28d9; border-color: #6d28d9; color: #fff; }
