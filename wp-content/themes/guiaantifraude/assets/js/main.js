@@ -350,6 +350,26 @@
     });
   }
 
+  /* ── Tema claro / escuro ──────────────────── */
+  const themeToggle = document.getElementById('fs-theme-toggle');
+  const DARK = 'dark';
+  const PREF_KEY = 'fs-theme';
+
+  function applyTheme(dark) {
+    document.documentElement.dataset.theme = dark ? DARK : '';
+    if (themeToggle) themeToggle.setAttribute('aria-pressed', String(dark));
+  }
+
+  const savedTheme = localStorage.getItem(PREF_KEY);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme ? savedTheme === DARK : prefersDark);
+
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.dataset.theme === DARK;
+    applyTheme(!isDark);
+    localStorage.setItem(PREF_KEY, !isDark ? DARK : 'light');
+  });
+
   /* ── Archive filter AJAX ──────────────────── */
   document.querySelectorAll('.fs-archive-filter').forEach(bar => {
     const grid     = document.getElementById(bar.dataset.grid);
