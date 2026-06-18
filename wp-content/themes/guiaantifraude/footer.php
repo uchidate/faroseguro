@@ -21,12 +21,12 @@
       </div>
 
       <div class="fs-footer__col">
-        <h3 class="fs-footer__col-title">Alertas</h3>
+        <h3 class="fs-footer__col-title">Golpes</h3>
         <?php
         $tipos = get_terms(['taxonomy' => 'tipo_golpe', 'hide_empty' => true, 'number' => 6]);
         if ($tipos && !is_wp_error($tipos)): ?>
         <ul class="fs-footer__links">
-          <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Todos os alertas</a></li>
+          <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Todos os golpes</a></li>
           <?php foreach ($tipos as $t): ?>
             <li><a href="<?php echo get_term_link($t); ?>"><?php echo esc_html($t->name); ?></a></li>
           <?php endforeach; ?>

@@ -5,13 +5,13 @@ $tipo_atual  = is_tax('tipo_golpe')  ? get_queried_object() : null;
 $canal_atual = is_tax('canal_golpe') ? get_queried_object() : null;
 $tipos       = get_terms(['taxonomy' => 'tipo_golpe',  'hide_empty' => true]);
 $canais      = get_terms(['taxonomy' => 'canal_golpe', 'hide_empty' => true]);
-$hero_title  = $tipo_atual ? $tipo_atual->name : ($canal_atual ? $canal_atual->name : 'Central de Alertas');
+$hero_title  = $tipo_atual ? $tipo_atual->name : ($canal_atual ? $canal_atual->name : 'Catálogo de Golpes');
 $hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_atual->description : 'Todos os golpes e fraudes bancárias identificados pela equipe Guia Antifraude. Atualizações em até 24h após identificação.');
 ?>
 
 <div class="fs-archive__hero fs-archive__hero--dark">
   <div class="container">
-    <span class="fs-eyebrow">Alertas</span>
+    <span class="fs-eyebrow">Golpes</span>
     <h1 class="fs-archive__title"><?php echo esc_html($hero_title); ?></h1>
     <p class="fs-archive__desc"><?php echo esc_html($hero_desc); ?></p>
   </div>
@@ -52,8 +52,8 @@ $hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_a
       <div class="fs-pagination"><?php the_posts_pagination(['prev_text' => 'Anterior', 'next_text' => 'Próximos', 'mid_size' => 2]); ?></div>
     <?php else: ?>
       <div class="fs-empty">
-        <p>Nenhum alerta encontrado nesta categoria.</p>
-        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--navy">Ver todos os alertas</a>
+        <p>Nenhum golpe encontrado nesta categoria.</p>
+        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--navy">Ver todos os golpes</a>
       </div>
     <?php endif; ?>
 

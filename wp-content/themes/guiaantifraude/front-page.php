@@ -246,7 +246,7 @@ $total_posts   = wp_count_posts('post')->publish;
         <?php foreach ($fraudes_grid as $f): fs_fraude_card($f, true); endforeach; wp_reset_postdata(); ?>
       </div>
       <div style="text-align:center;margin-top:28px;">
-        <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-btn" style="background:#7c3aed;color:#fff;">Ver todas as fraudes</a>
+        <a href="<?php echo get_post_type_archive_link('fraude'); ?>" class="fs-btn fs-btn--purple">Ver todas as fraudes</a>
       </div>
       <?php else: ?>
         <p style="color:rgba(255,255,255,.3);text-align:center;padding:40px 0;">Catalogando fraudes — em breve.</p>

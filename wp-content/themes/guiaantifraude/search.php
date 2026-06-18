@@ -24,7 +24,7 @@
       <div style="border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden;">
         <?php while (have_posts()) : the_post();
           $type = get_post_type();
-          $type_labels = ['post' => 'Artigo', 'golpe' => 'Alerta', 'fraude' => 'Fraude', 'glossario' => 'Glossário'];
+          $type_labels = ['post' => 'Artigo', 'golpe' => 'Golpe', 'fraude' => 'Fraude', 'glossario' => 'Glossário'];
           $type_label  = $type_labels[$type] ?? $type;
         ?>
           <article class="fs-search-result">
@@ -46,7 +46,7 @@
       <div class="fs-empty">
         <p>Nenhum resultado para "<?php the_search_query(); ?>".</p>
         <p style="font-size:.875rem;margin-top:8px;">Tente termos como "pix", "whatsapp", "phishing" ou "central antifraude".</p>
-        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--navy" style="margin-top:20px;">Ver todos os alertas</a>
+        <a href="<?php echo get_post_type_archive_link('golpe'); ?>" class="fs-btn fs-btn--navy" style="margin-top:20px;">Ver todos os golpes</a>
       </div>
     <?php endif; ?>
 

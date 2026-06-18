@@ -56,7 +56,7 @@ if ($latest_golpes): ?>
             'fallback_cb'    => function () {
               echo '<ul class="fs-nav__list">
                 <li><a href="/">Home</a></li>
-                <li><a href="/golpes/">Alertas</a></li>
+                <li><a href="/golpes/">Golpes</a></li>
                 <li><a href="/artigos/" class="current-menu-item">Artigos</a></li>
                 <li><a href="/glossario/">Glossário</a></li>
                 <li><a href="/sobre-nos/">Sobre</a></li>
@@ -117,7 +117,7 @@ if ($latest_golpes): ?>
     <ol class="fs-breadcrumbs__list">
       <li><a href="<?php echo home_url('/'); ?>">Início</a></li>
       <?php if (is_singular('golpe')): ?>
-        <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Alertas</a></li>
+        <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Golpes</a></li>
         <?php $tipos = get_the_terms(get_the_ID(), 'tipo_golpe');
         if ($tipos && !is_wp_error($tipos)): ?>
           <li><a href="<?php echo get_term_link($tipos[0]); ?>"><?php echo esc_html($tipos[0]->name); ?></a></li>
@@ -131,7 +131,7 @@ if ($latest_golpes): ?>
         <?php endif; ?>
         <li aria-current="page"><?php echo wp_trim_words(get_the_title(), 6); ?></li>
       <?php elseif (is_post_type_archive('golpe') || is_tax('tipo_golpe') || is_tax('canal_golpe')): ?>
-        <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Alertas</a></li>
+        <li><a href="<?php echo get_post_type_archive_link('golpe'); ?>">Golpes</a></li>
         <?php if (is_tax()): ?><li aria-current="page"><?php single_term_title(); ?></li><?php endif; ?>
       <?php elseif (is_category()): ?>
         <li>Artigos</li>
