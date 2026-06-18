@@ -1165,7 +1165,7 @@ button { cursor: pointer; font: inherit; }
 /* ─────────────────────────────────────────
    TEMA FRAUDES (roxo) — archive hero + filtros
 ───────────────────────────────────────── */
-.fs-archive__hero--fraude { background: #0f0a2a; border-bottom: 4px solid #7c3aed; }
+.fs-archive__hero--fraude { background: #0f0a2a !important; border-bottom: 4px solid #7c3aed; }
 .fs-archive__hero--fraude .fs-archive__title { color: #fff; }
 .fs-archive__hero--fraude .fs-archive__desc  { color: rgba(255,255,255,.55); }
 .fs-archive__hero--fraude .fs-eyebrow { color: rgba(167,139,250,.8); }
