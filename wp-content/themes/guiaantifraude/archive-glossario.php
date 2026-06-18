@@ -1,30 +1,29 @@
 <?php get_header(); ?>
 
-<main class="fs-archive fs-archive--glossario">
-  <div class="fs-archive__hero">
-    <div class="container">
-      <span class="fs-eyebrow">Referência</span>
-      <h1 class="fs-archive__title">Glossário de Segurança Financeira</h1>
-      <p class="fs-archive__desc">Definições claras dos termos técnicos usados no universo de golpes, fraudes bancárias e segurança digital.</p>
-    </div>
-  </div>
+<?php
+fs_archive_hero(
+    'Referência',
+    'Glossário de Segurança Financeira',
+    'Definições claras dos termos técnicos usados no universo de golpes, fraudes bancárias e segurança digital.',
+    'dark'
+);
+?>
 
-  <div class="container fs-archive__body">
+<div class="fs-archive__body">
+  <div class="container">
 
-    <!-- Índice alfabético -->
     <div class="fs-alpha-index">
-      <?php
-      $letters = range('A', 'Z');
-      foreach ($letters as $l) echo "<a href=\"#letra-{$l}\" class=\"fs-alpha-index__letter\">{$l}</a>";
-      ?>
+      <?php foreach (range('A', 'Z') as $l): ?>
+        <a href="#letra-<?php echo $l; ?>" class="fs-alpha-index__letter"><?php echo $l; ?></a>
+      <?php endforeach; ?>
     </div>
 
     <?php
     $all = get_posts(['post_type' => 'glossario', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC']);
     $grouped = [];
     foreach ($all as $p) {
-      $first = strtoupper(mb_substr(fs_editorial_text($p->post_title), 0, 1));
-      $grouped[$first][] = $p;
+        $first = strtoupper(mb_substr(fs_editorial_text($p->post_title), 0, 1));
+        $grouped[$first][] = $p;
     }
     ?>
 
@@ -49,6 +48,6 @@
     <?php endif; ?>
 
   </div>
-</main>
+</div>
 
 <?php get_footer(); ?>
