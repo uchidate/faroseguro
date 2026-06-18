@@ -9,6 +9,14 @@ defined('ABSPATH') || exit;
 require_once get_stylesheet_directory() . '/inc/newsletter.php';
 require_once get_stylesheet_directory() . '/inc/features.php';
 
+/* Redireciona attachment pages para o post pai ou home — evita páginas orfãs */
+add_action('template_redirect', function () {
+    if (!is_attachment()) return;
+    $parent = get_post_field('post_parent', get_the_ID());
+    wp_redirect($parent ? get_permalink($parent) : home_url('/'), 301);
+    exit;
+});
+
 if (!defined('FS_BRAND_NAME')) {
     define('FS_BRAND_NAME', 'Guia Antifraude');
 }
