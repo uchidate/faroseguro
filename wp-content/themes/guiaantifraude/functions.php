@@ -637,6 +637,41 @@ function fs_post_tags(int $post_id = 0, string $taxonomy = 'category'): string {
 }
 
 /**
+ * Retorna HTML do breadcrumb integrado para páginas single.
+ * post_type: 'post' → Início / Artigos / [cat]
+ * post_type: 'golpe' → Início / Golpes / [tipo]
+ * post_type: 'fraude' → Início / Fraudes / [tipo]
+ */
+function fs_single_breadcrumb(): string {
+    $type   = get_post_type();
+    $home   = '<a href="' . esc_url(home_url('/')) . '">Início</a>';
+    $items  = [$home];
+
+    if ($type === 'post') {
+        $items[] = '<a href="' . esc_url(home_url('/artigos/')) . '">Artigos</a>';
+        $cats = get_the_category();
+        if ($cats) {
+            $items[] = '<a href="' . esc_url(get_category_link($cats[0])) . '">' . esc_html($cats[0]->name) . '</a>';
+        }
+    } elseif ($type === 'golpe') {
+        $items[] = '<a href="' . esc_url(get_post_type_archive_link('golpe')) . '">Golpes</a>';
+        $tipos = get_the_terms(get_the_ID(), 'tipo_golpe');
+        if ($tipos && !is_wp_error($tipos)) {
+            $items[] = '<a href="' . esc_url(get_term_link($tipos[0])) . '">' . esc_html($tipos[0]->name) . '</a>';
+        }
+    } elseif ($type === 'fraude') {
+        $items[] = '<a href="' . esc_url(get_post_type_archive_link('fraude')) . '">Fraudes</a>';
+        $tipos = get_the_terms(get_the_ID(), 'tipo_fraude');
+        if ($tipos && !is_wp_error($tipos)) {
+            $items[] = '<a href="' . esc_url(get_term_link($tipos[0])) . '">' . esc_html($tipos[0]->name) . '</a>';
+        }
+    }
+
+    $li = implode('', array_map(fn($i) => '<li>' . $i . '</li>', $items));
+    return '<nav class="fs-archive__crumb" aria-label="Breadcrumb"><ol>' . $li . '</ol></nav>';
+}
+
+/**
  * Renderiza o hero de uma página de arquivo com breadcrumb integrado.
  * @param string $modifier  Sufixo CSS: 'dark', 'fraude' ou '' (claro)
  * @param int    $count     Contagem de itens exibida à direita (0 = oculta)

@@ -26,8 +26,9 @@
 
 <main class="fs-single fs-single--golpe">
 
-  <div class="fs-single__hero" style="border-bottom: 4px solid <?php echo esc_attr($hero_border); ?>;">
+  <div class="fs-single__hero fs-single__hero--golpe-<?php echo esc_attr($nivel); ?>">
     <div class="container">
+      <?php echo fs_single_breadcrumb(); ?>
       <div class="fs-single__meta-top">
         <span class="fs-badge fs-badge<?php echo $nivel_class; ?>"><?php echo $nivel_label; ?></span>
         <?php if ($novo_modus): ?><span class="fs-badge fs-badge--novo">Novo modus operandi</span><?php endif; ?>

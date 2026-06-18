@@ -287,7 +287,16 @@ button { cursor: pointer; font: inherit; }
 /* ─────────────────────────────────────────
    SINGLE ARTIGO
 ───────────────────────────────────────── */
-.fs-single__hero { background: var(--navy); padding: 56px 0 48px; border-bottom: 3px solid var(--orange); }
+.fs-single__hero { background: var(--navy); padding: 32px 0 40px; border-bottom: 3px solid var(--orange); }
+/* Fraude hero — fundo roxo escuro */
+.fs-single__hero--fraude { background: #0f0a2a; }
+.fs-single__hero--fraude-alto  { border-bottom-color: #7c3aed; }
+.fs-single__hero--fraude-medio { border-bottom-color: #2563eb; }
+.fs-single__hero--fraude-baixo { border-bottom-color: #0891b2; }
+/* Golpe hero — borda por nível de risco */
+.fs-single__hero--golpe-alto  { border-bottom-color: var(--red); }
+.fs-single__hero--golpe-medio { border-bottom-color: var(--amber); }
+.fs-single__hero--golpe-baixo { border-bottom-color: var(--blue); }
 .fs-single__meta-top { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .fs-single__title { font-size: clamp(var(--text-2xl), 4vw, 2.75rem); font-weight: 800; color: #fff; letter-spacing: -.035em; line-height: 1.15; margin-bottom: 16px; }
 .fs-single__lead { font-size: var(--text-lg); font-weight: 600; color: #fff; line-height: 1.75; max-width: 700px; margin-bottom: 24px; -webkit-font-smoothing: antialiased; }

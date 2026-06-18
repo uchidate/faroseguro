@@ -15,6 +15,7 @@
   <!-- Hero editorial -->
   <div class="fs-single__hero">
     <div class="container">
+      <?php echo fs_single_breadcrumb(); ?>
       <div class="fs-single__meta-top">
         <?php
         $cats = get_the_category();

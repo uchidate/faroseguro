@@ -22,8 +22,9 @@
 
 <main class="fs-single fs-single--fraude">
 
-  <div class="fs-single__hero" style="background:#0f0a2a;border-bottom:4px solid <?php echo esc_attr($hero_border); ?>;">
+  <div class="fs-single__hero fs-single__hero--fraude fs-single__hero--fraude-<?php echo esc_attr($nivel); ?>">
     <div class="container">
+      <?php echo fs_single_breadcrumb(); ?>
       <div class="fs-single__meta-top">
         <span class="fs-badge <?php echo $badge_cls; ?>"><?php echo $badge_label; ?></span>
         <?php if ($nova_tecnica): ?><span class="fs-badge fs-badge--novo">Nova técnica</span><?php endif; ?>
