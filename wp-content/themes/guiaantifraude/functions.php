@@ -68,16 +68,9 @@ add_action('wp_enqueue_scripts', function () {
     $ver = wp_get_theme()->get('Version');
 
     wp_enqueue_style(
-        'kadence-parent-style',
-        get_template_directory_uri() . '/style.css',
-        [],
-        wp_get_theme('kadence')->get('Version')
-    );
-
-    wp_enqueue_style(
         'fs-style',
         get_stylesheet_uri(),
-        ['kadence-parent-style'],
+        [],
         $ver
     );
 
@@ -1201,6 +1194,15 @@ add_action('manage_posts_custom_column', function ($col, $post_id) {
 
 // Remover versão do WP do HTML
 remove_action('wp_head', 'wp_generator');
+
+// Bloquear CSS/JS do Kadence que ainda possam ser enqueued pelo tema pai
+add_action('wp_enqueue_scripts', function () {
+    wp_dequeue_style('kadence-style');
+    wp_dequeue_style('kadence-global');
+    wp_dequeue_style('kadence-woocommerce');
+    wp_deregister_style('kadence-style');
+    wp_deregister_style('kadence-global');
+}, 100);
 
 // Desabilitar XML-RPC (vetor de ataque)
 add_filter('xmlrpc_enabled', '__return_false');
