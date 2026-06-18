@@ -6,7 +6,8 @@ $tipos_fraude = get_terms(['taxonomy' => 'tipo_fraude', 'hide_empty' => true]);
 $title        = $tipo_atual ? $tipo_atual->name : 'Central de Fraudes';
 $desc         = $tipo_atual ? $tipo_atual->description : 'Fraudes bancárias onde o acesso não autorizado ocorre sem ação direta da vítima — cartão clonado, conta invadida, SIM swap, vazamento de dados.';
 
-fs_archive_hero('Fraudes', $title, $desc, 'fraude');
+$total_fraudes = wp_count_posts('fraude')->publish;
+fs_archive_hero('Fraudes', $title, $desc, 'fraude', (int) $total_fraudes, 'fraudes catalogadas');
 
 fs_archive_filter_strip([
     [

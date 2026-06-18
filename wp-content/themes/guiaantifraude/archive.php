@@ -6,7 +6,9 @@ $title  = $is_cat ? single_cat_title('', false) : (is_tag() ? single_tag_title('
 $desc   = $is_cat && category_description() ? category_description() : 'Guias completos, análises e orientações para você se proteger de fraudes e golpes bancários.';
 $cats   = get_categories(['hide_empty' => true, 'number' => 8]);
 
-fs_archive_hero('Artigos', $title, $desc, 'dark');
+$total_artigos = wp_count_posts('post')->publish;
+$total_artigos = (int) wp_count_posts('post')->publish;
+fs_archive_hero('Artigos', $title, $desc, 'dark', $total_artigos, 'artigos publicados');
 
 fs_archive_filter_strip([
     [

@@ -8,7 +8,8 @@ $canais      = get_terms(['taxonomy' => 'canal_golpe', 'hide_empty' => true]);
 $hero_title  = $tipo_atual ? $tipo_atual->name : ($canal_atual ? $canal_atual->name : 'Catálogo de Golpes');
 $hero_desc   = $tipo_atual ? $tipo_atual->description : ($canal_atual ? $canal_atual->description : 'Todos os golpes e fraudes bancárias identificados pela equipe Guia Antifraude. Atualizações em até 24h após identificação.');
 
-fs_archive_hero('Golpes', $hero_title, $hero_desc, 'dark');
+$total_golpes = wp_count_posts('golpe')->publish;
+fs_archive_hero('Golpes', $hero_title, $hero_desc, 'dark', (int) $total_golpes, 'golpes catalogados');
 
 fs_archive_filter_strip([
     [
