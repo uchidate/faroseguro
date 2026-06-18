@@ -17,8 +17,6 @@ RUN for plugin in akismet contact-form-7 kadence-blocks really-simple-ssl \
 
 # Tema
 COPY wp-content/themes/guiaantifraude /var/www/html/wp-content/themes/guiaantifraude
-RUN cp -a /var/www/html/wp-content/themes/guiaantifraude \
-          /var/www/html/wp-content/themes/faroseguro
 
 # Permissões
 RUN chown -R www-data:www-data /var/www/html/wp-content/themes \

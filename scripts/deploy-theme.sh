@@ -15,8 +15,7 @@ docker run --rm \
   "$IMAGE" \
   bash -c '
     cp -r /var/www/html/wp-content/themes/guiaantifraude/. /html/wp-content/themes/guiaantifraude/
-    cp -r /var/www/html/wp-content/themes/faroseguro/. /html/wp-content/themes/faroseguro/
-    chown -R www-data:www-data /html/wp-content/themes/guiaantifraude /html/wp-content/themes/faroseguro
+    chown -R www-data:www-data /html/wp-content/themes/guiaantifraude
   '
 
 echo "✓ Deploy concluído."
