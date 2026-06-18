@@ -59,6 +59,17 @@
     searchBar?.setAttribute('aria-hidden', 'true');
   });
 
+  /* ── Hero paths expandíveis ──────────────── */
+  document.querySelectorAll('.fs-hero-path__trigger[aria-controls]').forEach(trigger => {
+    const card = trigger.closest('.fs-hero-path');
+    const sub  = document.getElementById(trigger.getAttribute('aria-controls'));
+    if (!card || !sub) return;
+    trigger.addEventListener('click', () => {
+      const open = card.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+  });
+
   /* ── Reading progress bar ─────────────────── */
   const progressBar = document.getElementById('fs-progress-bar');
   const article     = document.getElementById('fs-article-content');

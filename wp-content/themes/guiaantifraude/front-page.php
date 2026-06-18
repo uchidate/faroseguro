@@ -39,33 +39,91 @@ $total_posts   = wp_count_posts('post')->publish;
         <p class="fs-hero__desc">Aqui você encontra o que precisa: identifique o que aconteceu, saiba o que fazer agora e onde denunciar — sem juridiquês.</p>
       </div>
       <div class="fs-hero__paths">
-        <a href="<?php echo esc_url(home_url('/?s=pix')); ?>" class="fs-hero-path fs-hero-path--red">
-          <span class="fs-hero-path__icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-          </span>
-          <span class="fs-hero-path__text">
-            <strong>Recebi uma mensagem suspeita</strong>
-            <small>Phishing, falso atendimento, golpe do Pix</small>
-          </span>
-        </a>
-        <a href="<?php echo esc_url(get_post_type_archive_link('fraude')); ?>" class="fs-hero-path fs-hero-path--purple">
-          <span class="fs-hero-path__icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </span>
-          <span class="fs-hero-path__text">
-            <strong>Minha conta foi acessada</strong>
-            <small>SIM swap, cartão clonado, invasão</small>
-          </span>
-        </a>
-        <a href="<?php echo esc_url(home_url('/contato/')); ?>" class="fs-hero-path fs-hero-path--orange">
-          <span class="fs-hero-path__icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
-          </span>
-          <span class="fs-hero-path__text">
-            <strong>Quero denunciar um caso</strong>
-            <small>Canais oficiais e como registrar a ocorrência</small>
-          </span>
-        </a>
+
+        <!-- Busca inline no hero -->
+        <form class="fs-hero__search" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" name="s" placeholder="Buscar golpes, fraudes, artigos…" value="<?php echo get_search_query(); ?>" autocomplete="off">
+          <button type="submit">Buscar</button>
+        </form>
+
+        <!-- Card 1: Recebi mensagem suspeita — expandível -->
+        <div class="fs-hero-path fs-hero-path--red" id="fsp-msg">
+          <button class="fs-hero-path__trigger" aria-expanded="false" aria-controls="fsp-msg-sub">
+            <span class="fs-hero-path__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            </span>
+            <span class="fs-hero-path__text">
+              <strong>Recebi uma mensagem suspeita</strong>
+              <small>Phishing, falso atendimento, golpe do Pix</small>
+            </span>
+            <svg class="fs-hero-path__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fs-hero-path__sub" id="fsp-msg-sub" role="region">
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('golpe-do-pix-comprovante-falso', OBJECT, 'golpe'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Recebi link ou QR Code pedindo pagamento (Pix falso)
+            </a>
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('golpe-do-falso-motoboy', OBJECT, 'golpe'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Alguém ligou dizendo ser do banco / INSS
+            </a>
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('golpe-do-falso-suporte-tecnico', OBJECT, 'golpe'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Me pediram para instalar um aplicativo
+            </a>
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('fraude-phishing-bancario', OBJECT, 'fraude'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Recebi e-mail / SMS falso de banco ou Receita Federal
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Minha conta foi acessada — expandível -->
+        <div class="fs-hero-path fs-hero-path--purple" id="fsp-acc">
+          <button class="fs-hero-path__trigger" aria-expanded="false" aria-controls="fsp-acc-sub">
+            <span class="fs-hero-path__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <span class="fs-hero-path__text">
+              <strong>Minha conta foi acessada</strong>
+              <small>SIM swap, cartão clonado, invasão</small>
+            </span>
+            <svg class="fs-hero-path__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fs-hero-path__sub" id="fsp-acc-sub" role="region">
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('fraude-de-identidade-account-takeover', OBJECT, 'fraude'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Perdi sinal do celular / não consigo acessar minha conta (SIM swap)
+            </a>
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('fraude-skimming-clonagem-cartao-atm', OBJECT, 'fraude'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Aparecem compras ou saques que não fiz (cartão clonado)
+            </a>
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('golpe-do-emprestimo-nome-da-vitima', OBJECT, 'golpe'))); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Abriram conta ou empréstimo no meu nome
+            </a>
+            <a href="<?php echo esc_url(get_post_type_archive_link('fraude')); ?>" class="fs-hero-path__sub-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Ver todas as fraudes catalogadas
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Denunciar — link direto -->
+        <div class="fs-hero-path fs-hero-path--orange">
+          <a href="<?php echo esc_url(home_url('/contato/')); ?>" class="fs-hero-path__trigger">
+            <span class="fs-hero-path__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+            </span>
+            <span class="fs-hero-path__text">
+              <strong>Quero denunciar um caso</strong>
+              <small>Canais oficiais e como registrar a ocorrência</small>
+            </span>
+          </a>
+        </div>
+
       </div>
     </div>
   </section>
