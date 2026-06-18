@@ -29,7 +29,17 @@ jobs:
         run: echo "${{ secrets.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
-        run: ssh root@31.97.255.107 "bash <(curl -fsSL https://raw.githubusercontent.com/uchidate/faroseguro/main/scripts/deploy-theme.sh)"
+        run: |
+          for attempt in 1 2 3; do
+            echo "→ Tentativa $attempt/3..."
+            ssh -o ConnectTimeout=60 root@31.97.255.107 \
+              "bash <(curl -fsSL https://raw.githubusercontent.com/uchidate/faroseguro/main/scripts/deploy-theme.sh)" \
+              && echo "✓ Deploy concluído na tentativa $attempt" && exit 0
+            echo "✗ Tentativa $attempt falhou. Aguardando 30s..."
+            sleep 30
+          done
+          echo "✗ Deploy falhou após 3 tentativas."
+          exit 1
 
       - name: Verificar site
         run: |
