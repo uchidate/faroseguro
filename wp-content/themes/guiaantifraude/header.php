@@ -111,8 +111,8 @@ if ($latest_golpes): ?>
 </div>
 <?php endif; ?>
 
-<!-- Breadcrumbs -->
-<?php if (!is_front_page()): ?>
+<!-- Breadcrumbs — apenas para singles e pages; archives têm breadcrumb integrado no hero -->
+<?php if (!is_front_page() && !is_archive() && !is_home()): ?>
 <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
   <div class="container">
     <ol class="fs-breadcrumbs__list">

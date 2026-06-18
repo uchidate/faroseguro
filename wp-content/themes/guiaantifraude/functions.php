@@ -637,16 +637,41 @@ function fs_post_tags(int $post_id = 0, string $taxonomy = 'category'): string {
 }
 
 /**
- * Renderiza o hero de uma página de arquivo.
+ * Renderiza o hero de uma página de arquivo com breadcrumb integrado.
  * @param string $modifier  Sufixo CSS: 'dark', 'fraude' ou '' (claro)
+ * @param int    $count     Contagem de itens exibida à direita (0 = oculta)
+ * @param string $count_label  Label da contagem (ex: 'golpes catalogados')
  */
-function fs_archive_hero(string $eyebrow, string $title, string $desc, string $modifier = ''): void {
-    $mod = $modifier ? ' fs-archive__hero--' . esc_attr($modifier) : '';
+function fs_archive_hero(string $eyebrow, string $title, string $desc, string $modifier = '', int $count = 0, string $count_label = 'itens'): void {
+    $mod      = $modifier ? ' fs-archive__hero--' . esc_attr($modifier) : '';
+    $is_dark  = in_array($modifier, ['dark', 'fraude'], true);
+
+    // Breadcrumb integrado
+    $crumb_html = '';
+    if (!is_front_page()) {
+        $home = '<a href="' . esc_url(home_url('/')) . '">Início</a>';
+        $crumb_html = '<nav class="fs-archive__crumb" aria-label="Breadcrumb"><ol>'
+            . '<li>' . $home . '</li>'
+            . '<li aria-current="page">' . esc_html($eyebrow) . '</li>'
+            . '</ol></nav>';
+    }
+
     echo '<div class="fs-archive__hero' . $mod . '">';
     echo '<div class="container">';
+    if ($crumb_html) echo $crumb_html;
+    echo '<div class="fs-archive__hero-inner">';
+    echo '<div class="fs-archive__hero-content">';
     echo '<span class="fs-eyebrow">' . esc_html($eyebrow) . '</span>';
     echo '<h1 class="fs-archive__title">' . esc_html($title) . '</h1>';
     echo '<p class="fs-archive__desc">' . esc_html($desc) . '</p>';
+    echo '</div>';
+    if ($count > 0) {
+        echo '<div class="fs-archive__hero-stat' . ($is_dark ? ' fs-archive__hero-stat--light' : '') . '">'
+            . '<span class="fs-archive__hero-stat__num">' . intval($count) . '</span>'
+            . '<span class="fs-archive__hero-stat__label">' . esc_html($count_label) . '</span>'
+            . '</div>';
+    }
+    echo '</div>';
     echo '</div></div>';
 }
 
