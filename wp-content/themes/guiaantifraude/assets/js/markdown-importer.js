@@ -111,8 +111,14 @@
     if (keyword && headingText.indexOf(keyword) === -1) {
       warnings.push('A palavra-chave não aparece em um H2 ou H3.');
     }
+    if (meta.imageAlt && keyword && normalize(meta.imageAlt).indexOf(keyword) === -1) {
+      warnings.push('A palavra-chave não aparece no texto alternativo da imagem.');
+    }
     if (words < 600) {
       warnings.push('O artigo possui apenas ' + words + ' palavras.');
+    }
+    if (words >= 600 && occurrences < 3) {
+      warnings.push('A palavra-chave aparece apenas ' + occurrences + ' vez(es). Use-a naturalmente em pelo menos três pontos.');
     }
     if (density > 2) {
       warnings.push('A palavra-chave parece repetida em excesso: ' + density.toFixed(1) + '%.');

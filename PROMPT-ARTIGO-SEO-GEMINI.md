@@ -41,7 +41,7 @@ QUALIDADE EDITORIAL OBRIGATÓRIA
 
 SEO E RANK MATH
 
-1. A palavra-chave foco deve:
+1. A palavra-chave foco deve aparecer de forma exata:
    - aparecer perto do início do título principal;
    - aparecer no título SEO;
    - aparecer na meta descrição;
@@ -49,7 +49,7 @@ SEO E RANK MATH
    - aparecer naturalmente nas primeiras 100 palavras;
    - aparecer em pelo menos um subtítulo H2 ou H3;
    - aparecer no restante do texto apenas quando fizer sentido.
-2. Priorize naturalidade. Não repita a expressão mecanicamente para atingir densidade. Use sinônimos, entidades e termos relacionados.
+2. Em artigos com mais de 1.000 palavras, use a expressão exata de três a seis vezes, distribuída naturalmente. No restante, use sinônimos, entidades e termos relacionados.
 3. O título principal deve ter de 45 a 65 caracteres. Use número somente quando o assunto realmente comportar uma lista, quantidade ou ano relevante.
 4. O título SEO deve ter no máximo 60 caracteres.
 5. A meta descrição deve ter entre 140 e 160 caracteres e apresentar um benefício concreto.
@@ -69,7 +69,7 @@ SEO E RANK MATH
    - Legislação e Direitos
    - Tecnologia e Segurança
    - Casos Reais
-13. Crie um texto alternativo descritivo para a futura imagem destacada. Não force a palavra-chave se ela não descrever a imagem.
+13. Crie um texto alternativo descritivo para a futura imagem destacada contendo naturalmente a palavra-chave foco exata.
 14. Não inclua observações, pontuação SEO, contagem de palavras ou comentários fora do formato solicitado.
 
 FORMATO OBRIGATÓRIO DA RESPOSTA

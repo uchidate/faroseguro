@@ -110,6 +110,11 @@ add_action('rest_api_init', function () {
                 'content'          => (string) $request->get_param('content'),
             ];
 
+            $keyword_slug = sanitize_title($fields['focus_keyword']);
+            if ($keyword_slug !== '' && !str_contains($fields['slug'], $keyword_slug)) {
+                $fields['slug'] = trim($keyword_slug . '-' . $fields['slug'], '-');
+            }
+
             $post_update = ['ID' => $post_id];
             if ($fields['title'] !== '') {
                 $post_update['post_title'] = $fields['title'];
