@@ -197,6 +197,95 @@ add_action('updated_post_meta', function ($meta_id, $post_id, $meta_key, $meta_v
     }
 }, 10, 4);
 
+function fs_gemini_article_prompt(): string {
+    $path = get_stylesheet_directory() . '/assets/prompts/artigo-seo-gemini.txt';
+    return file_exists($path) ? trim((string) file_get_contents($path)) : '';
+}
+
+function fs_render_gemini_prompt_widget(): void {
+    $prompt = fs_gemini_article_prompt();
+    ?>
+    <p>Digite apenas o assunto. O prompt editorial completo será copiado já preenchido.</p>
+    <label for="fs-gemini-prompt-subject"><strong>Assunto do artigo</strong></label>
+    <input
+        type="text"
+        id="fs-gemini-prompt-subject"
+        class="widefat"
+        placeholder="Ex.: golpe do falso advogado"
+        style="margin:8px 0 10px;"
+    >
+    <button type="button" class="button button-primary" id="fs-copy-gemini-prompt">
+        Copiar prompt para o Gemini
+    </button>
+    <span id="fs-copy-gemini-status" style="margin-left:8px;" aria-live="polite"></span>
+    <textarea id="fs-gemini-prompt-template" hidden><?php echo esc_textarea($prompt); ?></textarea>
+    <script>
+    (function () {
+        var button = document.getElementById('fs-copy-gemini-prompt');
+        if (!button) return;
+
+        button.addEventListener('click', async function () {
+            var subject = document.getElementById('fs-gemini-prompt-subject').value.trim();
+            var status = document.getElementById('fs-copy-gemini-status');
+            var template = document.getElementById('fs-gemini-prompt-template').value;
+
+            if (!subject) {
+                status.textContent = 'Informe o assunto.';
+                document.getElementById('fs-gemini-prompt-subject').focus();
+                return;
+            }
+
+            var prompt = template.replace('{{ASSUNTO}}', subject);
+            try {
+                await navigator.clipboard.writeText(prompt);
+                status.textContent = 'Prompt copiado!';
+            } catch (error) {
+                var textarea = document.createElement('textarea');
+                textarea.value = prompt;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                textarea.remove();
+                status.textContent = 'Prompt copiado!';
+            }
+        });
+    })();
+    </script>
+    <?php
+}
+
+add_action('wp_dashboard_setup', function () {
+    if (!current_user_can('edit_posts')) {
+        return;
+    }
+
+    wp_add_dashboard_widget(
+        'fs_gemini_article_prompt',
+        'Criar artigo SEO com Gemini',
+        'fs_render_gemini_prompt_widget'
+    );
+});
+
+add_action('admin_menu', function () {
+    add_posts_page(
+        'Prompt SEO para Gemini',
+        'Prompt SEO Gemini',
+        'edit_posts',
+        'fs-prompt-seo-gemini',
+        function () {
+            ?>
+            <div class="wrap">
+                <h1>Prompt SEO para Gemini</h1>
+                <div class="card" style="max-width:760px;">
+                    <?php fs_render_gemini_prompt_widget(); ?>
+                </div>
+                <p>Depois, cole a resposta em <strong>Importar artigo SEO</strong> dentro do editor.</p>
+            </div>
+            <?php
+        }
+    );
+});
+
 function fs_editorial_text(string $text): string {
     if ($text === '') {
         return '';
