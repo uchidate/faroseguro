@@ -26,16 +26,30 @@
     RESUMO: 'excerpt',
     CATEGORIA: 'category',
     IMAGEM_ALT: 'imageAlt',
+    NIVEL_RISCO: 'riskLevel',
+    PREJUIZO_ESTIMADO: 'estimatedLoss',
+    NOVO_MODUS: 'newModus',
+    NOVA_TECNICA: 'newTechnique',
+    FONTE_REFERENCIA: 'sourceReference',
+    TIPO_GOLPE: 'contentTypeTerms',
+    TIPO_FRAUDE: 'contentTypeTerms',
+    CANAIS: 'channels',
+    PUBLICO_ALVO: 'audiences',
+    COMO_AGE: 'howItWorks',
+    COMO_FUNCIONA: 'howItWorks',
+    SINAIS_ALERTA: 'warningSigns',
+    COMO_SE_PROTEGER: 'protection',
+    O_QUE_FAZER: 'whatToDo',
   };
 
   function parseSeoPackage(value) {
-    var match = value.match(/---GUIA-SEO---\s*([\s\S]*?)\s*---FIM-GUIA-SEO---\s*([\s\S]*)$/i);
+    var match = value.match(/---GUIA-(SEO|GOLPE|FRAUDE)---\s*([\s\S]*?)\s*---FIM-GUIA-\1---\s*([\s\S]*)$/i);
     if (!match) {
       return null;
     }
 
     var metadata = {};
-    match[1].split('\n').forEach(function (line) {
+    match[2].split('\n').forEach(function (line) {
       var field = line.match(/^\s*([A-Z_]+)\s*:\s*(.+?)\s*$/);
       if (field && seoFieldMap[field[1]]) {
         metadata[seoFieldMap[field[1]]] = field[2].trim();
@@ -43,8 +57,9 @@
     });
 
     return {
+      packageType: match[1].toLocaleLowerCase('pt-BR'),
       metadata: metadata,
-      body: match[2].trim().replace(/^#\s+.+(?:\n+|$)/, ''),
+      body: match[3].trim().replace(/^#\s+.+(?:\n+|$)/, ''),
     };
   }
 
@@ -87,7 +102,25 @@
     );
     var warnings = [];
 
-    ['title', 'seoTitle', 'focusKeyword', 'slug', 'metaDescription', 'excerpt', 'category', 'imageAlt'].forEach(function (field) {
+    var requiredFields = ['title', 'seoTitle', 'focusKeyword', 'slug', 'metaDescription', 'excerpt', 'imageAlt'];
+    if (seoPackage.packageType === 'seo') {
+      requiredFields.push('category');
+    } else {
+      requiredFields = requiredFields.concat([
+        'riskLevel',
+        'estimatedLoss',
+        'sourceReference',
+        'contentTypeTerms',
+        'channels',
+        'audiences',
+        'howItWorks',
+        'warningSigns',
+        'protection',
+        'whatToDo',
+      ]);
+    }
+
+    requiredFields.forEach(function (field) {
       if (!meta[field]) {
         warnings.push('Campo obrigatório ausente: ' + field + '.');
       }
@@ -402,6 +435,19 @@
             excerpt: meta.excerpt || '',
             category: meta.category || '',
             image_alt: meta.imageAlt || '',
+            package_type: seoPackage.packageType,
+            risk_level: meta.riskLevel || '',
+            estimated_loss: meta.estimatedLoss || '',
+            new_modus: meta.newModus || '',
+            new_technique: meta.newTechnique || '',
+            source_reference: meta.sourceReference || '',
+            content_type_terms: meta.contentTypeTerms || '',
+            channels: meta.channels || '',
+            audiences: meta.audiences || '',
+            how_it_works: meta.howItWorks || '',
+            warning_signs: meta.warningSigns || '',
+            protection: meta.protection || '',
+            what_to_do: meta.whatToDo || '',
             content: wp.blocks.serialize(finalBlocks),
           },
         })

@@ -107,8 +107,30 @@ add_action('rest_api_init', function () {
                 'excerpt'          => sanitize_textarea_field((string) $request->get_param('excerpt')),
                 'category'         => sanitize_text_field((string) $request->get_param('category')),
                 'image_alt'        => sanitize_text_field((string) $request->get_param('image_alt')),
+                'package_type'     => sanitize_key((string) $request->get_param('package_type')),
+                'risk_level'       => sanitize_key((string) $request->get_param('risk_level')),
+                'estimated_loss'   => sanitize_text_field((string) $request->get_param('estimated_loss')),
+                'new_modus'        => (string) $request->get_param('new_modus') === '1' ? '1' : '0',
+                'new_technique'    => (string) $request->get_param('new_technique') === '1' ? '1' : '0',
+                'source_reference' => esc_url_raw((string) $request->get_param('source_reference')),
+                'content_terms'    => sanitize_text_field((string) $request->get_param('content_type_terms')),
+                'channels'         => sanitize_text_field((string) $request->get_param('channels')),
+                'audiences'        => sanitize_text_field((string) $request->get_param('audiences')),
+                'how_it_works'     => sanitize_textarea_field((string) $request->get_param('how_it_works')),
+                'warning_signs'    => sanitize_textarea_field(str_replace('|', "\n", (string) $request->get_param('warning_signs'))),
+                'protection'       => sanitize_textarea_field(str_replace('|', "\n", (string) $request->get_param('protection'))),
+                'what_to_do'       => sanitize_textarea_field(str_replace('|', "\n", (string) $request->get_param('what_to_do'))),
                 'content'          => (string) $request->get_param('content'),
             ];
+
+            $expected_type = ['golpe' => 'golpe', 'fraude' => 'fraude'][$fields['package_type']] ?? 'post';
+            if ($post->post_type !== $expected_type) {
+                return new WP_Error(
+                    'fs_wrong_post_type',
+                    sprintf('Este pacote deve ser importado em um conteúdo do tipo %s.', $expected_type),
+                    ['status' => 400]
+                );
+            }
 
             $keyword_slug = sanitize_title($fields['focus_keyword']);
             if ($keyword_slug !== '' && !str_contains($fields['slug'], $keyword_slug)) {
@@ -147,6 +169,31 @@ add_action('rest_api_init', function () {
             }
             if ($fields['meta_description'] !== '') {
                 update_post_meta($post_id, 'rank_math_description', $fields['meta_description']);
+            }
+
+            if (in_array($post->post_type, ['golpe', 'fraude'], true)) {
+                if (in_array($fields['risk_level'], ['alto', 'medio', 'baixo'], true)) {
+                    update_post_meta($post_id, 'nivel_risco', $fields['risk_level']);
+                }
+                update_post_meta($post_id, 'prejuizo_estimado', $fields['estimated_loss']);
+                update_post_meta($post_id, 'fonte_referencia', $fields['source_reference']);
+                update_post_meta($post_id, 'sinais_alerta', $fields['warning_signs']);
+                update_post_meta($post_id, 'como_se_proteger', $fields['protection']);
+                update_post_meta($post_id, 'o_que_fazer', $fields['what_to_do']);
+
+                if ($post->post_type === 'golpe') {
+                    update_post_meta($post_id, 'novo_modus', $fields['new_modus']);
+                    update_post_meta($post_id, 'como_age', $fields['how_it_works']);
+                } else {
+                    update_post_meta($post_id, 'nova_tecnica', $fields['new_technique']);
+                    update_post_meta($post_id, 'como_funciona', $fields['how_it_works']);
+                }
+
+                $taxonomy = $post->post_type === 'golpe' ? 'tipo_golpe' : 'tipo_fraude';
+                $term_names = fn(string $value): array => array_values(array_filter(array_map('trim', explode('|', $value))));
+                wp_set_object_terms($post_id, $term_names($fields['content_terms']), $taxonomy, false);
+                wp_set_object_terms($post_id, $term_names($fields['channels']), 'canal_golpe', false);
+                wp_set_object_terms($post_id, $term_names($fields['audiences']), 'publico_alvo', false);
             }
 
             $category_id = 0;
@@ -202,15 +249,28 @@ add_action('updated_post_meta', function ($meta_id, $post_id, $meta_key, $meta_v
     }
 }, 10, 4);
 
-function fs_gemini_article_prompt(): string {
-    $path = get_stylesheet_directory() . '/assets/prompts/artigo-seo-gemini.txt';
+function fs_gemini_prompt(string $type = 'artigo'): string {
+    $allowed = ['artigo', 'golpe', 'fraude'];
+    $type = in_array($type, $allowed, true) ? $type : 'artigo';
+    $filename = $type === 'artigo' ? 'artigo-seo-gemini.txt' : $type . '-seo-gemini.txt';
+    $path = get_stylesheet_directory() . '/assets/prompts/' . $filename;
     return file_exists($path) ? trim((string) file_get_contents($path)) : '';
 }
 
 function fs_render_gemini_prompt_widget(): void {
-    $prompt = fs_gemini_article_prompt();
+    $prompts = [
+        'artigo' => fs_gemini_prompt('artigo'),
+        'golpe'  => fs_gemini_prompt('golpe'),
+        'fraude' => fs_gemini_prompt('fraude'),
+    ];
     ?>
-    <p>Digite apenas o assunto. O prompt editorial completo será copiado já preenchido.</p>
+    <p>Escolha o tipo de conteúdo, digite o assunto e copie o prompt já preenchido.</p>
+    <label for="fs-gemini-prompt-type"><strong>Tipo de conteúdo</strong></label>
+    <select id="fs-gemini-prompt-type" class="widefat" style="margin:8px 0 10px;">
+        <option value="artigo">Artigo educativo</option>
+        <option value="golpe">Alerta de golpe</option>
+        <option value="fraude">Ficha de fraude</option>
+    </select>
     <label for="fs-gemini-prompt-subject"><strong>Assunto do artigo</strong></label>
     <input
         type="text"
@@ -223,7 +283,7 @@ function fs_render_gemini_prompt_widget(): void {
         Copiar prompt para o Gemini
     </button>
     <span id="fs-copy-gemini-status" style="margin-left:8px;" aria-live="polite"></span>
-    <textarea id="fs-gemini-prompt-template" hidden><?php echo esc_textarea($prompt); ?></textarea>
+    <script type="application/json" id="fs-gemini-prompt-templates"><?php echo wp_json_encode($prompts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?></script>
     <script>
     (function () {
         var button = document.getElementById('fs-copy-gemini-prompt');
@@ -231,8 +291,10 @@ function fs_render_gemini_prompt_widget(): void {
 
         button.addEventListener('click', async function () {
             var subject = document.getElementById('fs-gemini-prompt-subject').value.trim();
+            var type = document.getElementById('fs-gemini-prompt-type').value;
             var status = document.getElementById('fs-copy-gemini-status');
-            var template = document.getElementById('fs-gemini-prompt-template').value;
+            var templates = JSON.parse(document.getElementById('fs-gemini-prompt-templates').textContent);
+            var template = templates[type] || templates.artigo;
 
             if (!subject) {
                 status.textContent = 'Informe o assunto.';
@@ -266,7 +328,7 @@ add_action('wp_dashboard_setup', function () {
 
     wp_add_dashboard_widget(
         'fs_gemini_article_prompt',
-        'Criar artigo SEO com Gemini',
+        'Criar conteúdo com Gemini',
         'fs_render_gemini_prompt_widget'
     );
 });
@@ -274,13 +336,13 @@ add_action('wp_dashboard_setup', function () {
 add_action('admin_menu', function () {
     add_posts_page(
         'Prompt SEO para Gemini',
-        'Prompt SEO Gemini',
+        'Prompts Gemini',
         'edit_posts',
         'fs-prompt-seo-gemini',
         function () {
             ?>
             <div class="wrap">
-                <h1>Prompt SEO para Gemini</h1>
+                <h1>Prompts para Gemini</h1>
                 <div class="card" style="max-width:760px;">
                     <?php fs_render_gemini_prompt_widget(); ?>
                 </div>
@@ -572,7 +634,7 @@ add_action('init', function () {
     ]);
 
     /* 5b. Canal do Golpe */
-    register_taxonomy('canal_golpe', ['golpe'], [
+    register_taxonomy('canal_golpe', ['golpe', 'fraude'], [
         'label'         => 'Canal',
         'labels'        => [
             'name'          => 'Canais',
