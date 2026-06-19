@@ -72,11 +72,13 @@ add_filter('image_editor_output_format', function ($formats) {
 });
 
 add_action('enqueue_block_editor_assets', function () {
+    $script_path = get_stylesheet_directory() . '/assets/js/markdown-importer.js';
+
     wp_enqueue_script(
         'fs-markdown-importer',
         get_stylesheet_directory_uri() . '/assets/js/markdown-importer.js',
         ['wp-api-fetch', 'wp-blocks', 'wp-components', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins'],
-        wp_get_theme()->get('Version'),
+        file_exists($script_path) ? (string) filemtime($script_path) : wp_get_theme()->get('Version'),
         true
     );
 });

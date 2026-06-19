@@ -10,6 +10,7 @@
   var useState = wp.element.useState;
   var registerPlugin = wp.plugins.registerPlugin;
   var PluginMoreMenuItem = wp.editPost.PluginMoreMenuItem;
+  var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
   var Modal = wp.components.Modal;
   var TextareaControl = wp.components.TextareaControl;
   var Button = wp.components.Button;
@@ -416,6 +417,33 @@
         },
         'Colar artigo SEO / Markdown'
       ),
+      PluginDocumentSettingPanel &&
+        el(
+          PluginDocumentSettingPanel,
+          {
+            name: 'fs-importar-artigo-seo',
+            title: 'Importar artigo SEO',
+            className: 'fs-importar-artigo-seo-panel',
+            initialOpen: true,
+          },
+          el(
+            'p',
+            null,
+            'Cole a resposta estruturada do Gemini para preencher conteúdo, categoria e campos do Rank Math.'
+          ),
+          el(
+            Button,
+            {
+              variant: 'primary',
+              style: { width: '100%', justifyContent: 'center' },
+              onClick: function () {
+                setError('');
+                setOpen(true);
+              },
+            },
+            'Colar artigo SEO / Markdown'
+          )
+        ),
       isOpen &&
         el(
           Modal,
