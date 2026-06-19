@@ -33,6 +33,164 @@ require_once get_stylesheet_directory() . '/inc/ads.php';
 require_once get_stylesheet_directory() . '/inc/seo-readiness.php';
 require_once get_stylesheet_directory() . '/inc/editorial.php';
 
+/*
+ * Imagens editoriais:
+ * - aceita o original no upload;
+ * - cria automaticamente uma versão web quando o lado maior passa de 1600px;
+ * - equilibra nitidez e peso nas versões geradas pelo WordPress.
+ */
+add_filter('big_image_size_threshold', function () {
+    return 1600;
+});
+
+add_filter('wp_editor_set_quality', function ($quality, $mime_type) {
+    if (in_array($mime_type, ['image/jpeg', 'image/webp', 'image/avif'], true)) {
+        return 82;
+    }
+
+    return $quality;
+}, 10, 2);
+
+// Evita gerar versões redundantes e demoradas durante o upload.
+add_filter('intermediate_image_sizes_advanced', function ($sizes) {
+    foreach (['medium_large', '1536x1536', '2048x2048', 'fs-square'] as $size) {
+        unset($sizes[$size]);
+    }
+
+    return $sizes;
+});
+
+// GD tende a ser mais previsível que o ImageMagick com PNGs grandes gerados por IA.
+add_filter('wp_image_editors', function ($editors) {
+    return ['WP_Image_Editor_GD', 'WP_Image_Editor_Imagick'];
+});
+
+// Mantém o original e cria as versões usadas no site em um formato mais leve.
+add_filter('image_editor_output_format', function ($formats) {
+    $formats['image/png'] = 'image/webp';
+    return $formats;
+});
+
+add_action('enqueue_block_editor_assets', function () {
+    wp_enqueue_script(
+        'fs-markdown-importer',
+        get_stylesheet_directory_uri() . '/assets/js/markdown-importer.js',
+        ['wp-api-fetch', 'wp-blocks', 'wp-components', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins'],
+        wp_get_theme()->get('Version'),
+        true
+    );
+});
+
+add_action('rest_api_init', function () {
+    register_rest_route('guia-antifraude/v1', '/importar-seo', [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'permission_callback' => function (WP_REST_Request $request) {
+            $post_id = (int) $request->get_param('post_id');
+            return $post_id > 0 && current_user_can('edit_post', $post_id);
+        },
+        'callback'            => function (WP_REST_Request $request) {
+            $post_id = (int) $request->get_param('post_id');
+            $post = get_post($post_id);
+
+            if (!$post) {
+                return new WP_Error('fs_post_not_found', 'Post não encontrado.', ['status' => 404]);
+            }
+
+            $fields = [
+                'title'            => sanitize_text_field((string) $request->get_param('title')),
+                'seo_title'        => sanitize_text_field((string) $request->get_param('seo_title')),
+                'focus_keyword'    => sanitize_text_field((string) $request->get_param('focus_keyword')),
+                'slug'             => sanitize_title((string) $request->get_param('slug')),
+                'meta_description' => sanitize_text_field((string) $request->get_param('meta_description')),
+                'excerpt'          => sanitize_textarea_field((string) $request->get_param('excerpt')),
+                'category'         => sanitize_text_field((string) $request->get_param('category')),
+                'image_alt'        => sanitize_text_field((string) $request->get_param('image_alt')),
+                'content'          => (string) $request->get_param('content'),
+            ];
+
+            $post_update = ['ID' => $post_id];
+            if ($fields['title'] !== '') {
+                $post_update['post_title'] = $fields['title'];
+            }
+            if ($fields['slug'] !== '') {
+                $post_update['post_name'] = $fields['slug'];
+            }
+            if ($fields['excerpt'] !== '') {
+                $post_update['post_excerpt'] = $fields['excerpt'];
+            }
+            if ($fields['content'] !== '') {
+                $post_update['post_content'] = wp_kses_post($fields['content']);
+            }
+
+            if (count($post_update) > 1) {
+                $updated = wp_update_post($post_update, true);
+                if (is_wp_error($updated)) {
+                    return $updated;
+                }
+            }
+
+            if ($fields['focus_keyword'] !== '') {
+                update_post_meta($post_id, 'rank_math_focus_keyword', $fields['focus_keyword']);
+            }
+            if ($fields['seo_title'] !== '') {
+                update_post_meta($post_id, 'rank_math_title', $fields['seo_title']);
+            }
+            if ($fields['meta_description'] !== '') {
+                update_post_meta($post_id, 'rank_math_description', $fields['meta_description']);
+            }
+
+            $category_id = 0;
+            if ($fields['category'] !== '') {
+                $term = get_term_by('name', $fields['category'], 'category');
+                if (!$term) {
+                    $term = get_term_by('slug', sanitize_title($fields['category']), 'category');
+                }
+                if ($term instanceof WP_Term) {
+                    $category_id = (int) $term->term_id;
+                    wp_set_post_categories($post_id, [$category_id], false);
+                }
+            }
+
+            if ($fields['image_alt'] !== '') {
+                update_post_meta($post_id, 'fs_featured_image_alt', $fields['image_alt']);
+                $thumbnail_id = (int) get_post_thumbnail_id($post_id);
+                if ($thumbnail_id) {
+                    update_post_meta($thumbnail_id, '_wp_attachment_image_alt', $fields['image_alt']);
+                }
+            }
+
+            clean_post_cache($post_id);
+
+            return rest_ensure_response([
+                'post_id'     => $post_id,
+                'title'       => get_the_title($post_id),
+                'slug'        => get_post_field('post_name', $post_id),
+                'excerpt'     => get_post_field('post_excerpt', $post_id),
+                'category_id' => $category_id,
+                'permalink'   => get_permalink($post_id),
+            ]);
+        },
+        'args'                => [
+            'post_id' => [
+                'required'          => true,
+                'validate_callback' => fn($value) => is_numeric($value) && (int) $value > 0,
+            ],
+        ],
+    ]);
+});
+
+add_action('updated_post_meta', function ($meta_id, $post_id, $meta_key, $meta_value) {
+    if ($meta_key !== '_thumbnail_id') {
+        return;
+    }
+
+    $alt = (string) get_post_meta($post_id, 'fs_featured_image_alt', true);
+    $thumbnail_id = (int) $meta_value;
+    if ($alt !== '' && $thumbnail_id) {
+        update_post_meta($thumbnail_id, '_wp_attachment_image_alt', $alt);
+    }
+}, 10, 4);
+
 function fs_editorial_text(string $text): string {
     if ($text === '') {
         return '';

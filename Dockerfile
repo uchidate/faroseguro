@@ -1,5 +1,8 @@
 FROM wordpress:latest
 
+# Uploads editoriais maiores, com memória suficiente para redimensionar imagens.
+COPY config/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # WP-CLI
 RUN curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
