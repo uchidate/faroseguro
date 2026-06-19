@@ -170,8 +170,11 @@
     return text;
   }
 
-  function markdownToHtml(markdown) {
+  function markdownToHtml(markdown, smartSeo) {
     var lines = markdown.replace(/\r\n?/g, '\n').split('\n');
+    var hasExplicitHeadings = lines.some(function (line) {
+      return /^#{2,6}\s+/.test(line);
+    });
     var html = [];
     var paragraph = [];
     var listType = null;
@@ -248,6 +251,25 @@
         return;
       }
 
+      if (smartSeo && !hasExplicitHeadings) {
+        var trimmed = line.trim();
+        var looksLikeQuestion = trimmed.length <= 140 && /\?$/.test(trimmed);
+        var looksLikeHeading =
+          trimmed.length <= 100 &&
+          !/[.!?:;]$/.test(trimmed) &&
+          !/^\d+[.)]\s+/.test(trimmed) &&
+          !/^[-*+]\s+/.test(trimmed);
+
+        if (looksLikeQuestion || looksLikeHeading) {
+          flushParagraph();
+          closeList();
+          flushQuote();
+          var inferredLevel = looksLikeQuestion ? 3 : 2;
+          html.push('<h' + inferredLevel + '>' + inlineMarkdown(trimmed) + '</h' + inferredLevel + '>');
+          return;
+        }
+      }
+
       if (/^ {0,3}([-*_])(?:\s*\1){2,}\s*$/.test(line)) {
         flushParagraph();
         closeList();
@@ -293,6 +315,10 @@
       closeList();
       flushQuote();
       paragraph.push(line.trim());
+
+      if (smartSeo && !hasExplicitHeadings) {
+        flushParagraph();
+      }
     });
 
     if (inCode) {
@@ -329,7 +355,7 @@
 
       try {
         var source = seoPackage ? seoPackage.body : markdown;
-        var blocks = wp.blocks.rawHandler({ HTML: markdownToHtml(source) });
+        var blocks = wp.blocks.rawHandler({ HTML: markdownToHtml(source, Boolean(seoPackage)) });
         var dispatch = wp.data.dispatch('core/block-editor');
 
         if (!blocks.length) {
@@ -376,12 +402,15 @@
             content: wp.blocks.serialize(finalBlocks),
           },
         })
-          .then(function () {
+          .then(function (response) {
             window.sessionStorage.setItem(
               'fsMarkdownImportNotice',
               'Artigo, categoria e campos do Rank Math importados com sucesso.'
             );
-            window.location.reload();
+            window.location.href =
+              response && response.edit_url
+                ? response.edit_url
+                : window.location.href.replace(/post-new\.php(?:\?.*)?$/, 'post.php?post=' + postId + '&action=edit');
           })
           .catch(function (apiError) {
             setImporting(false);

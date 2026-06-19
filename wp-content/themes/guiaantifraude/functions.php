@@ -123,6 +123,9 @@ add_action('rest_api_init', function () {
             if ($fields['content'] !== '') {
                 $post_update['post_content'] = wp_kses_post($fields['content']);
             }
+            if ($post->post_status === 'auto-draft') {
+                $post_update['post_status'] = 'draft';
+            }
 
             if (count($post_update) > 1) {
                 $updated = wp_update_post($post_update, true);
@@ -170,6 +173,7 @@ add_action('rest_api_init', function () {
                 'excerpt'     => get_post_field('post_excerpt', $post_id),
                 'category_id' => $category_id,
                 'permalink'   => get_permalink($post_id),
+                'edit_url'    => get_edit_post_link($post_id, 'raw'),
             ]);
         },
         'args'                => [
