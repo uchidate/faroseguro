@@ -96,9 +96,6 @@
     if (meta.title && keyword && normalize(meta.title).indexOf(keyword) === -1) {
       warnings.push('A palavra-chave não aparece no título.');
     }
-    if (meta.title && !/\d/.test(meta.title)) {
-      warnings.push('O título não contém um número.');
-    }
     if (meta.seoTitle && keyword && normalize(meta.seoTitle).indexOf(keyword) === -1) {
       warnings.push('A palavra-chave não aparece no título SEO.');
     }
@@ -117,8 +114,8 @@
     if (words < 600) {
       warnings.push('O artigo possui apenas ' + words + ' palavras.');
     }
-    if (density > 0 && (density < 0.5 || density > 1.5)) {
-      warnings.push('Densidade estimada da palavra-chave: ' + density.toFixed(1) + '%.');
+    if (density > 2) {
+      warnings.push('A palavra-chave parece repetida em excesso: ' + density.toFixed(1) + '%.');
     }
     if ((seoPackage.body.match(/https?:\/\/guiaantifraude\.com\//gi) || []).length < 2) {
       warnings.push('Inclua pelo menos dois links internos do Guia Antifraude.');
