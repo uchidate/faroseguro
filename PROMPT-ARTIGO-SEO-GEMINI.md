@@ -12,7 +12,7 @@ O artigo será publicado no Guia Antifraude (https://guiaantifraude.com). Ele de
 Antes de escrever:
 
 1. Identifique a principal dúvida que levou o leitor a pesquisar esse assunto.
-2. Escolha uma palavra-chave foco natural, específica e alinhada a essa intenção.
+2. Escolha uma palavra-chave foco natural, específica e alinhada a essa intenção. Ela deve ter preferencialmente de duas a quatro palavras e ser fácil de repetir sem deixar o texto artificial.
 3. Decida qual estrutura explica melhor o assunto. Não use automaticamente o mesmo roteiro em todos os artigos.
 4. Se tiver acesso à internet, confira informações atuais em fontes oficiais antes de escrever.
 
@@ -41,36 +41,50 @@ QUALIDADE EDITORIAL OBRIGATÓRIA
 
 SEO E RANK MATH
 
-1. A palavra-chave foco deve aparecer de forma exata:
-   - aparecer perto do início do título principal;
-   - aparecer no título SEO;
-   - aparecer na meta descrição;
-   - aparecer no slug;
-   - aparecer naturalmente nas primeiras 100 palavras;
-   - aparecer em pelo menos um subtítulo H2 ou H3;
-   - aparecer no restante do texto apenas quando fizer sentido.
-2. Em artigos com mais de 1.000 palavras, use a expressão exata de três a seis vezes, distribuída naturalmente. No restante, use sinônimos, entidades e termos relacionados.
-3. O título principal deve ter de 45 a 65 caracteres. Use número somente quando o assunto realmente comportar uma lista, quantidade ou ano relevante.
-4. O título SEO deve ter no máximo 60 caracteres.
-5. A meta descrição deve ter entre 140 e 160 caracteres e apresentar um benefício concreto.
-6. O slug deve ser curto, descritivo, sem acentos e sem palavras desnecessárias.
-7. O resumo deve ter entre 120 e 160 caracteres e não deve apenas copiar a meta descrição.
-8. Use H2 e H3 em Markdown real, sempre com `##` e `###`. Não use H1 no corpo.
-9. Inclua pelo menos dois links internos contextuais e úteis para páginas reais do Guia Antifraude. Verifique as URLs antes de usá-las. Se não puder verificar, use apenas:
+1. Depois de escolher a palavra-chave, trate-a como uma expressão fixa. Não retire, acrescente, troque ou reorganize palavras quando ela for usada nos campos obrigatórios.
+2. A expressão exata deve aparecer:
+   - perto do início do título principal;
+   - no título SEO;
+   - na meta descrição;
+   - integralmente no slug, convertida apenas para minúsculas, sem acentos e com hífens. Exemplo: `dicas de segurança digital` vira `dicas-de-seguranca-digital`;
+   - nas primeiras 100 palavras;
+   - em pelo menos um subtítulo H2 ou H3;
+   - no texto alternativo da imagem;
+   - de oito a doze vezes no corpo de um artigo entre 1.200 e 1.800 palavras, sempre em frases naturais e bem distribuídas.
+3. Use sinônimos e termos relacionados entre essas ocorrências. Nunca coloque a expressão duas vezes no mesmo parágrafo e não repita por obrigação em todos os subtítulos.
+4. O título principal deve ter de 45 a 65 caracteres. Use número somente quando o assunto realmente comportar uma lista, quantidade ou ano relevante.
+5. O título SEO deve ter no máximo 60 caracteres.
+6. A meta descrição deve ter entre 140 e 160 caracteres e apresentar um benefício concreto.
+7. O slug deve começar pela versão com hífens da palavra-chave exata. Acrescente no máximo duas palavras se forem necessárias para esclarecer o assunto.
+8. O resumo deve ter entre 120 e 160 caracteres e não deve apenas copiar a meta descrição.
+9. Use H2 e H3 em Markdown real, sempre com `##` e `###`. Não use H1 no corpo.
+10. Inclua pelo menos dois links internos contextuais e úteis para páginas reais do Guia Antifraude. Verifique as URLs antes de usá-las. Se não puder verificar, use apenas:
    - https://guiaantifraude.com/golpes/
    - https://guiaantifraude.com/fraudes/
    - https://guiaantifraude.com/glossario/
    - https://guiaantifraude.com/artigos/
-10. Inclua de dois a quatro links externos somente para páginas oficiais que você tenha verificado. Use links normais e contextuais.
-11. Quando o tema envolver risco ou fraude, explique como reconhecer a situação e o que fazer. Use subtítulos específicos, não os mesmos rótulos em todos os artigos.
-12. Escolha exatamente uma destas categorias:
+11. Inclua de dois a quatro links externos somente para páginas oficiais que você tenha verificado. Use links normais e contextuais.
+12. Quando o tema envolver risco ou fraude, explique como reconhecer a situação e o que fazer. Use subtítulos específicos, não os mesmos rótulos em todos os artigos.
+13. Escolha exatamente uma destas categorias:
    - Como se Proteger
    - Educação Financeira
    - Legislação e Direitos
    - Tecnologia e Segurança
    - Casos Reais
-13. Crie um texto alternativo descritivo para a futura imagem destacada contendo naturalmente a palavra-chave foco exata.
-14. Não inclua observações, pontuação SEO, contagem de palavras ou comentários fora do formato solicitado.
+14. Crie um texto alternativo descritivo para a futura imagem destacada contendo naturalmente a palavra-chave foco exata.
+15. Não inclua observações, pontuação SEO, contagem de palavras ou comentários fora do formato solicitado.
+
+AUDITORIA FINAL OBRIGATÓRIA
+
+Antes de responder, faça silenciosamente estas verificações e corrija o texto se alguma falhar:
+
+1. Copie a PALAVRA_CHAVE e procure a expressão exata no TITULO, TITULO_SEO, META_DESCRICAO, SLUG, IMAGEM_ALT, primeiras 100 palavras e em pelo menos um H2 ou H3.
+2. Confirme que o slug contém todas as palavras da palavra-chave na mesma ordem. Preposições como “de”, “do”, “da” e “para” não podem desaparecer.
+3. Conte as ocorrências exatas no corpo. Para 1.200 a 1.800 palavras, deve haver entre oito e doze.
+4. Confirme que existem pelo menos dois links internos e dois links externos oficiais.
+5. Confirme que todos os subtítulos começam com `##` ou `###`.
+6. Confirme que não existe subtítulo “Conclusão”.
+7. Só entregue a resposta depois que todos os itens acima estiverem corretos. Não mostre a auditoria.
 
 FORMATO OBRIGATÓRIO DA RESPOSTA
 
